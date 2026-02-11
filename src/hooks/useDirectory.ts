@@ -3,6 +3,7 @@ import {
   collection, query, onSnapshot, orderBy, addDoc, serverTimestamp, where, getDocs,
 } from "firebase/firestore";
 import { db } from "@/config/firebase";
+import { ns } from "@/lib/namespace";
 import { sampleBusinesses, sampleReviews } from "@/data/sampleBusinesses";
 import type { Business, BusinessReview } from "@/types";
 import { sendNotification, notifyAdmins } from "@/lib/notifications";
@@ -14,7 +15,7 @@ export const useDirectory = () => {
 
   useEffect(() => {
     const unsub = onSnapshot(
-      query(collection(db, "businesses"), orderBy("createdAt", "desc")),
+      query(collection(db, ns("businesses")), orderBy("createdAt", "desc")),
       (snap) => {
         if (!snap.empty) {
           setBusinesses(snap.docs.map((d) => ({ id: d.id, ...d.data() } as Business)));
@@ -38,7 +39,7 @@ export const useDirectory = () => {
 
     businesses.forEach((biz) => {
       const unsub = onSnapshot(
-        query(collection(db, "businesses", biz.id, "reviews"), orderBy("createdAt", "desc")),
+        query(collection(db, ns("businesses"), biz.id, "reviews"), orderBy("createdAt", "desc")),
         (snap) => {
           if (!snap.empty) {
             setReviewsMap((prev) => ({
@@ -62,7 +63,7 @@ export const useDirectory = () => {
   }, [businesses]);
 
   const submitClaim = async (businessId: string, businessName: string, userId: string, userName: string, userEmail: string) => {
-    await addDoc(collection(db, "businessClaims"), {
+    await addDoc(collection(db, ns("businessClaims")), {
       businessId, businessName, userId, userName, userEmail,
       verificationMethod: "email",
       verificationDetails: userEmail,
@@ -74,7 +75,7 @@ export const useDirectory = () => {
   };
 
   const submitReview = async (businessId: string, review: Omit<BusinessReview, "id" | "createdAt" | "updatedAt">) => {
-    await addDoc(collection(db, "businesses", businessId, "reviews"), {
+    await addDoc(collection(db, ns("businesses"), businessId, "reviews"), {
       ...review,
       createdAt: serverTimestamp(),
       updatedAt: serverTimestamp(),

@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { signOut, updateProfile } from "firebase/auth";
 import { doc, updateDoc, serverTimestamp } from "firebase/firestore";
 import { auth, db } from "@/config/firebase";
+import { ns } from "@/lib/namespace";
 import { useAuth } from "@/contexts/AuthContext";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { useTheme } from "@/contexts/ThemeContext";
@@ -34,7 +35,7 @@ const ProfilePage: React.FC = () => {
     setSaving(true);
     try {
       await updateProfile(user, { displayName: newName });
-      await updateDoc(doc(db, "users", user.uid), {
+      await updateDoc(doc(db, ns("users"), user.uid), {
         displayName: newName,
         lastSeen: serverTimestamp(),
       });
@@ -55,7 +56,7 @@ const ProfilePage: React.FC = () => {
   const handleUpgradeToBusiness = async () => {
     if (!user) return;
     try {
-      await updateDoc(doc(db, "users", user.uid), {
+      await updateDoc(doc(db, ns("users"), user.uid), {
         role: "business",
         accountType: "business_owner",
       });

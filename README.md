@@ -78,10 +78,34 @@ src/
 ├── contexts/           # Auth, Language, Theme providers
 ├── data/               # Sample data, translations, athkar
 ├── hooks/              # useChat, useEvents, useAdmin, useDirectory, useNotifications
-├── lib/                # Utilities, notification helpers
+├── lib/                # Utilities, notification helpers, namespace isolation
 ├── pages/              # Route pages (Home, Events, Chat, Directory, Admin, Help, etc.)
 └── config/             # Firebase configuration
 terraform/              # GCP infrastructure as code
+```
+
+### 🔀 Namespace Isolation (Lab Mode)
+
+For workshops/labs where multiple students deploy to the **same Firestore**, each student can set `VITE_NAMESPACE` to isolate their data:
+
+```bash
+# Student 1
+VITE_NAMESPACE=student1 docker compose up --build
+
+# Student 2
+VITE_NAMESPACE=student2 docker compose up --build
+```
+
+This prefixes all Firestore collection names (e.g., `student1_users`, `student1_events`), so each instance has completely isolated data while sharing the same database.
+
+| Without namespace | With `VITE_NAMESPACE=alice` |
+|---|---|
+| `users` | `alice_users` |
+| `events` | `alice_events` |
+| `businesses` | `alice_businesses` |
+| `notifications` | `alice_notifications` |
+
+> 💡 If `VITE_NAMESPACE` is not set, collections use their default names (no prefix).
 ```
 
 ---

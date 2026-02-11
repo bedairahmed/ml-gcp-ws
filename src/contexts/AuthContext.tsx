@@ -1,7 +1,8 @@
 import React, { createContext, useContext, useState, useEffect } from "react";
 import { onAuthStateChanged, type User } from "firebase/auth";
-import { doc, onSnapshot, setDoc, serverTimestamp, getDoc } from "firebase/firestore";
+import { doc, onSnapshot, setDoc, serverTimestamp, getDoc, collection } from "firebase/firestore";
 import { auth, db } from "@/config/firebase";
+import { ns } from "@/lib/namespace";
 import type { UserProfile } from "@/types";
 
 interface AuthContextType {
@@ -35,7 +36,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     if (!user) return;
 
     const ensureUserDoc = async () => {
-      const userRef = doc(db, "users", user.uid);
+      const userRef = doc(db, ns("users"), user.uid);
       const snap = await getDoc(userRef);
       if (!snap.exists()) {
         await setDoc(userRef, {
@@ -57,7 +58,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
     ensureUserDoc().catch(console.error);
 
-    const unsubProfile = onSnapshot(doc(db, "users", user.uid), (snap) => {
+    const unsubProfile = onSnapshot(doc(db, ns("users"), user.uid), (snap) => {
       if (snap.exists()) {
         setProfile({ uid: user.uid, ...snap.data() } as UserProfile);
       }

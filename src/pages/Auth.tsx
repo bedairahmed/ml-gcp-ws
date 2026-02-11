@@ -10,6 +10,7 @@ import {
 } from "firebase/auth";
 import { doc, setDoc, serverTimestamp, getDoc } from "firebase/firestore";
 import { auth, db } from "@/config/firebase";
+import { ns } from "@/lib/namespace";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { useTheme } from "@/contexts/ThemeContext";
 import type { Language, AccountType } from "@/types";
@@ -38,7 +39,7 @@ const AuthPage: React.FC = () => {
     userEmail: string,
     type: AccountType
   ) => {
-    const userRef = doc(db, "users", uid);
+    const userRef = doc(db, ns("users"), uid);
     const existing = await getDoc(userRef);
     if (existing.exists()) return;
 

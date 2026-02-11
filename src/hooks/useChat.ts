@@ -14,6 +14,7 @@ import {
   arrayRemove,
 } from "firebase/firestore";
 import { db } from "@/config/firebase";
+import { ns } from "@/lib/namespace";
 import { useAuth } from "@/contexts/AuthContext";
 import { toast } from "sonner";
 import type { ChatMessage, Group } from "@/types";
@@ -28,7 +29,7 @@ export const useChat = (activeGroupId: string) => {
 
   // Real-time groups listener
   useEffect(() => {
-    const q = query(collection(db, "groups"), orderBy("name_en", "asc"));
+    const q = query(collection(db, ns("groups")), orderBy("name_en", "asc"));
     const unsub = onSnapshot(
       q,
       (snapshot) => {
@@ -51,7 +52,7 @@ export const useChat = (activeGroupId: string) => {
   useEffect(() => {
     setLoading(true);
     const q = query(
-      collection(db, "messages"),
+      collection(db, ns("messages")),
       where("groupId", "==", activeGroupId),
       orderBy("timestamp", "asc"),
       limit(100)
@@ -116,7 +117,7 @@ export const useChat = (activeGroupId: string) => {
 
       if (firestoreConnected) {
         try {
-          await addDoc(collection(db, "messages"), msgData);
+          await addDoc(collection(db, ns("messages")), msgData);
         } catch (error: any) {
           console.error("Send message error:", error.message);
           toast.error("Failed to send message");
@@ -141,7 +142,7 @@ export const useChat = (activeGroupId: string) => {
 
       if (firestoreConnected) {
         try {
-          const msgRef = doc(db, "messages", msgId);
+          const msgRef = doc(db, ns("messages"), msgId);
           const msg = messages.find((m) => m.id === msgId);
           if (!msg) return;
           const users = msg.reactions?.[emoji] || [];

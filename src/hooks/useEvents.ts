@@ -12,6 +12,7 @@ import {
   orderBy,
 } from "firebase/firestore";
 import { db } from "@/config/firebase";
+import { ns } from "@/lib/namespace";
 import { useAuth } from "@/contexts/AuthContext";
 import { toast } from "sonner";
 import type { CommunityEvent, Announcement } from "@/types";
@@ -27,7 +28,7 @@ export const useEvents = () => {
   // Real-time events listener
   useEffect(() => {
     const q = query(
-      collection(db, "events"),
+      collection(db, ns("events")),
       where("isActive", "==", true),
       orderBy("date", "asc")
     );
@@ -58,7 +59,7 @@ export const useEvents = () => {
   // Real-time announcements listener
   useEffect(() => {
     const q = query(
-      collection(db, "announcements"),
+      collection(db, ns("announcements")),
       where("active", "==", true),
       orderBy("priority", "asc")
     );
@@ -93,7 +94,7 @@ export const useEvents = () => {
 
       if (firestoreConnected) {
         try {
-          const eventRef = doc(db, "events", eventId);
+          const eventRef = doc(db, ns("events"), eventId);
           await updateDoc(eventRef, {
             rsvpUsers: already ? arrayRemove(user.uid) : arrayUnion(user.uid),
             rsvpCount: increment(already ? -1 : 1),

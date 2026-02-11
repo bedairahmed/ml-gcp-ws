@@ -3,6 +3,7 @@ import { useLanguage } from "@/contexts/LanguageContext";
 import { useAuth } from "@/contexts/AuthContext";
 import { collection, query, where, onSnapshot, doc, updateDoc, serverTimestamp } from "firebase/firestore";
 import { db } from "@/config/firebase";
+import { ns } from "@/lib/namespace";
 import { sampleBusinesses, sampleReviews } from "@/data/sampleBusinesses";
 import type { Business, BusinessReview } from "@/types";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
@@ -37,7 +38,7 @@ const MyBusinessPage: React.FC = () => {
     if (!user) { setLoading(false); return; }
 
     // Listen for businesses owned by this user
-    const q = query(collection(db, "businesses"), where("ownerUid", "==", user.uid));
+    const q = query(collection(db, ns("businesses")), where("ownerUid", "==", user.uid));
     const unsub = onSnapshot(q, (snap) => {
       if (!snap.empty) {
         setBusinesses(snap.docs.map((d) => ({ id: d.id, ...d.data() } as Business)));
@@ -58,7 +59,7 @@ const MyBusinessPage: React.FC = () => {
     // Load reviews for each business
     const revMap: Record<string, BusinessReview[]> = {};
     businesses.forEach((biz) => {
-      const unsub = onSnapshot(collection(db, "businesses", biz.id, "reviews"), (snap) => {
+      const unsub = onSnapshot(collection(db, ns("businesses"), biz.id, "reviews"), (snap) => {
         if (!snap.empty) {
           revMap[biz.id] = snap.docs.map((d) => ({ id: d.id, ...d.data() } as BusinessReview));
           setReviews({ ...revMap });
@@ -174,7 +175,7 @@ const DetailsTab: React.FC<{ business: Business }> = ({ business }) => {
   const handleSave = async () => {
     setSaving(true);
     try {
-      await updateDoc(doc(db, "businesses", business.id), {
+      await updateDoc(doc(db, ns("businesses"), business.id), {
         ...form,
         tags: form.tags.split(",").map((t) => t.trim()).filter(Boolean),
         updatedAt: serverTimestamp(),
@@ -218,7 +219,7 @@ const HoursTab: React.FC<{ business: Business }> = ({ business }) => {
   const handleSave = async () => {
     setSaving(true);
     try {
-      await updateDoc(doc(db, "businesses", business.id), { hours, updatedAt: serverTimestamp() });
+      await updateDoc(doc(db, ns("businesses"), business.id), { hours, updatedAt: serverTimestamp() });
       toast.success("Hours updated!");
     } catch {
       toast.error("Saved locally (Firestore may be unavailable)");
@@ -270,7 +271,7 @@ const ReviewsTab: React.FC<{ reviews: BusinessReview[]; businessId: string; user
   const handleReply = async (reviewId: string) => {
     if (!replyText.trim()) return;
     try {
-      await updateDoc(doc(db, "businesses", businessId, "reviews", reviewId), {
+      await updateDoc(doc(db, ns("businesses"), businessId, "reviews", reviewId), {
         response: { text: replyText, respondedBy: userId, respondedAt: serverTimestamp() },
       });
       toast.success("Response posted!");

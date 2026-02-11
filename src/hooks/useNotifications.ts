@@ -3,6 +3,7 @@ import {
   collection, query, where, orderBy, onSnapshot, doc, updateDoc, writeBatch,
 } from "firebase/firestore";
 import { db } from "@/config/firebase";
+import { ns } from "@/lib/namespace";
 import type { AppNotification } from "@/lib/notifications";
 
 export const useNotifications = (userId: string | undefined) => {
@@ -13,7 +14,7 @@ export const useNotifications = (userId: string | undefined) => {
     if (!userId) { setNotifications([]); setLoading(false); return; }
 
     const q = query(
-      collection(db, "notifications"),
+      collection(db, ns("notifications")),
       where("userId", "==", userId),
       orderBy("createdAt", "desc")
     );
@@ -33,7 +34,7 @@ export const useNotifications = (userId: string | undefined) => {
 
   const markAsRead = async (notifId: string) => {
     try {
-      await updateDoc(doc(db, "notifications", notifId), { read: true });
+      await updateDoc(doc(db, ns("notifications"), notifId), { read: true });
     } catch (err) {
       console.error("Failed to mark as read:", err);
     }
@@ -43,7 +44,7 @@ export const useNotifications = (userId: string | undefined) => {
     try {
       const batch = writeBatch(db);
       notifications.filter((n) => !n.read).forEach((n) => {
-        batch.update(doc(db, "notifications", n.id), { read: true });
+        batch.update(doc(db, ns("notifications"), n.id), { read: true });
       });
       await batch.commit();
     } catch (err) {
