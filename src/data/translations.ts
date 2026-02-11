@@ -89,6 +89,8 @@ export const translations: Record<Language, Record<string, string>> = {
     rsvpd: "RSVP'd",
     pastEvents: "Past Events",
     upcoming: "Upcoming",
+    allEvents: "All Events",
+    eventCategories: "Categories",
 
     // Directory
     allCategories: "All Categories",
