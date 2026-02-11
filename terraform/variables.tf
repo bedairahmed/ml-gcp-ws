@@ -9,10 +9,16 @@ variable "region" {
   default     = "us-central1"
 }
 
-variable "service_name" {
-  description = "Cloud Run service name"
+variable "student_namespace" {
+  description = "Student namespace for isolated deployments (e.g. alice, bob)"
   type        = string
-  default     = "madina-lab"
+  default     = "default"
+}
+
+variable "service_name" {
+  description = "Cloud Run service name (auto-derived from student_namespace if not set)"
+  type        = string
+  default     = ""
 }
 
 variable "image" {

@@ -1,5 +1,10 @@
+locals {
+  effective_service_name = var.service_name != "" ? var.service_name : "madina-lab-${var.student_namespace}"
+  effective_image        = var.image != "" ? var.image : "gcr.io/${var.project_id}/madina-lab-${var.student_namespace}:latest"
+}
+
 resource "google_cloud_run_v2_service" "app" {
-  name     = var.service_name
+  name     = local.effective_service_name
   location = var.region
 
   template {
@@ -9,7 +14,7 @@ resource "google_cloud_run_v2_service" "app" {
     }
 
     containers {
-      image = var.image
+      image = local.effective_image
 
       ports {
         container_port = 8080
