@@ -93,6 +93,26 @@ export const translations: Record<Language, Record<string, string>> = {
     writeReview: "Write a Review",
     helpful: "Helpful",
     ownerResponse: "Owner Response",
+
+    // Auth messages
+    errorNameRequired: "Display name is required",
+    errorPasswordShort: "Password must be at least 6 characters",
+    errorPasswordMismatch: "Passwords do not match",
+    errorEmailInUse: "This email is already registered",
+    errorInvalidEmail: "Please enter a valid email",
+    errorInvalidCredentials: "Invalid email or password",
+    errorEmailRequired: "Please enter your email first",
+    errorResetFailed: "Failed to send reset email",
+    registerSuccess: "Account created successfully!",
+    signInSuccess: "Welcome back!",
+    resetEmailSent: "Password reset email sent",
+
+    // Profile
+    memberSince: "Member since",
+    preferences: "Preferences",
+    groups: "Groups",
+    upgradeToBusiness: "Upgrade to Business Account",
+    upgradedToBusiness: "Upgraded to Business Account!",
   },
   ar: {
     appName: "مدينة لاب",
@@ -175,6 +195,24 @@ export const translations: Record<Language, Record<string, string>> = {
     writeReview: "كتابة مراجعة",
     helpful: "مفيد",
     ownerResponse: "رد المالك",
+
+    errorNameRequired: "الاسم المعروض مطلوب",
+    errorPasswordShort: "يجب أن تكون كلمة المرور 6 أحرف على الأقل",
+    errorPasswordMismatch: "كلمتا المرور غير متطابقتين",
+    errorEmailInUse: "هذا البريد الإلكتروني مسجل بالفعل",
+    errorInvalidEmail: "يرجى إدخال بريد إلكتروني صالح",
+    errorInvalidCredentials: "بريد إلكتروني أو كلمة مرور غير صالحة",
+    errorEmailRequired: "يرجى إدخال بريدك الإلكتروني أولاً",
+    errorResetFailed: "فشل إرسال رابط إعادة التعيين",
+    registerSuccess: "تم إنشاء الحساب بنجاح!",
+    signInSuccess: "!مرحباً بعودتك",
+    resetEmailSent: "تم إرسال رابط إعادة تعيين كلمة المرور",
+
+    memberSince: "عضو منذ",
+    preferences: "التفضيلات",
+    groups: "المجموعات",
+    upgradeToBusiness: "الترقية إلى حساب تجاري",
+    upgradedToBusiness: "!تمت الترقية إلى حساب تجاري",
   },
   ur: {
     appName: "مدینہ لیب",
@@ -257,6 +295,24 @@ export const translations: Record<Language, Record<string, string>> = {
     writeReview: "جائزہ لکھیں",
     helpful: "مددگار",
     ownerResponse: "مالک کا جواب",
+
+    errorNameRequired: "ظاہری نام ضروری ہے",
+    errorPasswordShort: "پاسورڈ کم از کم 6 حروف کا ہونا چاہیے",
+    errorPasswordMismatch: "پاسورڈ مماثل نہیں ہیں",
+    errorEmailInUse: "یہ ای میل پہلے سے رجسٹرڈ ہے",
+    errorInvalidEmail: "براہ کرم ایک درست ای میل درج کریں",
+    errorInvalidCredentials: "غلط ای میل یا پاسورڈ",
+    errorEmailRequired: "پہلے اپنا ای میل درج کریں",
+    errorResetFailed: "ری سیٹ ای میل بھیجنے میں ناکامی",
+    registerSuccess: "!اکاؤنٹ کامیابی سے بنایا گیا",
+    signInSuccess: "!خوش آمدید",
+    resetEmailSent: "پاسورڈ ری سیٹ ای میل بھیج دی گئی",
+
+    memberSince: "ممبر بنے",
+    preferences: "ترجیحات",
+    groups: "گروپس",
+    upgradeToBusiness: "کاروباری اکاؤنٹ میں اپ گریڈ",
+    upgradedToBusiness: "!کاروباری اکاؤنٹ میں اپ گریڈ ہو گیا",
   },
 };
 
