@@ -30,25 +30,25 @@ steps:
           --build-arg VITE_GOOGLE_MAPS_API_KEY=$$VITE_GOOGLE_MAPS_API_KEY \
           --build-arg VITE_APP_ENV=production \
           --build-arg VITE_NAMESPACE=${_STUDENT_NAMESPACE} \
-          --build-arg VITE_APP_URL=https://madina-lab-HASH.run.app \
-          -t gcr.io/$PROJECT_ID/madina-lab:$COMMIT_SHA \
-          -t gcr.io/$PROJECT_ID/madina-lab:latest \
+          --build-arg VITE_APP_URL=https://madina-lab-${_STUDENT_NAMESPACE:-default}.run.app \
+          -t gcr.io/$PROJECT_ID/madina-lab-${_STUDENT_NAMESPACE:-default}:$COMMIT_SHA \
+          -t gcr.io/$PROJECT_ID/madina-lab-${_STUDENT_NAMESPACE:-default}:latest \
           .
 
   # Step 3: Push to Container Registry
   - name: 'gcr.io/cloud-builders/docker'
-    args: ['push', 'gcr.io/$PROJECT_ID/madina-lab:$COMMIT_SHA']
+    args: ['push', 'gcr.io/$PROJECT_ID/madina-lab-${_STUDENT_NAMESPACE:-default}:$COMMIT_SHA']
   - name: 'gcr.io/cloud-builders/docker'
-    args: ['push', 'gcr.io/$PROJECT_ID/madina-lab:latest']
+    args: ['push', 'gcr.io/$PROJECT_ID/madina-lab-${_STUDENT_NAMESPACE:-default}:latest']
 
   # Step 4: Deploy to Cloud Run
   - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
     entrypoint: 'gcloud'
     args:
       - 'run'
-      - 'deploy'
-      - 'madina-lab'
-      - '--image=gcr.io/$PROJECT_ID/madina-lab:$COMMIT_SHA'
+       - 'deploy'
+       - 'madina-lab-${_STUDENT_NAMESPACE:-default}'
+       - '--image=gcr.io/$PROJECT_ID/madina-lab-${_STUDENT_NAMESPACE:-default}:$COMMIT_SHA'
       - '--region=us-central1'
       - '--platform=managed'
       - '--allow-unauthenticated'
@@ -64,8 +64,8 @@ steps:
     args: ['-c', 'rm -f /workspace/.build-env']
 
 images:
-  - 'gcr.io/$PROJECT_ID/madina-lab:$COMMIT_SHA'
-  - 'gcr.io/$PROJECT_ID/madina-lab:latest'
+  - 'gcr.io/$PROJECT_ID/madina-lab-${_STUDENT_NAMESPACE:-default}:$COMMIT_SHA'
+  - 'gcr.io/$PROJECT_ID/madina-lab-${_STUDENT_NAMESPACE:-default}:latest'
 
 options:
   logging: CLOUD_LOGGING_ONLY
