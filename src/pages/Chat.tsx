@@ -8,7 +8,7 @@ import { ScrollArea } from "@/components/ui/scroll-area";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import { Button } from "@/components/ui/button";
 import { Menu } from "lucide-react";
-import { sampleGroups, sampleMessages } from "@/data/sampleChat";
+import { useChat } from "@/hooks/useChat";
 import type { ChatMessage, Group, Language } from "@/types";
 import { useIsMobile } from "@/hooks/use-mobile";
 
@@ -20,12 +20,13 @@ const ChatPage: React.FC = () => {
   const { user, profile } = useAuth();
   const isMobile = useIsMobile();
   const [activeGroup, setActiveGroup] = useState("general");
-  const [messages, setMessages] = useState<ChatMessage[]>(sampleMessages);
   const [replyTo, setReplyTo] = useState<ChatMessage | null>(null);
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const scrollRef = useRef<HTMLDivElement>(null);
 
-  const activeGroupObj = sampleGroups.find((g) => g.id === activeGroup);
+  const { messages, groups, loading, sendMessage, toggleReaction } = useChat(activeGroup);
+
+  const activeGroupObj = groups.find((g) => g.id === activeGroup);
 
   const groupMessages = useMemo(
     () => messages.filter((m) => m.groupId === activeGroup).sort((a, b) => {
@@ -44,52 +45,10 @@ const ChatPage: React.FC = () => {
 
   const handleSend = useCallback(
     (text: string) => {
-      if (!user || !profile) return;
-      const newMsg: ChatMessage = {
-        id: `msg-${Date.now()}`,
-        displayName: profile.displayName,
-        message: text,
-        timestamp: { toMillis: () => Date.now() } as any,
-        userId: user.uid,
-        groupId: activeGroup,
-        textDirection: /[\u0600-\u06FF]/.test(text) ? "rtl" : "ltr",
-        isDeleted: false,
-        messageType: "text",
-        mentions: [],
-        reactions: {},
-        replyTo: replyTo
-          ? {
-              messageId: replyTo.id,
-              displayName: replyTo.displayName,
-              messagePreview: replyTo.message.slice(0, 50),
-            }
-          : undefined,
-      };
-      setMessages((prev) => [...prev, newMsg]);
+      sendMessage(text, replyTo);
       setReplyTo(null);
     },
-    [user, profile, activeGroup, replyTo]
-  );
-
-  const handleReact = useCallback(
-    (msgId: string, emoji: string) => {
-      if (!user) return;
-      setMessages((prev) =>
-        prev.map((m) => {
-          if (m.id !== msgId) return m;
-          const reactions = { ...m.reactions };
-          const users = reactions[emoji] ? [...reactions[emoji]] : [];
-          if (users.includes(user.uid)) {
-            reactions[emoji] = users.filter((u) => u !== user.uid);
-            if (reactions[emoji].length === 0) delete reactions[emoji];
-          } else {
-            reactions[emoji] = [...users, user.uid];
-          }
-          return { ...m, reactions };
-        })
-      );
-    },
-    [user]
+    [sendMessage, replyTo]
   );
 
   const handleGroupSelect = (id: string) => {
@@ -100,7 +59,7 @@ const ChatPage: React.FC = () => {
 
   const groupListEl = (
     <GroupList
-      groups={sampleGroups}
+      groups={groups}
       activeGroupId={activeGroup}
       onSelect={handleGroupSelect}
     />
@@ -143,17 +102,22 @@ const ChatPage: React.FC = () => {
         {/* Messages */}
         <ScrollArea className="flex-1" ref={scrollRef}>
           <div className="flex flex-col gap-3 p-4">
-            {groupMessages.length === 0 && (
+            {loading && (
+              <p className="text-center text-muted-foreground text-sm py-12 animate-pulse">
+                {t("loading")}
+              </p>
+            )}
+            {!loading && groupMessages.length === 0 && (
               <p className="text-center text-muted-foreground text-sm py-12">
                 No messages yet. Start the conversation! 💬
               </p>
             )}
-            {groupMessages.map((msg) => (
+            {!loading && groupMessages.map((msg) => (
               <MessageBubble
                 key={msg.id}
                 msg={msg}
                 onReply={setReplyTo}
-                onReact={handleReact}
+                onReact={toggleReaction}
               />
             ))}
           </div>
