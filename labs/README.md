@@ -18,6 +18,8 @@ Step-by-step hands-on exercises for the Madina Lab Cloud Engineering Workshop.
 
 📋 **[Cheat Sheet](./cheat-sheet.md)** — Quick-reference for every key command across all labs.
 
+🔧 **[Troubleshooting FAQ](./troubleshooting.md)** — Common errors and how to fix them.
+
 ## Prerequisites
 
 Before starting the labs, ensure you have completed the [prerequisites](../README.md#-prerequisites).
