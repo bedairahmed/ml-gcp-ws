@@ -3,6 +3,7 @@ import { useLanguage } from "@/contexts/LanguageContext";
 import AnnouncementBanner from "@/components/events/AnnouncementBanner";
 import CategoryFilter, { type EventCategory } from "@/components/events/CategoryFilter";
 import EventCard from "@/components/events/EventCard";
+import AddEventDialog from "@/components/events/AddEventDialog";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useEvents } from "@/hooks/useEvents";
 import { isPast, parseISO } from "date-fns";
@@ -36,7 +37,10 @@ const EventsPage: React.FC = () => {
 
   return (
     <div className="p-4 max-w-3xl mx-auto space-y-4">
-      <h1 className="font-heading text-2xl font-bold">📅 {t("navEvents")}</h1>
+      <div className="flex items-center justify-between">
+        <h1 className="font-heading text-2xl font-bold">📅 {t("navEvents")}</h1>
+        <AddEventDialog />
+      </div>
 
       <AnnouncementBanner announcements={announcements} />
 
