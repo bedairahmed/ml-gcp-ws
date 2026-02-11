@@ -1,8 +1,9 @@
 # Copy this file to terraform.tfvars and fill in your values
 
-project_id = "your-gcp-project-id"
-region     = "us-central1"
-image      = "gcr.io/your-gcp-project-id/madina-lab:latest"
+project_id        = "your-gcp-project-id"
+region            = "us-central1"
+student_namespace = "yourname"    # Your unique namespace (e.g. alice, bob)
+# image           = ""           # Optional: auto-derived as gcr.io/PROJECT/madina-lab-NAMESPACE:latest
 
 # Scaling
 min_instances = 0
