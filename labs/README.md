@@ -22,6 +22,8 @@ Step-by-step hands-on exercises for the Madina Lab Cloud Engineering Workshop.
 
 🎓 **[Instructor Guide](./instructor-guide.md)** — Timing, talking points, and common student issues.
 
+📋 **[Post-Workshop Survey](./post-workshop-survey.md)** — Feedback template for pacing, difficulty, and content.
+
 ## Prerequisites
 
 Before starting the labs, ensure you have completed the [prerequisites](../README.md#-prerequisites).
