@@ -5,6 +5,7 @@ import {
 } from "firebase/firestore";
 import { db } from "@/config/firebase";
 import type { UserProfile, CommunityEvent, BusinessClaim, Announcement } from "@/types";
+import { sendNotification } from "@/lib/notifications";
 
 export const useAdmin = () => {
   const [users, setUsers] = useState<UserProfile[]>([]);
@@ -82,14 +83,20 @@ export const useAdmin = () => {
         ownerUid: claim.userId,
       });
     }
+    // Notify the claimant
+    await sendNotification(claim.userId, "claim_approved", "Claim Approved! ✅", `Your claim for "${claim.businessName}" has been approved.`, "/my-business");
   };
 
   const rejectClaim = async (claimId: string, reviewerUid: string) => {
+    const claim = claims.find((c) => c.id === claimId);
     await updateDoc(doc(db, "businessClaims", claimId), {
       status: "rejected",
       reviewedBy: reviewerUid,
       reviewedAt: serverTimestamp(),
     });
+    if (claim) {
+      await sendNotification(claim.userId, "claim_rejected", "Claim Rejected", `Your claim for "${claim.businessName}" was not approved.`, "/directory");
+    }
   };
 
   const createAnnouncement = async (data: Omit<Announcement, "id" | "createdAt">) => {

@@ -5,6 +5,7 @@ import {
 import { db } from "@/config/firebase";
 import { sampleBusinesses, sampleReviews } from "@/data/sampleBusinesses";
 import type { Business, BusinessReview } from "@/types";
+import { sendNotification, notifyAdmins } from "@/lib/notifications";
 
 export const useDirectory = () => {
   const [businesses, setBusinesses] = useState<Business[]>([]);
@@ -68,6 +69,8 @@ export const useDirectory = () => {
       status: "pending",
       createdAt: serverTimestamp(),
     });
+    // Notify admins about new claim
+    await notifyAdmins("claim_pending", "New Business Claim 📋", `${userName} wants to claim "${businessName}".`, "/admin");
   };
 
   const submitReview = async (businessId: string, review: Omit<BusinessReview, "id" | "createdAt" | "updatedAt">) => {
@@ -76,6 +79,11 @@ export const useDirectory = () => {
       createdAt: serverTimestamp(),
       updatedAt: serverTimestamp(),
     });
+    // Notify business owner about new review
+    const biz = businesses.find((b) => b.id === businessId);
+    if (biz?.ownerUid) {
+      await sendNotification(biz.ownerUid, "review", "New Review ⭐", `${review.userName} left a ${review.rating}-star review.`, "/my-business");
+    }
   };
 
   return { businesses, reviewsMap, loading, submitClaim, submitReview };
