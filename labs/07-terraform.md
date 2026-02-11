@@ -44,11 +44,11 @@ ls -la
 | File | Purpose |
 |------|---------|
 | `main.tf` | Provider config & project settings |
-| `variables.tf` | Input variable declarations |
-| `cloud_run.tf` | Cloud Run service definition |
+| `variables.tf` | Input variables (including `student_namespace`) |
+| `cloud_run.tf` | Cloud Run service — auto-named per student |
 | `iam.tf` | IAM roles & permissions |
 | `secrets.tf` | Secret Manager resources |
-| `outputs.tf` | Values displayed after apply |
+| `outputs.tf` | Service URL, name, and namespace |
 
 ### Read the main files:
 
@@ -75,8 +75,9 @@ code terraform.tfvars
 Fill in your values:
 
 ```hcl
-project_id  = "your-gcp-project-id"
-region      = "us-central1"
+project_id        = "your-gcp-project-id"
+region            = "us-central1"
+student_namespace = "yourname"    # ← Your unique namespace (e.g. alice, bob)
 
 firebase_api_key             = "AIzaSy..."
 firebase_auth_domain         = "your-project.firebaseapp.com"
@@ -87,7 +88,7 @@ firebase_app_id              = "1:123456789:web:abcdef"
 google_maps_api_key          = ""
 ```
 
-> ⚠️ **Never commit `terraform.tfvars`** — it contains secrets! It's in `.gitignore`.
+> 💡 **`student_namespace`** automatically derives your service name (`madina-lab-yourname`) and image URL. No need to set those manually!
 
 ---
 
@@ -154,7 +155,12 @@ Apply complete! Resources: 8 added, 0 changed, 0 destroyed.
 terraform output
 ```
 
-You'll see the service URL and other useful values.
+You'll see:
+```
+service_url        = "https://madina-lab-yourname-HASH.run.app"
+service_name       = "madina-lab-yourname"
+student_namespace  = "yourname"
+```
 
 ---
 
