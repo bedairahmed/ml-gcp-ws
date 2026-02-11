@@ -104,6 +104,16 @@ export const useAdmin = () => {
       ...data,
       createdAt: serverTimestamp(),
     });
+    // Notify all active users
+    try {
+      const activeUsers = await getDocs(query(collection(db, "users"), where("isActive", "==", true)));
+      const promises = activeUsers.docs.map((d) =>
+        sendNotification(d.id, "announcement", "📢 New Announcement", data.text_en, "/")
+      );
+      await Promise.all(promises);
+    } catch (err) {
+      console.error("Failed to notify users about announcement:", err);
+    }
   };
 
   const updateAnnouncement = async (id: string, data: Partial<Announcement>) => {
