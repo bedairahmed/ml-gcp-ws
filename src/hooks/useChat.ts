@@ -105,6 +105,12 @@ export const useChat = (activeGroupId: string) => {
     async (text: string, replyTo?: ChatMessage | null) => {
       if (!user || !profile) return;
 
+      // Input validation
+      const trimmed = text.trim();
+      if (!trimmed || trimmed.length > 2000) {
+        toast.error(trimmed.length > 2000 ? "Message too long (max 2000 chars)" : "Message cannot be empty");
+        return;
+      }
       // Extract @mentions from text
       const mentionMatches = text.match(/@[\w\s]+?\b/g) || [];
       const mentionedNames = mentionMatches.map((m) => m.slice(1).trim());

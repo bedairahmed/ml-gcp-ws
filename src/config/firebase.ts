@@ -3,14 +3,20 @@ import { getAuth } from "firebase/auth";
 import { getFirestore } from "firebase/firestore";
 
 const firebaseConfig = {
-  apiKey: import.meta.env.VITE_FIREBASE_API_KEY || "AIzaSyBYLiibKIgZ1Jl0migaQ3LWMjgSw1xXSoQ",
-  authDomain: import.meta.env.VITE_FIREBASE_AUTH_DOMAIN || "ml-gcp-workshop-487117.firebaseapp.com",
-  projectId: import.meta.env.VITE_FIREBASE_PROJECT_ID || "ml-gcp-workshop-487117",
-  storageBucket: import.meta.env.VITE_FIREBASE_STORAGE_BUCKET || "ml-gcp-workshop-487117.firebasestorage.app",
-  messagingSenderId: import.meta.env.VITE_FIREBASE_MESSAGING_SENDER_ID || "202948511064",
-  appId: import.meta.env.VITE_FIREBASE_APP_ID || "1:202948511064:web:3dcf23fcb6085770f1d12d",
-  measurementId: import.meta.env.VITE_FIREBASE_MEASUREMENT_ID || "G-DFSPPPBQ6P",
+  apiKey: import.meta.env.VITE_FIREBASE_API_KEY,
+  authDomain: import.meta.env.VITE_FIREBASE_AUTH_DOMAIN,
+  projectId: import.meta.env.VITE_FIREBASE_PROJECT_ID,
+  storageBucket: import.meta.env.VITE_FIREBASE_STORAGE_BUCKET,
+  messagingSenderId: import.meta.env.VITE_FIREBASE_MESSAGING_SENDER_ID,
+  appId: import.meta.env.VITE_FIREBASE_APP_ID,
+  measurementId: import.meta.env.VITE_FIREBASE_MEASUREMENT_ID,
 };
+
+if (!firebaseConfig.apiKey || !firebaseConfig.projectId) {
+  console.error(
+    "Firebase config missing! Set VITE_FIREBASE_API_KEY and VITE_FIREBASE_PROJECT_ID environment variables."
+  );
+}
 
 const app = initializeApp(firebaseConfig);
 export const auth = getAuth(app);
