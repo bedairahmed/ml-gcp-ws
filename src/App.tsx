@@ -17,6 +17,7 @@ import AdminPage from "@/pages/Admin";
 import ProfilePage from "@/pages/Profile";
 import AuthPage from "@/pages/Auth";
 import MyBusinessPage from "@/pages/MyBusiness";
+import HelpPage from "@/pages/Help";
 import NotFound from "@/pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -41,6 +42,7 @@ const AppRoutes = () => {
         <Route path="/admin" element={<ProtectedRoute requiredRole="admin"><AdminPage /></ProtectedRoute>} />
         <Route path="/profile" element={<ProtectedRoute><ProfilePage /></ProtectedRoute>} />
         <Route path="/my-business" element={<ProtectedRoute requiredRole="business"><MyBusinessPage /></ProtectedRoute>} />
+        <Route path="/help" element={<ProtectedRoute><HelpPage /></ProtectedRoute>} />
         <Route path="*" element={<NotFound />} />
       </Routes>
     </AppLayout>
