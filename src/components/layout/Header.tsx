@@ -6,6 +6,7 @@ import { useTheme } from "@/contexts/ThemeContext";
 import { useAuth } from "@/contexts/AuthContext";
 import type { Language } from "@/types";
 import { getLanguageLabel } from "@/data/translations";
+import NotificationBell from "./NotificationBell";
 
 const languages: Language[] = ["en", "ar", "ur"];
 
@@ -41,6 +42,9 @@ const Header: React.FC = () => {
               </button>
             ))}
           </div>
+
+          {/* Notifications */}
+          {profile && <NotificationBell />}
 
           {/* Dark mode */}
           <button
