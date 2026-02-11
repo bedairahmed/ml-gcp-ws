@@ -9,7 +9,9 @@ interface ProtectedRouteProps {
 }
 
 const ProtectedRoute: React.FC<ProtectedRouteProps> = ({ children, requiredRole }) => {
-  const { user, profile, loading } = useAuth();
+  const { user, profile, loading, firebaseConfigured } = useAuth();
+
+  if (!firebaseConfigured) return <Navigate to="/landing" replace />;
 
   if (loading) return null;
 
