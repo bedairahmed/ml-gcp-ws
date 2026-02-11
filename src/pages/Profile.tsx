@@ -66,7 +66,17 @@ const ProfilePage: React.FC = () => {
     }
   };
 
-  if (!profile) return null;
+  if (!profile) {
+    return (
+      <div className="p-4 max-w-2xl mx-auto space-y-6">
+        <h1 className="font-heading text-2xl font-bold">👤 {t("navProfile")}</h1>
+        <div className="rounded-xl border bg-card p-6 text-center text-muted-foreground">
+          <p>{t("loading")}...</p>
+          <p className="text-xs mt-2">{t("error")}: If this persists, check Firestore Security Rules.</p>
+        </div>
+      </div>
+    );
+  }
 
   const badge = roleBadge[profile.role] || roleBadge.member;
   const memberSince = profile.createdAt?.toDate
