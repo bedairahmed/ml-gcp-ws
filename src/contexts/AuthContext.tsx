@@ -1,6 +1,6 @@
 import React, { createContext, useContext, useState, useEffect } from "react";
 import { onAuthStateChanged, type User } from "firebase/auth";
-import { doc, onSnapshot } from "firebase/firestore";
+import { doc, onSnapshot, setDoc, serverTimestamp, getDoc } from "firebase/firestore";
 import { auth, db } from "@/config/firebase";
 import type { UserProfile } from "@/types";
 
@@ -33,12 +33,39 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
   useEffect(() => {
     if (!user) return;
+
+    const ensureUserDoc = async () => {
+      const userRef = doc(db, "users", user.uid);
+      const snap = await getDoc(userRef);
+      if (!snap.exists()) {
+        await setDoc(userRef, {
+          displayName: user.displayName || "User",
+          email: user.email || "",
+          role: "member",
+          accountType: "community",
+          groups: ["general"],
+          language: "en",
+          photoURL: user.photoURL || "",
+          createdAt: serverTimestamp(),
+          lastSeen: serverTimestamp(),
+          isActive: true,
+          isOnline: true,
+          businessIds: [],
+        });
+      }
+    };
+
+    ensureUserDoc().catch(console.error);
+
     const unsubProfile = onSnapshot(doc(db, "users", user.uid), (snap) => {
       if (snap.exists()) {
         setProfile({ uid: user.uid, ...snap.data() } as UserProfile);
       }
       setLoading(false);
-    }, () => setLoading(false));
+    }, (error) => {
+      console.error("Firestore profile listener error:", error.code, error.message);
+      setLoading(false);
+    });
     return unsubProfile;
   }, [user]);
 
