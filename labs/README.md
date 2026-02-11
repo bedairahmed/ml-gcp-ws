@@ -16,6 +16,8 @@ Step-by-step hands-on exercises for the Madina Lab Cloud Engineering Workshop.
 | [07](./07-terraform.md) | Infrastructure as Code | 25 min | Manage infrastructure with Terraform |
 | [08](./08-namespace-isolation.md) | Namespace Isolation | 10 min | Isolate your data from other students |
 
+📋 **[Cheat Sheet](./cheat-sheet.md)** — Quick-reference for every key command across all labs.
+
 ## Prerequisites
 
 Before starting the labs, ensure you have completed the [prerequisites](../README.md#-prerequisites).
