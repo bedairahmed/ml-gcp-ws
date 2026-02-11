@@ -1,6 +1,6 @@
 import React from "react";
 import { Link, useLocation } from "react-router-dom";
-import { Moon, Sun, Info } from "lucide-react";
+import { Moon, Sun, HelpCircle } from "lucide-react";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { useTheme } from "@/contexts/ThemeContext";
 import { useAuth } from "@/contexts/AuthContext";
@@ -64,9 +64,9 @@ const Header: React.FC = () => {
             </Link>
           )}
 
-          {/* About */}
-          <Link to="/about" className="p-2 rounded-lg hover:bg-muted transition-colors">
-            <Info className="h-4 w-4" />
+          {/* Help */}
+          <Link to="/help" className="p-2 rounded-lg hover:bg-muted transition-colors" aria-label="Help & FAQ">
+            <HelpCircle className="h-4 w-4" />
           </Link>
         </div>
       </div>
