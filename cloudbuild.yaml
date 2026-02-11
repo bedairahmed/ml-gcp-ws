@@ -29,6 +29,7 @@ steps:
           --build-arg VITE_FIREBASE_APP_ID=$$VITE_FIREBASE_APP_ID \
           --build-arg VITE_GOOGLE_MAPS_API_KEY=$$VITE_GOOGLE_MAPS_API_KEY \
           --build-arg VITE_APP_ENV=production \
+          --build-arg VITE_NAMESPACE=${_STUDENT_NAMESPACE} \
           --build-arg VITE_APP_URL=https://madina-lab-HASH.run.app \
           -t gcr.io/$PROJECT_ID/madina-lab:$COMMIT_SHA \
           -t gcr.io/$PROJECT_ID/madina-lab:latest \
@@ -68,3 +69,6 @@ images:
 
 options:
   logging: CLOUD_LOGGING_ONLY
+
+substitutions:
+  _STUDENT_NAMESPACE: ''  # Override per student: --substitutions=_STUDENT_NAMESPACE=alice
