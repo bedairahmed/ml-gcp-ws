@@ -24,7 +24,7 @@ const ChatPage: React.FC = () => {
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const scrollRef = useRef<HTMLDivElement>(null);
 
-  const { messages, groups, loading, sendMessage, toggleReaction } = useChat(activeGroup);
+  const { messages, groups, members, loading, sendMessage, toggleReaction } = useChat(activeGroup);
 
   const activeGroupObj = groups.find((g) => g.id === activeGroup);
 
@@ -124,7 +124,7 @@ const ChatPage: React.FC = () => {
         </ScrollArea>
 
         {/* Composer */}
-        <MessageComposer onSend={handleSend} replyTo={replyTo} onCancelReply={() => setReplyTo(null)} />
+        <MessageComposer onSend={handleSend} replyTo={replyTo} onCancelReply={() => setReplyTo(null)} members={members} />
       </div>
     </div>
   );

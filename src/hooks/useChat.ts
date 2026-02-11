@@ -17,15 +17,25 @@ import { db } from "@/config/firebase";
 import { ns } from "@/lib/namespace";
 import { useAuth } from "@/contexts/AuthContext";
 import { toast } from "sonner";
-import type { ChatMessage, Group } from "@/types";
+import type { ChatMessage, Group, UserProfile } from "@/types";
 import { sampleGroups, sampleMessages } from "@/data/sampleChat";
 
 export const useChat = (activeGroupId: string) => {
   const { user, profile } = useAuth();
   const [messages, setMessages] = useState<ChatMessage[]>(sampleMessages);
   const [groups, setGroups] = useState<Group[]>(sampleGroups);
+  const [members, setMembers] = useState<UserProfile[]>([]);
   const [loading, setLoading] = useState(true);
   const [firestoreConnected, setFirestoreConnected] = useState(false);
+
+  // Fetch all active users for @mention
+  useEffect(() => {
+    const q = query(collection(db, ns("users")), where("isActive", "==", true));
+    const unsub = onSnapshot(q, (snap) => {
+      setMembers(snap.docs.map((d) => ({ uid: d.id, ...d.data() } as UserProfile)));
+    }, () => {});
+    return unsub;
+  }, []);
 
   // Real-time groups listener
   useEffect(() => {
@@ -95,6 +105,13 @@ export const useChat = (activeGroupId: string) => {
     async (text: string, replyTo?: ChatMessage | null) => {
       if (!user || !profile) return;
 
+      // Extract @mentions from text
+      const mentionMatches = text.match(/@[\w\s]+?\b/g) || [];
+      const mentionedNames = mentionMatches.map((m) => m.slice(1).trim());
+      const mentionedUids = members
+        .filter((m) => mentionedNames.some((n) => m.displayName.toLowerCase() === n.toLowerCase()))
+        .map((m) => m.uid);
+
       const msgData: Omit<ChatMessage, "id"> = {
         displayName: profile.displayName,
         message: text,
@@ -104,7 +121,7 @@ export const useChat = (activeGroupId: string) => {
         textDirection: /[\u0600-\u06FF]/.test(text) ? "rtl" : "ltr",
         isDeleted: false,
         messageType: "text",
-        mentions: [],
+        mentions: mentionedUids,
         reactions: {},
         replyTo: replyTo
           ? {
@@ -182,5 +199,5 @@ export const useChat = (activeGroupId: string) => {
     [user, messages, firestoreConnected]
   );
 
-  return { messages, groups, loading, sendMessage, toggleReaction };
+  return { messages, groups, members, loading, sendMessage, toggleReaction };
 };
