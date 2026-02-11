@@ -51,6 +51,12 @@ export const translations: Record<Language, Record<string, string>> = {
     high: "High",
     low: "Low",
 
+    // Athkar
+    morning: "Morning",
+    evening: "Evening",
+    streak: "Streak",
+    sessionProgress: "Session Progress",
+
     // General
     loading: "Loading...",
     error: "An error occurred",
@@ -158,6 +164,11 @@ export const translations: Record<Language, Record<string, string>> = {
     high: "الأعلى",
     low: "الأدنى",
 
+    morning: "الصباح",
+    evening: "المساء",
+    streak: "متتالية",
+    sessionProgress: "تقدم الجلسة",
+
     loading: "جاري التحميل...",
     error: "حدث خطأ",
     save: "حفظ",
@@ -257,6 +268,11 @@ export const translations: Record<Language, Record<string, string>> = {
     feelsLike: "محسوس ہوتا ہے",
     high: "زیادہ",
     low: "کم",
+
+    morning: "صبح",
+    evening: "شام",
+    streak: "سلسلہ",
+    sessionProgress: "سیشن کی پیشرفت",
 
     loading: "لوڈ ہو رہا ہے...",
     error: "ایک خرابی واقع ہوئی",
