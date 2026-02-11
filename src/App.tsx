@@ -18,6 +18,7 @@ import ProfilePage from "@/pages/Profile";
 import AuthPage from "@/pages/Auth";
 import MyBusinessPage from "@/pages/MyBusiness";
 import HelpPage from "@/pages/Help";
+import LandingPage from "@/pages/Landing";
 import NotFound from "@/pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -33,6 +34,7 @@ const AppRoutes = () => {
   return (
     <AppLayout>
       <Routes>
+        <Route path="/landing" element={<LandingPage />} />
         <Route path="/auth" element={<AuthGate><AuthPage /></AuthGate>} />
         <Route path="/" element={<ProtectedRoute><HomePage /></ProtectedRoute>} />
         <Route path="/athkar" element={<ProtectedRoute><AthkarPage /></ProtectedRoute>} />
