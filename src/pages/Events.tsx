@@ -1,38 +1,16 @@
-import React, { useState, useMemo, useCallback } from "react";
+import React, { useState, useMemo } from "react";
 import { useLanguage } from "@/contexts/LanguageContext";
-import { useAuth } from "@/contexts/AuthContext";
 import AnnouncementBanner from "@/components/events/AnnouncementBanner";
 import CategoryFilter, { type EventCategory } from "@/components/events/CategoryFilter";
 import EventCard from "@/components/events/EventCard";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { sampleEvents, sampleAnnouncements } from "@/data/sampleEvents";
+import { useEvents } from "@/hooks/useEvents";
 import { isPast, parseISO } from "date-fns";
-import { toast } from "sonner";
-import type { CommunityEvent } from "@/types";
 
 const EventsPage: React.FC = () => {
   const { t } = useLanguage();
-  const { user } = useAuth();
+  const { events, announcements, loading, toggleRsvp } = useEvents();
   const [category, setCategory] = useState<EventCategory>("all");
-  const [events, setEvents] = useState<CommunityEvent[]>(sampleEvents);
-
-  const handleRsvpToggle = useCallback(
-    (eventId: string) => {
-      if (!user) return;
-      setEvents((prev) =>
-        prev.map((evt) => {
-          if (evt.id !== eventId) return evt;
-          const already = evt.rsvpUsers.includes(user.uid);
-          const rsvpUsers = already
-            ? evt.rsvpUsers.filter((uid) => uid !== user.uid)
-            : [...evt.rsvpUsers, user.uid];
-          toast.success(already ? "RSVP removed" : "RSVP confirmed! ✅");
-          return { ...evt, rsvpUsers };
-        })
-      );
-    },
-    [user]
-  );
 
   const filtered = useMemo(() => {
     let list = events.filter((e) => e.isActive);
@@ -48,11 +26,19 @@ const EventsPage: React.FC = () => {
     .filter((e) => isPast(parseISO(e.date)))
     .sort((a, b) => b.date.localeCompare(a.date));
 
+  if (loading) {
+    return (
+      <div className="p-4 max-w-3xl mx-auto flex items-center justify-center py-20">
+        <p className="text-muted-foreground animate-pulse">{t("loading")}</p>
+      </div>
+    );
+  }
+
   return (
     <div className="p-4 max-w-3xl mx-auto space-y-4">
       <h1 className="font-heading text-2xl font-bold">📅 {t("navEvents")}</h1>
 
-      <AnnouncementBanner announcements={sampleAnnouncements} />
+      <AnnouncementBanner announcements={announcements} />
 
       <CategoryFilter selected={category} onChange={setCategory} />
 
@@ -71,7 +57,7 @@ const EventsPage: React.FC = () => {
             <p className="text-center text-muted-foreground py-8">{t("noResults")}</p>
           )}
           {upcoming.map((evt) => (
-            <EventCard key={evt.id} event={evt} onRsvpToggle={handleRsvpToggle} />
+            <EventCard key={evt.id} event={evt} onRsvpToggle={toggleRsvp} />
           ))}
         </TabsContent>
 
@@ -80,7 +66,7 @@ const EventsPage: React.FC = () => {
             <p className="text-center text-muted-foreground py-8">{t("noResults")}</p>
           )}
           {past.map((evt) => (
-            <EventCard key={evt.id} event={evt} onRsvpToggle={handleRsvpToggle} />
+            <EventCard key={evt.id} event={evt} onRsvpToggle={toggleRsvp} />
           ))}
         </TabsContent>
       </Tabs>
