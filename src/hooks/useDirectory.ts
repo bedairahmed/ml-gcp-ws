@@ -75,8 +75,17 @@ export const useDirectory = () => {
   };
 
   const submitReview = async (businessId: string, review: Omit<BusinessReview, "id" | "createdAt" | "updatedAt">) => {
+    // Input validation
+    if (!review.reviewText?.trim() || review.reviewText.length > 1000) {
+      throw new Error("Review text is required and must be under 1000 characters");
+    }
+    if (!review.rating || review.rating < 1 || review.rating > 5 || !Number.isInteger(review.rating)) {
+      throw new Error("Rating must be an integer between 1 and 5");
+    }
+
     await addDoc(collection(db, ns("businesses"), businessId, "reviews"), {
       ...review,
+      reviewText: review.reviewText.trim(),
       createdAt: serverTimestamp(),
       updatedAt: serverTimestamp(),
     });

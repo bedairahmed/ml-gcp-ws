@@ -1,0 +1,230 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    // ─── Helper functions ───────────────────────────────
+    function isSignedIn() {
+      return request.auth != null;
+    }
+
+    function isOwner(userId) {
+      return isSignedIn() && request.auth.uid == userId;
+    }
+
+    function isAdmin() {
+      return isSignedIn()
+        && exists(/databases/$(database)/documents/users/$(request.auth.uid))
+        && get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role == 'admin';
+    }
+
+    function isModerator() {
+      return isSignedIn()
+        && exists(/databases/$(database)/documents/users/$(request.auth.uid))
+        && get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role in ['admin', 'moderator'];
+    }
+
+    // Prevent modification of protected fields
+    function noRoleChange() {
+      return !request.resource.data.diff(resource.data).affectedKeys().hasAny(['role', 'accountType', 'isActive']);
+    }
+
+    // ─── Users ──────────────────────────────────────────
+    match /users/{userId} {
+      // Anyone signed in can read basic user info (needed for chat, mentions)
+      allow read: if isSignedIn();
+
+      // Users can create their own doc on first login
+      allow create: if isOwner(userId)
+        && request.resource.data.role == 'member';
+
+      // Users can update their own profile, but NOT role/accountType/isActive
+      allow update: if isOwner(userId) && noRoleChange();
+
+      // Admins can update any user (including role changes)
+      allow update: if isAdmin();
+
+      allow delete: if false;
+    }
+
+    // ─── Groups ─────────────────────────────────────────
+    match /groups/{groupId} {
+      allow read: if isSignedIn();
+      allow create, update, delete: if isAdmin();
+    }
+
+    // ─── Messages ───────────────────────────────────────
+    match /messages/{messageId} {
+      allow read: if isSignedIn();
+
+      // Authenticated users can create messages with length limit
+      allow create: if isSignedIn()
+        && request.resource.data.userId == request.auth.uid
+        && request.resource.data.message is string
+        && request.resource.data.message.size() <= 2000;
+
+      // Only message author can update (reactions), or moderator
+      allow update: if isOwner(resource.data.userId) || isModerator();
+
+      allow delete: if isModerator();
+    }
+
+    // ─── Events ─────────────────────────────────────────
+    match /events/{eventId} {
+      allow read: if isSignedIn();
+
+      allow create: if isModerator()
+        && request.resource.data.title_en is string
+        && request.resource.data.title_en.size() <= 120;
+
+      allow update: if isModerator();
+      allow delete: if isAdmin();
+    }
+
+    // ─── Announcements ──────────────────────────────────
+    match /announcements/{announcementId} {
+      allow read: if isSignedIn();
+      allow create, update, delete: if isAdmin();
+    }
+
+    // ─── Businesses ─────────────────────────────────────
+    match /businesses/{businessId} {
+      allow read: if isSignedIn();
+
+      // Admins can create businesses
+      allow create: if isAdmin();
+
+      // Business owner or admin can update
+      allow update: if isSignedIn()
+        && (resource.data.ownerUid == request.auth.uid || isAdmin());
+
+      allow delete: if isAdmin();
+
+      // ── Reviews (subcollection) ──
+      match /reviews/{reviewId} {
+        allow read: if isSignedIn();
+
+        // Any authenticated user can leave a review
+        allow create: if isSignedIn()
+          && request.resource.data.userId == request.auth.uid
+          && request.resource.data.rating is int
+          && request.resource.data.rating >= 1
+          && request.resource.data.rating <= 5
+          && request.resource.data.reviewText is string
+          && request.resource.data.reviewText.size() <= 1000;
+
+        // Business owner can add ownerReply, reviewer can edit own review
+        allow update: if isSignedIn()
+          && (resource.data.userId == request.auth.uid
+              || get(/databases/$(database)/documents/businesses/$(businessId)).data.ownerUid == request.auth.uid
+              || isAdmin());
+
+        allow delete: if isAdmin();
+      }
+    }
+
+    // ─── Business Claims ────────────────────────────────
+    match /businessClaims/{claimId} {
+      allow read: if isSignedIn()
+        && (resource.data.userId == request.auth.uid || isAdmin());
+
+      // Any authenticated user can submit a claim
+      allow create: if isSignedIn()
+        && request.resource.data.userId == request.auth.uid;
+
+      // Only admins can approve/reject claims
+      allow update: if isAdmin();
+
+      allow delete: if isAdmin();
+    }
+
+    // ─── Notifications ──────────────────────────────────
+    match /notifications/{notifId} {
+      // Users can only read their own notifications
+      allow read: if isSignedIn()
+        && resource.data.userId == request.auth.uid;
+
+      // System creates notifications (any authenticated user for now)
+      allow create: if isSignedIn();
+
+      // Users can mark their own notifications as read
+      allow update: if isSignedIn()
+        && resource.data.userId == request.auth.uid
+        && request.resource.data.diff(resource.data).affectedKeys().hasOnly(['read']);
+
+      allow delete: if false;
+    }
+
+    // ─── Namespaced collections (same rules, prefixed) ──
+    // When using VITE_NAMESPACE, collections are prefixed.
+    // Deploy separate rules per namespace or use wildcards:
+    match /{prefix}_users/{userId} {
+      allow read: if isSignedIn();
+      allow create: if isOwner(userId) && request.resource.data.role == 'member';
+      allow update: if isOwner(userId) || isAdmin();
+      allow delete: if false;
+    }
+
+    match /{prefix}_messages/{messageId} {
+      allow read: if isSignedIn();
+      allow create: if isSignedIn()
+        && request.resource.data.userId == request.auth.uid
+        && request.resource.data.message.size() <= 2000;
+      allow update: if isOwner(resource.data.userId) || isModerator();
+      allow delete: if isModerator();
+    }
+
+    match /{prefix}_events/{eventId} {
+      allow read: if isSignedIn();
+      allow create, update: if isModerator();
+      allow delete: if isAdmin();
+    }
+
+    match /{prefix}_announcements/{id} {
+      allow read: if isSignedIn();
+      allow create, update, delete: if isAdmin();
+    }
+
+    match /{prefix}_businesses/{businessId} {
+      allow read: if isSignedIn();
+      allow create: if isAdmin();
+      allow update: if isSignedIn()
+        && (resource.data.ownerUid == request.auth.uid || isAdmin());
+      allow delete: if isAdmin();
+
+      match /reviews/{reviewId} {
+        allow read: if isSignedIn();
+        allow create: if isSignedIn()
+          && request.resource.data.userId == request.auth.uid
+          && request.resource.data.rating >= 1
+          && request.resource.data.rating <= 5;
+        allow update: if isSignedIn()
+          && (resource.data.userId == request.auth.uid || isAdmin());
+        allow delete: if isAdmin();
+      }
+    }
+
+    match /{prefix}_businessClaims/{claimId} {
+      allow read: if isSignedIn()
+        && (resource.data.userId == request.auth.uid || isAdmin());
+      allow create: if isSignedIn()
+        && request.resource.data.userId == request.auth.uid;
+      allow update: if isAdmin();
+      allow delete: if isAdmin();
+    }
+
+    match /{prefix}_notifications/{notifId} {
+      allow read: if isSignedIn()
+        && resource.data.userId == request.auth.uid;
+      allow create: if isSignedIn();
+      allow update: if isSignedIn()
+        && resource.data.userId == request.auth.uid
+        && request.resource.data.diff(resource.data).affectedKeys().hasOnly(['read']);
+      allow delete: if false;
+    }
+
+    match /{prefix}_groups/{groupId} {
+      allow read: if isSignedIn();
+      allow create, update, delete: if isAdmin();
+    }
+  }
+}
