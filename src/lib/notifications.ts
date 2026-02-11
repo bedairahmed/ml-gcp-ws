@@ -1,5 +1,6 @@
 import { addDoc, collection, serverTimestamp } from "firebase/firestore";
 import { db } from "@/config/firebase";
+import { ns } from "@/lib/namespace";
 
 export type NotificationType = "review" | "claim_approved" | "claim_rejected" | "announcement" | "claim_pending";
 
@@ -22,7 +23,7 @@ export const sendNotification = async (
   link?: string
 ) => {
   try {
-    await addDoc(collection(db, "notifications"), {
+    await addDoc(collection(db, ns("notifications")), {
       userId,
       type,
       title,
@@ -45,7 +46,7 @@ export const notifyAdmins = async (
 ) => {
   const { query, where, getDocs } = await import("firebase/firestore");
   try {
-    const snap = await getDocs(query(collection(db, "users"), where("role", "==", "admin")));
+    const snap = await getDocs(query(collection(db, ns("users")), where("role", "==", "admin")));
     const promises = snap.docs.map((d) => sendNotification(d.id, type, title, message, link));
     await Promise.all(promises);
   } catch (err) {

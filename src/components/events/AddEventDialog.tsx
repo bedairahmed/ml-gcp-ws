@@ -22,6 +22,7 @@ import {
 import { Plus } from "lucide-react";
 import { collection, addDoc, serverTimestamp } from "firebase/firestore";
 import { db } from "@/config/firebase";
+import { ns } from "@/lib/namespace";
 import { toast } from "sonner";
 import { z } from "zod";
 
@@ -85,7 +86,7 @@ const AddEventDialog: React.FC = () => {
 
     setSubmitting(true);
     try {
-      await addDoc(collection(db, "events"), {
+      await addDoc(collection(db, ns("events")), {
         ...result.data,
         title_ar: result.data.title_ar || result.data.title_en,
         title_ur: result.data.title_ur || result.data.title_en,
