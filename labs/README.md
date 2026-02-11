@@ -20,6 +20,8 @@ Step-by-step hands-on exercises for the Madina Lab Cloud Engineering Workshop.
 
 🔧 **[Troubleshooting FAQ](./troubleshooting.md)** — Common errors and how to fix them.
 
+🎓 **[Instructor Guide](./instructor-guide.md)** — Timing, talking points, and common student issues.
+
 ## Prerequisites
 
 Before starting the labs, ensure you have completed the [prerequisites](../README.md#-prerequisites).
