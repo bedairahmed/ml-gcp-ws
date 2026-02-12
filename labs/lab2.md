@@ -1,153 +1,111 @@
-# 🕌 Madina Lab — Lab 2: Ship Your App
+# 🕌 Madina Lab — Lab 1: Explore Your Cloud & Meet the App
 
-> *The community board reviewed the demo. "We love it. Now each team ships their own version — live, today." Each team must be isolated: separate data, separate identity, separate URL. And every deploy must be scanned first.*
+> *A growing community needs a platform. Before building anything, understand the cloud services that power it.*
 
 ---
 
 ## 🎯 Objectives
 
-- Understand the business requirements and trace them to the pipeline
-- Deploy your team's app with one command
-- Read security scan results in Cloud Build
-- Verify your app is live and monitored
+- Navigate the GCP Console and identify workshop services
+- See the live app and understand its architecture
+- Read the Dockerfile and pipeline before running anything
 
-## ⏱ Duration: 35 minutes
+## ⏱ Duration: 30 minutes
 
 ## 👥 Roles
 
 | Role A — Builder | Role B — Observer |
 |-----------------|-------------------|
-| Runs deploy command in Cloud Shell | Watches Cloud Build → each step |
-| Reads terminal output | Checks Cloud Run: logs, metrics, secrets |
+| Navigates Console | Takes notes, answers discussion questions |
 
-> **Switch from Lab 1!**
-
-## 📖 Cheatsheets: [`docs/gcloud-cheatsheet.md`](../docs/gcloud-cheatsheet.md) · [`docs/cloudbuild-cheatsheet.md`](../docs/cloudbuild-cheatsheet.md)
+📖 Cheatsheet: [`docs/gcloud-cheatsheet.md`](../docs/gcloud-cheatsheet.md)
 
 ---
 
-## The Business Requirements
+## Part A: GCP Services Tour (15 min)
 
-| # | Requirement | Why? | Where in pipeline? |
-|---|------------|------|-------------------|
-| 1 | Own URL per team | Work independently | `madina-lab-${_TEAM}` in [`.pipelines/cloudbuild-app.yaml`](../.pipelines/cloudbuild-app.yaml) → Step 5 |
-| 2 | Isolated data | Team 1 ≠ Team 2 | `VITE_NAMESPACE=${_TEAM}` → Step 2 |
-| 3 | Own service account | Least privilege | `${_TEAM}-sa@...` → Step 5 |
-| 4 | Secrets from Secret Manager | Never hardcode keys | `secretEnv` + `--set-secrets` |
-| 5 | Security scan before deploy | Catch vulns early | Hadolint (Step 1) + Trivy (Step 3) |
-| 6 | Monitoring built-in | Logs & metrics day one | Cloud Run automatic |
+Log into GCP Console → project: **ml-gcp-workshop-487117** *(see [credentials.md](credentials.md))*
+
+### Task 1: VPC Network
+📍 **Console → VPC Network → VPC Networks → `madina-lab-vpc`**
+> ❓ What subnet? What IP range? How many firewall rules?
+
+### Task 2: Artifact Registry
+📍 **Console → Artifact Registry → `madina-lab`**
+> ❓ What type of repo? Can you find the instructor's image?
+
+### Task 3: Secret Manager
+📍 **Console → Security → Secret Manager**
+> ❓ How many secrets? Can you see the values?
+
+### Task 4: Cloud Build
+📍 **Console → Cloud Build → History** — find the instructor's build, expand each step
+> ❓ How many steps? How long? What does each step do?
+
+### Task 5: Cloud Run
+📍 **Console → Cloud Run → `madina-lab-instructor`** — explore: Metrics, Logs, Revisions, Security, Variables & Secrets
+> ❓ What URL? How many instances? What service account?
+
+### Task 6: Firestore
+📍 **Console → Firestore** — check Data tab and Rules tab
+> ❓ What collections? Where are security rules defined?
 
 ---
 
-## Part A: Understand the Pipeline (10 min)
+## Part B: Meet the App & Pipeline (15 min)
 
-### Task 1: Trace Your Team Name
+### Task 7: Visit the Live App
+Copy the Cloud Run URL from Task 5. Sign up, explore chat, events, business directory.
+> ❓ How would each feature use Firestore?
+
+### Task 8: Read the Dockerfile
+
+📍 **Open:** [`Dockerfile`](../Dockerfile)
+- VS Code: `ml-gcp-ws/Dockerfile`
+- GitHub: [view on GitHub](https://github.com/bedairahmed/ml-gcp-ws/blob/main/Dockerfile)
+
+> ❓ How many stages? What does each do? What port? What is `/health` for?
+
+**Key things:**
+- Stage 1 (`node:20-alpine`) — builds the React app
+- Stage 2 (`nginx:alpine`) — serves built files
+- Port `8080` — Cloud Run requirement
+- `/health` — startup probe endpoint
+
+📖 See [`docs/docker-cheatsheet.md`](../docs/docker-cheatsheet.md)
+
+### Task 9: Read the Pipeline
 
 📍 **Open:** [`.pipelines/cloudbuild-app.yaml`](../.pipelines/cloudbuild-app.yaml)
+- VS Code: `ml-gcp-ws/.pipelines/cloudbuild-app.yaml`
+- GitHub: [view on GitHub](https://github.com/bedairahmed/ml-gcp-ws/blob/main/.pipelines/cloudbuild-app.yaml)
 
-Find every `${_TEAM}`. This makes each deployment unique.
+> ❓ How many steps? Which builds? Which scans? Where are secrets? What does `_TEAM` do?
 
-> ❓ How many times? What does it affect? (image name, service name, namespace, SA, labels)
+| Step | Name | What it does |
+|------|------|-------------|
+| 1 | `lint-dockerfile` | Hadolint — Dockerfile best practices |
+| 2 | `build` | Docker build with secrets |
+| 3 | `scan-image` | Trivy — vulnerability scan |
+| 4 | `push` | Push to Artifact Registry |
+| 5 | `deploy-app` | Deploy to Cloud Run |
+| 6 | `allow-public-access` | Grant public access |
+| 7 | `map-domain` | Map custom domain |
 
----
-
-### Task 2: Find the Secrets
-
-In the same file, find:
-- `secretEnv:` — injected at build time
-- `--set-secrets=` — mounted at runtime
-- `availableSecrets:` — definitions at bottom
-
-> ❓ Difference between build-time secrets (Step 2) and runtime secrets (Step 5)?
-
----
-
-### Task 3: Find the Security Scans
-
-Step 1 (`lint-dockerfile`) and Step 3 (`scan-image`).
-
-> ❓ What does Hadolint check? What does Trivy check? What severity levels?
-
----
-
-## Part B: Deploy Your App (10 min)
-
-### Task 4: Open Cloud Shell
-
-📍 **Console → Cloud Shell icon** (top right, `>_`)
-
-### Task 5: Clone the Repo
-
-```bash
-git clone https://github.com/bedairahmed/ml-gcp-ws.git
-cd ml-gcp-ws
-```
-
-### Task 6: Deploy!
-
-Replace `teamN` with **your team number**:
-
-```bash
-gcloud builds submit --config .pipelines/cloudbuild-app.yaml --substitutions=_TEAM=teamN .
-```
-
-> ⏳ ~4-5 min. **Role B:** watch Console → Cloud Build → History.
-
----
-
-## Part C: Verify & Monitor (15 min)
-
-### Task 7: Check Build Steps
-
-📍 **Console → Cloud Build → History → click your build**
-
-**Step 1 — Hadolint:**
-> ❓ Any issues? What rules? (DL3018, DL3025)
-
-**Step 3 — Trivy:**
-> ❓ How many vulns? Any HIGH or CRITICAL?
-
----
-
-### Task 8: Check Cloud Run
-
-📍 **Console → Cloud Run → `madina-lab-teamN`**
-
-| Tab | Look for |
-|-----|---------|
-| **Metrics** | Request count, latency |
-| **Logs** | Startup logs, errors |
-| **Revisions** | When created? |
-| **Variables & Secrets** | Secret Manager refs |
-| **Security** | `allUsers` listed? |
-
-### Task 9: Visit Your App
-
-> ❓ Does it load? Can you sign up? Separate from instructor's app?
-
-### Task 10: Artifact Registry
-
-📍 **Console → Artifact Registry → `madina-lab`**
-
-> ❓ Find your team's image. What tag?
+📖 See [`docs/cloudbuild-cheatsheet.md`](../docs/cloudbuild-cheatsheet.md)
 
 ---
 
 ## 💬 Discussion
 
-1. CRITICAL vulnerability found — should the build stop?
-2. Why own service account per team?
-3. How to roll back? (Cloud Run → Revisions)
-4. What other steps for a production pipeline?
-
----
+1. Why Cloud Run instead of a VM?
+2. Why Secret Manager instead of `.env` in the repo?
+3. Why scan the container before deploying?
 
 ## ✅ Checklist
 
-- [ ] Understood 6 business requirements
-- [ ] Traced `_TEAM` through [`.pipelines/cloudbuild-app.yaml`](../.pipelines/cloudbuild-app.yaml)
-- [ ] Deployed with one command
-- [ ] Read Hadolint + Trivy results
-- [ ] Checked Cloud Run: metrics, logs, secrets
-- [ ] App is live
-- [ ] Found image in Artifact Registry
+- [ ] Logged into GCP Console
+- [ ] Explored: VPC, Artifact Registry, Secret Manager, Cloud Build, Cloud Run, Firestore
+- [ ] Visited the live app
+- [ ] Read the Dockerfile — understand two stages
+- [ ] Read the pipeline — identify each step

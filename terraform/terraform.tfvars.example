@@ -1,21 +1,11 @@
-# Copy this file to terraform.tfvars and fill in your values
+# Copy to terraform.tfvars: cp terraform.tfvars.example terraform.tfvars
 
-project_id        = "your-gcp-project-id"
+project_id        = "ml-gcp-workshop-487117"
 region            = "us-central1"
-student_namespace = "yourname"    # Your unique namespace (e.g. alice, bob)
-# image           = ""           # Optional: auto-derived as gcr.io/PROJECT/madina-lab-NAMESPACE:latest
+student_namespace = "team1"
+# image           = ""    # Auto-derived if empty
 
-# Scaling
 min_instances = 0
 max_instances = 3
 memory        = "256Mi"
 cpu           = "1"
-
-# Secrets (use terraform.tfvars or pass via CLI / CI env vars)
-firebase_api_key              = ""
-firebase_auth_domain          = ""
-firebase_project_id           = ""
-firebase_storage_bucket       = ""
-firebase_messaging_sender_id  = ""
-firebase_app_id               = ""
-google_maps_api_key           = ""

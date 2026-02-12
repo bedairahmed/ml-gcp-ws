@@ -2,66 +2,36 @@
 
 ## Your Account
 
-📋 [**Workshop Registration Sheet**](https://docs.google.com/spreadsheets/d/e/2PACX-1vSxQhQ5DcSui7mcSfXHVfUcVQpQWMklq4jzJzI1P9YLRgww02kMuk7HV3tdNUjxyJsYysvFosiCPy9J/pubhtml?gid=959209679&single=true) — Find your team, email, and password here.
-
-
+📋 [**Workshop Registration Sheet**](https://docs.google.com/spreadsheets/d/e/2PACX-1vSxQhQ5DcSui7mcSfXHVfUcVQpQWMklq4jzJzI1P9YLRgww02kMuk7HV3tdNUjxyJsYysvFosiCPy9J/pubhtml?gid=959209679&single=true)
 
 ## Login
 
 1. Open **Chrome** → [console.cloud.google.com](https://console.cloud.google.com)
-2. Sign in: `studentN@ml-gcp.cloud-people.net` (password from sheet above)
+2. Sign in: `studentN@ml-gcp.cloud-people.net` (password from sheet)
 3. Change password on first login
 4. Select project: **ml-gcp-workshop-487117**
 
+## How to View Repo Files
+
+Throughout the labs, you'll be asked to read files like the Dockerfile and pipeline YAML. You have two options:
+
+| Option | How |
+|--------|-----|
+| **VS Code** (if installed) | Clone the repo locally: `git clone https://github.com/bedairahmed/ml-gcp-ws.git` |
+| **GitHub** (no install needed) | Browse at [github.com/bedairahmed/ml-gcp-ws](https://github.com/bedairahmed/ml-gcp-ws) |
+
 ## Team Roles
 
-Each team has **two members**. Pick your roles and **switch between labs**:
+Each team has **two members**. Switch roles between labs:
 
 | Role A — Builder | Role B — Observer |
 |-----------------|-------------------|
 | Drives keyboard, runs commands | Follows in Console, checks logs & metrics |
 
-## Repo Structure
-
-```
-ml-gcp-ws/
-├── Dockerfile                  ← Docker image (Lab 1, 2)
-├── docker-compose.yml          ← Local dev only
-├── .pipelines/                 ← CI/CD pipelines
-│   ├── cloudbuild-app.yaml     ← App pipeline (Lab 1, 2)
-│   └── cloudbuild-tf.yaml      ← Terraform pipeline (Lab 3)
-├── labs/                       ← Lab guides
-│   ├── credentials.md          ← This file
-│   ├── lab1.md                 ← Lab 1: Explore & Meet the App
-│   ├── lab2.md                 ← Lab 2: Ship Your App
-│   └── lab3.md                 ← Lab 3: Infrastructure as Code
-├── terraform/                  ← IaC files (Lab 3)
-│   ├── main.tf                 ← Provider config
-│   ├── cloud_run.tf            ← Cloud Run service
-│   ├── iam.tf                  ← IAM bindings
-│   ├── secrets.tf              ← Secret Manager
-│   ├── variables.tf            ← Input variables
-│   ├── outputs.tf              ← Output values
-│   └── terraform.tfvars.example
-├── scripts/                    ← Instructor scripts
-│   ├── setup.sh
-│   ├── cleanup.sh
-│   └── validate.sh
-├── docs/                       ← Cheatsheets
-│   ├── gcloud-cheatsheet.md
-│   ├── docker-cheatsheet.md
-│   ├── terraform-cheatsheet.md
-│   ├── cloudbuild-cheatsheet.md
-│   ├── yaml-cheatsheet.md
-│   └── git-cheatsheet.md
-├── src/                        ← React app source
-└── public/                     ← Static assets
-```
-
 ## Cheatsheets
 
-| Cheatsheet | Link |
-|-----------|------|
+| Topic | Link |
+|-------|------|
 | GCP CLI (gcloud) | [`docs/gcloud-cheatsheet.md`](../docs/gcloud-cheatsheet.md) |
 | Docker | [`docs/docker-cheatsheet.md`](../docs/docker-cheatsheet.md) |
 | Terraform | [`docs/terraform-cheatsheet.md`](../docs/terraform-cheatsheet.md) |
@@ -74,5 +44,3 @@ ml-gcp-ws/
 ```bash
 gcloud builds submit --config .pipelines/cloudbuild-app.yaml --substitutions=_TEAM=teamN .
 ```
-
-Replace `teamN` with your team number (team1 – team8).

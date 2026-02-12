@@ -2,8 +2,7 @@
 #  🕌  Madina Lab — Terraform Pipeline (cloudbuild-tf.yaml)
 # =============================================================================
 #
-#  This pipeline builds the app, scans Terraform with Checkov,
-#  then deploys infrastructure using Terraform.
+#  Builds the app, scans Terraform with Checkov, then deploys infra.
 #
 #  HOW TO USE:
 #  ───────────
@@ -12,11 +11,19 @@
 #
 #  PIPELINE STAGES:
 #  ────────────────
-#  Step 1: BUILD-APP    → Build & push container image (same as app pipeline)
-#  Step 2: CHECKOV      → Scan Terraform for security & best practices
-#  Step 3: TF-INIT      → Download providers
-#  Step 4: TF-PLAN      → Preview what will change
-#  Step 5: TF-APPLY     → Create/update resources
+#  Step 1: BUILD-APP      → Build & push container image
+#  Step 2: CHECKOV-SCAN   → Scan Terraform for security & best practices
+#  Step 3: TF-INIT        → Download providers & configure per-team backend
+#  Step 4: TF-PLAN        → Preview what will change
+#  Step 5: TF-APPLY       → Create/update resources
+#
+#  STATE ISOLATION:
+#  ────────────────
+#  Each team gets its own state file in GCS:
+#    gs://ml-gcp-workshop-487117-tfstate/terraform/state/team1/
+#    gs://ml-gcp-workshop-487117-tfstate/terraform/state/team2/
+#    ...
+#  This means teams cannot interfere with each other's infrastructure.
 #
 # =============================================================================
 
@@ -25,13 +32,14 @@ substitutions:
   _REGION: "us-central1"
   _AR_REPO: "madina-lab"
   _PROJECT_ID: "ml-gcp-workshop-487117"
+  _TF_STATE_BUCKET: "ml-gcp-workshop-487117-tfstate"
 
 steps:
   # ════════════════════════════════════════════════════════
   # STEP 1: BUILD-APP — Build & push container image
   # ════════════════════════════════════════════════════════
-  # Terraform deploys a Cloud Run service that needs an image.
-  # This step builds and pushes it to Artifact Registry first.
+  # Terraform deploys a Cloud Run service that references this image.
+  # The image must exist in Artifact Registry before terraform apply.
   - name: "gcr.io/cloud-builders/docker"
     id: "build-app"
     entrypoint: "bash"
@@ -39,8 +47,7 @@ steps:
       - "-c"
       - |
         echo "═══════════════════════════════════════════════════"
-        echo "  🐳 Building container image"
-        echo "  Team: ${_TEAM}"
+        echo "  🐳 Building container image — ${_TEAM}"
         echo "═══════════════════════════════════════════════════"
         docker build \
           --build-arg VITE_FIREBASE_API_KEY=$$FIREBASE_API_KEY \
@@ -68,16 +75,13 @@ steps:
   # ════════════════════════════════════════════════════════
   # STEP 2: CHECKOV — Scan Terraform for security issues
   # ════════════════════════════════════════════════════════
-  # Checkov is a static analysis tool for Infrastructure as Code.
-  # It checks Terraform files for:
+  # Checkov checks Terraform files for:
   #   - Security misconfigurations (public access, missing encryption)
   #   - Best practices (resource naming, tagging)
-  #   - Compliance issues (CIS benchmarks)
+  #   - Compliance (CIS benchmarks)
   #
-  # Non-blocking (--soft-fail): shows results but doesn't stop the build.
-  # Remove --soft-fail to block deployment on security issues.
-  #
-  # View results: Cloud Build → History → click build → Step 2 logs
+  # --soft-fail: shows results but doesn't stop the build
+  # Remove --soft-fail to block deployment on security findings
   - name: "bridgecrew/checkov"
     id: "checkov-scan"
     entrypoint: "checkov"
@@ -91,10 +95,14 @@ steps:
       - "--quiet"
 
   # ════════════════════════════════════════════════════════
-  # STEP 3: TF-INIT — Download providers
+  # STEP 3: TF-INIT — Download providers & configure backend
   # ════════════════════════════════════════════════════════
-  # Downloads the Google Cloud provider plugin.
-  # Think of it like `npm install` for infrastructure.
+  # Downloads the Google Cloud provider plugin and configures
+  # the GCS backend with a team-specific state path:
+  #   gs://ml-gcp-workshop-487117-tfstate/terraform/state/team1/
+  #   gs://ml-gcp-workshop-487117-tfstate/terraform/state/team2/
+  #
+  # Each team's state is isolated — teams can't affect each other.
   - name: "hashicorp/terraform:latest"
     id: "tf-init"
     entrypoint: "sh"
@@ -102,9 +110,12 @@ steps:
       - "-c"
       - |
         echo "═══════════════════════════════════════════════════"
-        echo "  📦 Terraform Init — Downloading providers"
+        echo "  📦 Terraform Init"
+        echo "  Backend: gs://${_TF_STATE_BUCKET}/terraform/state/${_TEAM}/"
         echo "═══════════════════════════════════════════════════"
-        terraform init -no-color
+        terraform init \
+          -backend-config="prefix=terraform/state/${_TEAM}" \
+          -no-color
     dir: "terraform"
 
   # ════════════════════════════════════════════════════════
@@ -114,6 +125,8 @@ steps:
   #   + means CREATE (new resource)
   #   ~ means UPDATE (change existing)
   #   - means DESTROY (delete resource)
+  #
+  # -target limits to Cloud Run + IAM only (skip secrets — already created by setup.sh)
   - name: "hashicorp/terraform:latest"
     id: "tf-plan"
     entrypoint: "sh"
@@ -121,13 +134,15 @@ steps:
       - "-c"
       - |
         echo "═══════════════════════════════════════════════════"
-        echo "  🔍 Terraform Plan — Preview changes"
-        echo "  Team: ${_TEAM}"
+        echo "  🔍 Terraform Plan — Team: ${_TEAM}"
         echo "═══════════════════════════════════════════════════"
         terraform plan \
           -var="student_namespace=${_TEAM}" \
           -var="project_id=${_PROJECT_ID}" \
+          -var="region=${_REGION}" \
           -var="image=${_REGION}-docker.pkg.dev/${_PROJECT_ID}/${_AR_REPO}/madina-lab-${_TEAM}:latest" \
+          -target=google_cloud_run_v2_service.app \
+          -target=google_cloud_run_v2_service_iam_member.public_access \
           -no-color
     dir: "terraform"
 
@@ -135,7 +150,7 @@ steps:
   # STEP 5: TF-APPLY — Create/update resources
   # ════════════════════════════════════════════════════════
   # Actually creates the resources in GCP.
-  # -auto-approve skips confirmation (since this is CI/CD).
+  # -auto-approve skips confirmation (CI/CD context).
   - name: "hashicorp/terraform:latest"
     id: "tf-apply"
     entrypoint: "sh"
@@ -143,13 +158,15 @@ steps:
       - "-c"
       - |
         echo "═══════════════════════════════════════════════════"
-        echo "  🚀 Terraform Apply — Creating resources"
-        echo "  Team: ${_TEAM}"
+        echo "  🚀 Terraform Apply — Team: ${_TEAM}"
         echo "═══════════════════════════════════════════════════"
         terraform apply \
           -var="student_namespace=${_TEAM}" \
           -var="project_id=${_PROJECT_ID}" \
+          -var="region=${_REGION}" \
           -var="image=${_REGION}-docker.pkg.dev/${_PROJECT_ID}/${_AR_REPO}/madina-lab-${_TEAM}:latest" \
+          -target=google_cloud_run_v2_service.app \
+          -target=google_cloud_run_v2_service_iam_member.public_access \
           -auto-approve \
           -no-color
     dir: "terraform"

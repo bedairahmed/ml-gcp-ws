@@ -1,21 +1,23 @@
-terraform {
-  required_version = ">= 1.5.0"
+# =============================================================================
+#  🕌  Madina Lab — Main Configuration
+# =============================================================================
+#
+#  Provider & backend → providers.tf
+#  Cloud Run          → cloud_run.tf
+#  IAM                → iam.tf
+#  Secrets            → secrets.tf
+#  Variables          → variables.tf
+#  Outputs            → outputs.tf
+#
+# =============================================================================
 
-  required_providers {
-    google = {
-      source  = "hashicorp/google"
-      version = "~> 5.0"
-    }
-  }
-
-  backend "gcs" {
-    # Configure in terraform.tfvars or via CLI
-    # bucket = "madina-lab-tfstate"
-    # prefix = "terraform/state"
-  }
+# ── Data Sources ─────────────────────────────────────────
+data "google_project" "project" {
+  project_id = var.project_id
 }
 
-provider "google" {
-  project = var.project_id
-  region  = var.region
+# ── Locals ───────────────────────────────────────────────
+locals {
+  effective_service_name = var.service_name != "" ? var.service_name : "madina-lab-${var.student_namespace}"
+  effective_image        = var.image != "" ? var.image : "${var.region}-docker.pkg.dev/${var.project_id}/madina-lab/madina-lab-${var.student_namespace}:latest"
 }

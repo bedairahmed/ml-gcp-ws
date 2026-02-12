@@ -1,13 +1,13 @@
 # 🕌 Madina Lab — Lab 1: Explore Your Cloud & Meet the App
 
-> *A growing community needs a platform. Before building anything, understand the cloud services that power it and see the application running live.*
+> *A growing community needs a platform. Before building anything, understand the cloud services that power it.*
 
 ---
 
 ## 🎯 Objectives
 
-- Navigate the GCP Console and identify the services used in this workshop
-- See the live application and understand its architecture
+- Navigate the GCP Console and identify workshop services
+- See the live app and understand its architecture
 - Read the Dockerfile and pipeline before running anything
 
 ## ⏱ Duration: 30 minutes
@@ -16,115 +16,81 @@
 
 | Role A — Builder | Role B — Observer |
 |-----------------|-------------------|
-| Navigates Console, clicks into services | Takes notes, answers discussion questions |
-| Opens repo files | Compares Console vs code |
+| Navigates Console | Takes notes, answers discussion questions |
 
-## 📖 Helpful Cheatsheet: [`docs/gcloud-cheatsheet.md`](../docs/gcloud-cheatsheet.md)
+📖 Cheatsheet: [`docs/gcloud-cheatsheet.md`](../docs/gcloud-cheatsheet.md)
 
 ---
 
 ## Part A: GCP Services Tour (15 min)
 
-Log into the GCP Console → project: **ml-gcp-workshop-487117**
-
-*(See [credentials.md](credentials.md) for login details)*
-
----
+Log into GCP Console → project: **ml-gcp-workshop-487117** *(see [credentials.md](credentials.md))*
 
 ### Task 1: VPC Network
-
 📍 **Console → VPC Network → VPC Networks → `madina-lab-vpc`**
-
-> ❓ What subnet is attached? What IP range? How many firewall rules?
-
----
+> ❓ What subnet? What IP range? How many firewall rules?
 
 ### Task 2: Artifact Registry
-
 📍 **Console → Artifact Registry → `madina-lab`**
-
-> ❓ What type of repository? Can you find the instructor's image?
-
----
+> ❓ What type of repo? Can you find the instructor's image?
 
 ### Task 3: Secret Manager
-
 📍 **Console → Security → Secret Manager**
-
-> ❓ How many secrets? Can you see the values? What kind of config is stored?
-
----
+> ❓ How many secrets? Can you see the values?
 
 ### Task 4: Cloud Build
-
-📍 **Console → Cloud Build → History**
-
-Find the instructor's build. Click into it and expand each step.
-
-> ❓ How many steps? How long did it take? What does each step do?
-
----
+📍 **Console → Cloud Build → History** — find the instructor's build, expand each step
+> ❓ How many steps? How long? What does each step do?
 
 ### Task 5: Cloud Run
-
-📍 **Console → Cloud Run → `madina-lab-instructor`**
-
-Explore: **Metrics**, **Logs**, **Revisions**, **Security**, **Variables & Secrets**
-
-> ❓ What URL is assigned? How many instances? What service account?
-
----
+📍 **Console → Cloud Run → `madina-lab-instructor`** — explore: Metrics, Logs, Revisions, Security, Variables & Secrets
+> ❓ What URL? How many instances? What service account?
 
 ### Task 6: Firestore
-
-📍 **Console → Firestore**
-
-> ❓ What collections exist? Where are the security rules?
+📍 **Console → Firestore** — check Data tab and Rules tab
+> ❓ What collections? Where are security rules defined?
 
 ---
 
 ## Part B: Meet the App & Pipeline (15 min)
 
 ### Task 7: Visit the Live App
-
-Copy the Cloud Run URL from Task 5 and open it.
-
-- Sign up, explore chat, events, business directory
-
+Copy the Cloud Run URL from Task 5. Sign up, explore chat, events, business directory.
 > ❓ How would each feature use Firestore?
-
----
 
 ### Task 8: Read the Dockerfile
 
-📍 **Open in repo:** [`Dockerfile`](../Dockerfile)
+📍 **Open:** [`Dockerfile`](../Dockerfile)
+- VS Code: `ml-gcp-ws/Dockerfile`
+- GitHub: [view on GitHub](https://github.com/bedairahmed/ml-gcp-ws/blob/main/Dockerfile)
 
-> ❓ How many stages? What does each stage do? What port? What is `/health` for?
+> ❓ How many stages? What does each do? What port? What is `/health` for?
 
 **Key things:**
 - Stage 1 (`node:20-alpine`) — builds the React app
-- Stage 2 (`nginx:alpine`) — serves the built files
+- Stage 2 (`nginx:alpine`) — serves built files
 - Port `8080` — Cloud Run requirement
-- `/health` — Cloud Run health check
+- `/health` — startup probe endpoint
 
 📖 See [`docs/docker-cheatsheet.md`](../docs/docker-cheatsheet.md)
 
----
-
 ### Task 9: Read the Pipeline
 
-📍 **Open in repo:** [`.pipelines/cloudbuild-app.yaml`](../.pipelines/cloudbuild-app.yaml)
+📍 **Open:** [`.pipelines/cloudbuild-app.yaml`](../.pipelines/cloudbuild-app.yaml)
+- VS Code: `ml-gcp-ws/.pipelines/cloudbuild-app.yaml`
+- GitHub: [view on GitHub](https://github.com/bedairahmed/ml-gcp-ws/blob/main/.pipelines/cloudbuild-app.yaml)
 
 > ❓ How many steps? Which builds? Which scans? Where are secrets? What does `_TEAM` do?
 
 | Step | Name | What it does |
 |------|------|-------------|
 | 1 | `lint-dockerfile` | Hadolint — Dockerfile best practices |
-| 2 | `build` | Docker build with secrets from Secret Manager |
-| 3 | `scan-image` | Trivy — vulnerability scan (CVEs) |
-| 4 | `push` | Push image to Artifact Registry |
+| 2 | `build` | Docker build with secrets |
+| 3 | `scan-image` | Trivy — vulnerability scan |
+| 4 | `push` | Push to Artifact Registry |
 | 5 | `deploy-app` | Deploy to Cloud Run |
 | 6 | `allow-public-access` | Grant public access |
+| 7 | `map-domain` | Map custom domain |
 
 📖 See [`docs/cloudbuild-cheatsheet.md`](../docs/cloudbuild-cheatsheet.md)
 
@@ -133,15 +99,13 @@ Copy the Cloud Run URL from Task 5 and open it.
 ## 💬 Discussion
 
 1. Why Cloud Run instead of a VM?
-2. Why Secret Manager instead of a `.env` file in the repo?
+2. Why Secret Manager instead of `.env` in the repo?
 3. Why scan the container before deploying?
-
----
 
 ## ✅ Checklist
 
 - [ ] Logged into GCP Console
 - [ ] Explored: VPC, Artifact Registry, Secret Manager, Cloud Build, Cloud Run, Firestore
 - [ ] Visited the live app
-- [ ] Read [`Dockerfile`](../Dockerfile) — understand two stages
-- [ ] Read [`.pipelines/cloudbuild-app.yaml`](../.pipelines/cloudbuild-app.yaml) — identify each step
+- [ ] Read the Dockerfile — understand two stages
+- [ ] Read the pipeline — identify each step

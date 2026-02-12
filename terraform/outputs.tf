@@ -1,5 +1,11 @@
+# =============================================================================
+#  🕌  Madina Lab — Outputs
+# =============================================================================
+#  Displayed after `terraform apply`. Visible in Cloud Build → tf-apply logs.
+# =============================================================================
+
 output "service_url" {
-  description = "Cloud Run service URL"
+  description = "Your app URL — open in browser"
   value       = google_cloud_run_v2_service.app.uri
 }
 
@@ -9,6 +15,6 @@ output "service_name" {
 }
 
 output "student_namespace" {
-  description = "Student namespace used for this deployment"
+  description = "Team namespace"
   value       = var.student_namespace
 }
