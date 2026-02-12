@@ -27,6 +27,8 @@ Using a sample community platform (chat, events, business directory) as our use 
 
 Madina Lab is a **production-ready trilingual community platform** built for the MCWS Canton community. It serves as both a real community tool and the sample application for this workshop.
 
+🔗 [**Live Demo**](https://instructor.lab.ml-gcp.cloud-people.net) · [Cloud Run URL](https://madina-lab-instructor-202948511064.us-central1.run.app) — See the deployed application
+
 ### Features
 
 | Feature | Description |
@@ -230,7 +232,7 @@ ml-gcp-ws/
 │   └── validate.sh
 │
 ├── terraform/                  # IaC files (Lab 3)
-│   ├── providers.tf            # Provider & GCS backend
+│   ├── provider.tf             # Provider & GCS backend
 │   ├── main.tf                 # Data sources & locals
 │   ├── cloud_run.tf            # Cloud Run service
 │   ├── iam.tf                  # IAM bindings
@@ -287,6 +289,12 @@ npm install && npm run dev
 | [Cloud Build & CI/CD](docs/cloudbuild-cheatsheet.md) | Pipeline YAML, security scanning |
 | [YAML](docs/yaml-cheatsheet.md) | Syntax, substitutions, Cloud Build YAML |
 | [Git](docs/git-cheatsheet.md) | Clone, commit, push, branches |
+
+---
+
+## 📝 Workshop Feedback
+
+📋 [**Submit Feedback**](https://github.com/bedairahmed/ml-gcp-ws/issues/new?template=workshop-feedback.yml) — Help us improve future workshops!
 
 ---
 
