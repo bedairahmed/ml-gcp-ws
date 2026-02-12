@@ -1,0 +1,307 @@
+# =============================================================================
+#  🕌  Madina Lab — Cloud Build Pipeline (deploy-app)
+# =============================================================================
+#
+#  This pipeline builds, scans, and deploys the Madina Lab app to Cloud Run,
+#  then maps it to a custom domain under lab.ml-gcp.cloud-people.net.
+#
+#  HOW TO USE:
+#  ───────────
+#  gcloud builds submit --config cloudbuild-app.yaml \
+#    --substitutions=_TEAM=team1 .
+#
+#  PIPELINE STAGES:
+#  ────────────────
+#  Step 1: LINT-DOCKERFILE  → Hadolint scans Dockerfile for best practices
+#  Step 2: BUILD            → Builds Docker image with Firebase config from Secret Manager
+#  Step 3: SCAN-IMAGE       → Trivy scans container for CVEs (vulnerabilities)
+#  Step 4: PUSH             → Pushes image to Artifact Registry
+#  Step 5: DEPLOY-APP       → Deploys to Cloud Run with labels & Secret Manager references
+#  Step 6: PUBLIC           → Makes the service publicly accessible (allUsers invoker)
+#  Step 7: MAP-DOMAIN       → Maps teamN.lab.ml-gcp.cloud-people.net to the service
+#
+#  SECURITY SCANNING:
+#  ──────────────────
+#  - Hadolint:  Lints Dockerfile for security & best practice issues (DL3018, etc.)
+#  - Trivy:     Scans container image for known CVEs (HIGH/CRITICAL severity)
+#  - Results:   Visible in Cloud Build → History → click build → view step logs
+#  - Policy:    Scans are warnings only (non-blocking) — build continues even if issues found
+#               Change "|| true" to "|| exit 1" to make scans block deployment
+#
+#  TEAM ISOLATION:
+#  ───────────────
+#  - Each team gets its own Cloud Run service:  madina-lab-team1, madina-lab-team2, etc.
+#  - Each team gets its own service account:    team1-sa, team2-sa, etc.
+#  - Each team gets its own Firestore namespace: team1_users, team1_events, etc.
+#  - Each team gets its own custom domain:      team1.lab.ml-gcp.cloud-people.net
+#  - All teams share the same Firebase project and secrets from Secret Manager.
+#
+#  MONITORING (automatic — no extra config needed):
+#  ─────────────────────────────────────────────────
+#  - Cloud Run logs:    Console → Cloud Run → madina-lab-teamN → Logs
+#  - Cloud Run metrics: Console → Cloud Run → madina-lab-teamN → Metrics
+#  - Health checks:     /health endpoint monitored by Cloud Run startup probe
+#  - Labels:            Filter by team and environment in Console & Monitoring
+#  - Secrets:           Visible in Console → Cloud Run → Variables & Secrets
+#
+# =============================================================================
+
+# ── Substitutions ────────────────────────────────────────
+# _TEAM is the only thing that changes per team.
+# Override it with: --substitutions=_TEAM=team1
+substitutions:
+  _TEAM: "team1"                              # Your team name (team1, team2, ... team8)
+  _REGION: "us-central1"                      # GCP region (don't change)
+  _AR_REPO: "madina-lab"                      # Artifact Registry repository name
+  _PROJECT_ID: "ml-gcp-workshop-487117"       # GCP project ID
+  _LAB_DOMAIN: "lab.ml-gcp.cloud-people.net"  # Workshop domain (DNS managed in Cloud DNS)
+  _SEVERITY: "HIGH,CRITICAL"                  # Trivy severity threshold (LOW,MEDIUM,HIGH,CRITICAL)
+
+steps:
+  # ════════════════════════════════════════════════════════
+  # STEP 1: LINT-DOCKERFILE — Check Dockerfile for best practices
+  # ════════════════════════════════════════════════════════
+  # Hadolint is a Dockerfile linter that checks for:
+  #   - Security issues (running as root, missing USER instruction)
+  #   - Best practices (pinning package versions, layer optimization)
+  #   - Shell script issues (ShellCheck integration)
+  #
+  # Common rules:
+  #   DL3018: Pin versions in apk add (e.g. apk add curl=7.88.1)
+  #   DL3008: Pin versions in apt-get install
+  #   DL3025: Use JSON notation for CMD
+  #   DL3059: Multiple consecutive RUN instructions (merge them)
+  #
+  # View results: Cloud Build → History → click build → Step 1 logs
+  - name: "ghcr.io/hadolint/hadolint"
+    id: "lint-dockerfile"
+    entrypoint: "hadolint"
+    args:
+      - "--no-fail"
+      - "--format"
+      - "tty"
+      - "Dockerfile"
+
+  # ════════════════════════════════════════════════════════
+  # STEP 2: BUILD — Create Docker image
+  # ════════════════════════════════════════════════════════
+  # This step:
+  #   - Reads Firebase secrets from Secret Manager (injected securely by Cloud Build)
+  #   - Passes them as build arguments to Docker
+  #   - Sets VITE_NAMESPACE to your team name (for Firestore data isolation)
+  #   - Tags the image for Artifact Registry
+  #
+  # NOTE: Firebase config is injected at BUILD time because this is a React app
+  # that runs in the browser. The secrets are baked into the JS bundle — this is
+  # the standard pattern for Firebase web apps. The actual data is protected by
+  # Firestore security rules, not by hiding the config.
+  - name: "gcr.io/cloud-builders/docker"
+    id: "build"
+    entrypoint: "bash"
+    args:
+      - "-c"
+      - |
+        docker build \
+          --build-arg VITE_FIREBASE_API_KEY=$$FIREBASE_API_KEY \
+          --build-arg VITE_FIREBASE_AUTH_DOMAIN=$$FIREBASE_AUTH_DOMAIN \
+          --build-arg VITE_FIREBASE_PROJECT_ID=$$FIREBASE_PROJECT_ID \
+          --build-arg VITE_FIREBASE_STORAGE_BUCKET=$$FIREBASE_STORAGE_BUCKET \
+          --build-arg VITE_FIREBASE_MESSAGING_SENDER_ID=$$FIREBASE_MESSAGING_SENDER_ID \
+          --build-arg VITE_FIREBASE_APP_ID=$$FIREBASE_APP_ID \
+          --build-arg VITE_FIREBASE_MEASUREMENT_ID=$$FIREBASE_MEASUREMENT_ID \
+          --build-arg VITE_APP_ENV=production \
+          --build-arg VITE_NAMESPACE=${_TEAM} \
+          --build-arg VITE_APP_URL=https://${_TEAM}.${_LAB_DOMAIN} \
+          -t ${_REGION}-docker.pkg.dev/$PROJECT_ID/${_AR_REPO}/madina-lab-${_TEAM}:latest \
+          .
+    secretEnv:
+      - "FIREBASE_API_KEY"
+      - "FIREBASE_AUTH_DOMAIN"
+      - "FIREBASE_PROJECT_ID"
+      - "FIREBASE_STORAGE_BUCKET"
+      - "FIREBASE_MESSAGING_SENDER_ID"
+      - "FIREBASE_APP_ID"
+      - "FIREBASE_MEASUREMENT_ID"
+
+  # ════════════════════════════════════════════════════════
+  # STEP 3: SCAN-IMAGE — Vulnerability scan with Trivy
+  # ════════════════════════════════════════════════════════
+  # Trivy scans the built container image for:
+  #   - Known CVEs (Common Vulnerabilities and Exposures)
+  #   - Outdated packages with security patches available
+  #   - OS-level and application-level vulnerabilities
+  #
+  # Severity levels: LOW → MEDIUM → HIGH → CRITICAL
+  # Default: Only shows HIGH and CRITICAL (change _SEVERITY substitution)
+  #
+  # The scan runs AFTER build but BEFORE push — so vulnerable images
+  # are caught before they reach Artifact Registry.
+  #
+  # "|| true" = non-blocking (warning only). To BLOCK deploys on CVEs:
+  #   Change "|| true" to "|| exit 1" and remove "--exit-code 0"
+  #
+  # View results: Cloud Build → History → click build → Step 3 logs
+  #   Look for: Total: X (HIGH: Y, CRITICAL: Z)
+  - name: "gcr.io/cloud-builders/docker"
+    id: "scan-image"
+    entrypoint: "bash"
+    args:
+      - "-c"
+      - |
+        echo "═══════════════════════════════════════════════════"
+        echo "  🔍 Trivy Container Vulnerability Scan"
+        echo "  Image: madina-lab-${_TEAM}:latest"
+        echo "  Severity: ${_SEVERITY}"
+        echo "═══════════════════════════════════════════════════"
+        docker run --rm \
+          -v /var/run/docker.sock:/var/run/docker.sock \
+          aquasec/trivy:latest image \
+          --severity ${_SEVERITY} \
+          --no-progress \
+          --format table \
+          --exit-code 0 \
+          ${_REGION}-docker.pkg.dev/$PROJECT_ID/${_AR_REPO}/madina-lab-${_TEAM}:latest \
+          && echo "✔ Scan complete — check results above" \
+          || (echo "⚠ Scan found vulnerabilities — review above" && true)
+
+  # ════════════════════════════════════════════════════════
+  # STEP 4: PUSH — Upload image to Artifact Registry
+  # ════════════════════════════════════════════════════════
+  # Artifact Registry is Google's container registry.
+  # Your image is stored at:
+  #   us-central1-docker.pkg.dev/ml-gcp-workshop-487117/madina-lab/madina-lab-team1:latest
+  #
+  # After push, you can also view scan results in:
+  #   Console → Artifact Registry → madina-lab → click image → Vulnerabilities tab
+  #   (requires Container Analysis API — enabled automatically)
+  - name: "gcr.io/cloud-builders/docker"
+    id: "push"
+    args:
+      - "push"
+      - "${_REGION}-docker.pkg.dev/$PROJECT_ID/${_AR_REPO}/madina-lab-${_TEAM}:latest"
+
+  # ════════════════════════════════════════════════════════
+  # STEP 5: DEPLOY-APP — Deploy to Cloud Run
+  # ════════════════════════════════════════════════════════
+  # Creates (or updates) a Cloud Run service with:
+  #   - Service name:      madina-lab-team1
+  #   - Service account:   team1-sa (your team's identity for GCP resources)
+  #   - Memory:            256Mi (free tier friendly)
+  #   - CPU:               1 (throttled when idle — saves cost)
+  #   - Scaling:           0 to 3 instances (scales to zero = $0 when no traffic!)
+  #   - Port:              8080 (nginx serves the React app)
+  #   - Labels:            team name + environment (for filtering in Console & Monitoring)
+  #   - Secrets:           Firebase config referenced from Secret Manager
+  #                        (visible in Console → Cloud Run → Variables & Secrets)
+  #
+  # MONITORING (automatic — included with Cloud Run):
+  #   - Request logs:      Console → Cloud Run → Logs
+  #   - Metrics:           Console → Cloud Run → Metrics (requests/sec, latency, errors)
+  #   - CPU/Memory usage:  Console → Cloud Run → Metrics → Container tab
+  #   - Health checks:     Startup probe on port 8080 (/health endpoint)
+  - name: "gcr.io/google.com/cloudsdktool/cloud-sdk"
+    id: "deploy-app"
+    entrypoint: "bash"
+    args:
+      - "-c"
+      - |
+        gcloud run deploy madina-lab-${_TEAM} \
+          --image=${_REGION}-docker.pkg.dev/$PROJECT_ID/${_AR_REPO}/madina-lab-${_TEAM}:latest \
+          --region=${_REGION} \
+          --platform=managed \
+          --allow-unauthenticated \
+          --memory=256Mi \
+          --cpu=1 \
+          --cpu-throttling \
+          --min-instances=0 \
+          --max-instances=3 \
+          --port=8080 \
+          --service-account=${_TEAM}-sa@${_PROJECT_ID}.iam.gserviceaccount.com \
+          --labels=team=${_TEAM},env=workshop,app=madina-lab \
+          --set-secrets=FIREBASE_API_KEY=firebase-api-key:latest,FIREBASE_AUTH_DOMAIN=firebase-auth-domain:latest,FIREBASE_PROJECT_ID=firebase-project-id:latest,FIREBASE_STORAGE_BUCKET=firebase-storage-bucket:latest,FIREBASE_MESSAGING_SENDER_ID=firebase-messaging-sender-id:latest,FIREBASE_APP_ID=firebase-app-id:latest,FIREBASE_MEASUREMENT_ID=firebase-measurement-id:latest \
+          && echo "✔ Deployed madina-lab-${_TEAM} successfully" \
+          || (echo "✘ Deployment failed" && exit 1)
+
+  # ════════════════════════════════════════════════════════
+  # STEP 6: PUBLIC ACCESS — Allow anyone to visit your app
+  # ════════════════════════════════════════════════════════
+  # Grants the "allUsers" invoker role so the app URL works
+  # in any browser without Google authentication.
+  # Non-blocking: if org policy prevents it, build still succeeds.
+  - name: "gcr.io/google.com/cloudsdktool/cloud-sdk"
+    id: "allow-public-access"
+    entrypoint: "bash"
+    args:
+      - "-c"
+      - |
+        gcloud run services add-iam-policy-binding madina-lab-${_TEAM} \
+          --region=${_REGION} \
+          --member=allUsers \
+          --role=roles/run.invoker \
+          --quiet 2>/dev/null \
+          && echo "✔ Public access enabled" \
+          || echo "⚠ Public access skipped — set manually in Console → Cloud Run → Security"
+
+  # ════════════════════════════════════════════════════════
+  # STEP 7: MAP-DOMAIN — Map custom domain to Cloud Run service
+  # ════════════════════════════════════════════════════════
+  # Maps teamN.lab.ml-gcp.cloud-people.net → madina-lab-teamN Cloud Run service.
+  # DNS CNAME records are pre-created in Cloud DNS (setup.sh).
+  # This step is idempotent — if mapping exists, it skips gracefully.
+  - name: "gcr.io/google.com/cloudsdktool/cloud-sdk"
+    id: "map-domain"
+    entrypoint: "bash"
+    args:
+      - "-c"
+      - |
+        gcloud beta run domain-mappings create \
+          --service=madina-lab-${_TEAM} \
+          --domain=${_TEAM}.${_LAB_DOMAIN} \
+          --region=${_REGION} \
+          --quiet 2>/dev/null \
+          && echo "✔ Domain mapped: https://${_TEAM}.${_LAB_DOMAIN}" \
+          || echo "⚠ Domain mapping exists or skipped — https://${_TEAM}.${_LAB_DOMAIN}"
+
+# ══════════════════════════════════════════════════════════
+# SECRETS — Firebase config from Secret Manager
+# ══════════════════════════════════════════════════════════
+# These secrets were created by the instructor during setup.
+# Cloud Build reads them automatically and injects them into
+# the build step as environment variables ($$FIREBASE_API_KEY, etc.)
+#
+# Students never see the actual secret values in this file —
+# they're stored securely in Secret Manager and injected at build time.
+#
+# The secrets are ALSO mounted on the Cloud Run service (--set-secrets)
+# so you can see them in Console → Cloud Run → Variables & Secrets.
+# This demonstrates the Secret Manager → Cloud Run integration.
+availableSecrets:
+  secretManager:
+    - versionName: projects/$PROJECT_ID/secrets/firebase-api-key/versions/latest
+      env: "FIREBASE_API_KEY"
+    - versionName: projects/$PROJECT_ID/secrets/firebase-auth-domain/versions/latest
+      env: "FIREBASE_AUTH_DOMAIN"
+    - versionName: projects/$PROJECT_ID/secrets/firebase-project-id/versions/latest
+      env: "FIREBASE_PROJECT_ID"
+    - versionName: projects/$PROJECT_ID/secrets/firebase-storage-bucket/versions/latest
+      env: "FIREBASE_STORAGE_BUCKET"
+    - versionName: projects/$PROJECT_ID/secrets/firebase-messaging-sender-id/versions/latest
+      env: "FIREBASE_MESSAGING_SENDER_ID"
+    - versionName: projects/$PROJECT_ID/secrets/firebase-app-id/versions/latest
+      env: "FIREBASE_APP_ID"
+    - versionName: projects/$PROJECT_ID/secrets/firebase-measurement-id/versions/latest
+      env: "FIREBASE_MEASUREMENT_ID"
+
+# ══════════════════════════════════════════════════════════
+# ARTIFACTS — Images produced by this pipeline
+# ══════════════════════════════════════════════════════════
+images:
+  - "${_REGION}-docker.pkg.dev/$PROJECT_ID/${_AR_REPO}/madina-lab-${_TEAM}:latest"
+
+# ══════════════════════════════════════════════════════════
+# OPTIONS
+# ══════════════════════════════════════════════════════════
+options:
+  logging: CLOUD_LOGGING_ONLY    # Build logs → Cloud Logging (Console → Cloud Build → History)
+
+timeout: "900s"                  # 15 minute timeout (extra time for security scans)

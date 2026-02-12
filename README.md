@@ -1,95 +1,88 @@
-# ☁️ Madina Lab — Cloud Application Workshop
+# ☁️ Madina Lab — GCP Cloud Workshop
 
-**GCP · Firebase · Docker · Terraform · Cloud Run**
+![GCP](https://img.shields.io/badge/GCP-4285F4?style=for-the-badge&logo=googlecloud&logoColor=white)
+![Docker](https://img.shields.io/badge/Docker-2496ED?style=for-the-badge&logo=docker&logoColor=white)
+![Terraform](https://img.shields.io/badge/Terraform-7B42BC?style=for-the-badge&logo=terraform&logoColor=white)
+![Firebase](https://img.shields.io/badge/Firebase-FFCA28?style=for-the-badge&logo=firebase&logoColor=black)
 
-> Hands-on GCP Workshop — Build, containerize, and deploy a full-stack community platform
-
-Welcome to the **Madina Lab GCP Cloud Engineering Workshop**! This project is a production-ready community platform that you'll deploy to Google Cloud using modern DevOps practices.
+> **Hands-on Workshop** — Build a solution architecture on Google Cloud using a sample community application
 
 ---
 
 ## 📋 Workshop Overview
 
-This workshop focuses on **real-world cloud deployment** — not just theory. By the end, you'll have deployed a full-stack application to GCP with CI/CD, secrets management, and infrastructure as code.
+Using a sample community platform (chat, events, business directory) as our use case, we'll build a solution architecture on Google Cloud and deploy it using GCP services.
 
-### What You'll Learn
+**3 labs. All hands-on.**
 
-| | Skill | Description |
+| | Lab | What You'll Do |
 |---|---|---|
-| 🏗️ | **Application Architecture** | React + Firebase full-stack design |
-| 🐳 | **Containerization** | Multi-stage Docker builds with nginx |
-| ☁️ | **Cloud Deployment** | Google Cloud Run serverless hosting |
-| 🔐 | **Secrets Management** | GCP Secret Manager for API keys |
-| 🔄 | **CI/CD Pipelines** | Automated builds with Cloud Build |
-| 🏛️ | **Infrastructure as Code** | Terraform for GCP resources |
-| 🔥 | **Backend Services** | Firebase Auth + Firestore real-time database |
-| 🛡️ | **Security** | Firestore rules, input validation, RBAC |
+| 🔍 | **Lab 1** | Explore GCP services & understand the architecture |
+| 🚀 | **Lab 2** | Build & deploy using containers and CI/CD pipelines |
+| 🏗️ | **Lab 3** | Introduction to Infrastructure as Code |
 
 ---
 
-## 📅 Your Workshop Journey
+## 📅 Schedule
 
-### Phase 1: Understand & Configure
-
-| Step | Task | Description |
-|------|------|-------------|
-| 01 | **Clone Repository** | Fork and clone the project |
-| 02 | **Explore the App** | Run locally, understand the architecture |
-| 03 | **Firebase Setup** | Configure Auth + Firestore |
-| 04 | **Environment Config** | Set up environment variables |
-
-### Phase 2: Containerize & Deploy
-
-| Step | Task | Description |
-|------|------|-------------|
-| 05 | **Docker Build** | Build multi-stage container image |
-| 06 | **Enable GCP APIs** | Activate Cloud Run, Build, Secret Manager |
-| 07 | **Configure IAM** | Set up service account permissions |
-| 08 | **Create Secrets** | Store Firebase keys in Secret Manager |
-| 09 | **Deploy to Cloud Run** | Ship it! 🚀 |
-
-### Phase 3: Automate & Scale
-
-| Step | Task | Description |
-|------|------|-------------|
-| 10 | **CI/CD Pipeline** | Automate with Cloud Build |
-| 11 | **Terraform** | Manage infrastructure as code |
-| 12 | **Namespace Isolation** | Multi-student data isolation |
+| Time | Type | Topic |
+|------|------|-------|
+| 2:15 – 2:25 | Setup | Welcome, login, team assignments |
+| 2:25 – 2:40 | 🎤 Talk | Cloud basics, GCP services, containers |
+| 2:40 – 3:10 | 💻 Lab 1 | Explore GCP Console & meet the app |
+| 3:10 – 3:25 | 🎤 Talk | CI/CD, pipelines, Dockerfile, security |
+| 3:25 – 4:00 | 💻 Lab 2 | Deploy, scan, monitor |
+| 4:00 – 4:10 | ☕ Break | |
+| 4:10 – 4:25 | 🎤 Talk | IaC, Terraform, imperative vs declarative |
+| 4:25 – 4:55 | 💻 Lab 3 | Terraform pipeline |
+| 4:55 – 5:00 | 🎤 | Wrap-up & Q&A |
 
 ---
 
-## ✨ Application Features
+## 🔐 Student Access
 
-| Feature | Description |
-|---------|-------------|
-| 🕐 **Prayer Times** | Real-time prayer schedule via Aladhan API (ISNA method) |
-| 🌤️ **Weather Widget** | Live weather for Canton, MI via Open-Meteo API |
-| 📿 **Athkar Tracker** | Morning & evening adhkar with tap counters, streak tracking |
-| 📅 **Community Events** | RSVP system, category filters, admin event creation |
-| 💬 **Community Chat** | Group channels with @mentions, reactions, reply threads |
-| 🏢 **Business Directory** | Listings with reviews, ratings, claim/verify workflow |
-| 🏪 **My Business** | Business owners manage listings, respond to reviews |
-| 🛡️ **Admin Panel** | User management, event moderation, claim approvals |
-| 🔔 **Notifications** | In-app notifications for reviews, claims, announcements |
-| ❓ **Help & FAQ** | Searchable help center with categorized FAQ |
-| 🌐 **Trilingual** | English, Arabic, Urdu with full RTL support |
-| 🌙 **Dark Mode** | Full dark/light theme toggle |
+📋 [**Workshop Registration Sheet**](https://docs.google.com/spreadsheets/d/e/2PACX-1vSxQhQ5DcSui7mcSfXHVfUcVQpQWMklq4jzJzI1P9YLRgww02kMuk7HV3tdNUjxyJsYysvFosiCPy9J/pubhtml?gid=959209679&single=true) — Find your team, email, and password here.
+
+<iframe src="https://docs.google.com/spreadsheets/d/e/2PACX-1vSxQhQ5DcSui7mcSfXHVfUcVQpQWMklq4jzJzI1P9YLRgww02kMuk7HV3tdNUjxyJsYysvFosiCPy9J/pubhtml?gid=959209679&amp;single=true&amp;widget=true&amp;headers=false" width="100%" height="400" frameborder="0"></iframe>
+
+| Setting | Value |
+|---------|-------|
+| **GCP Console** | [console.cloud.google.com](https://console.cloud.google.com) |
+| **Project** | `ml-gcp-workshop-487117` |
+| **Region** | `us-central1` |
+| **Login** | `studentN@ml-gcp.cloud-people.net` |
+
+### Team Roles
+
+Each team has **two members**. Pick your roles and **switch between labs**:
+
+| Role A — Builder | Role B — Observer |
+|-----------------|-------------------|
+| Drives keyboard, runs commands | Follows in Console, checks logs & metrics |
 
 ---
 
-## 🧱 Tech Stack
+## 🧪 Labs
 
-| Layer | Technology | Purpose |
-|-------|-----------|---------|
-| **Frontend** | React 18, TypeScript, Vite | UI framework & build tooling |
-| **UI** | Tailwind CSS, shadcn/ui, Lucide Icons | Styling & components |
-| **Backend** | Firebase Auth + Firestore | Authentication & real-time database |
-| **APIs** | Aladhan, Open-Meteo | Prayer times & weather data |
-| **Container** | Docker (multi-stage) | Node.js build → nginx serve |
-| **CI/CD** | Google Cloud Build | Automated build & deploy |
-| **Hosting** | Google Cloud Run | Serverless container hosting |
-| **Secrets** | GCP Secret Manager | Secure credential storage |
-| **IaC** | Terraform | Infrastructure automation |
+| Lab | Title | Duration | Guide |
+|-----|-------|----------|-------|
+| 0 | Credentials & Setup | 10 min | [labs/CREDENTIALS.md](labs/CREDENTIALS.md) |
+| 1 | Explore Your Cloud & Meet the App | 30 min | [labs/LAB1.md](labs/LAB1.md) |
+| 2 | Ship Your App | 35 min | [labs/LAB2.md](labs/LAB2.md) |
+| 3 | Infrastructure as Code | 30 min | [labs/LAB3.md](labs/LAB3.md) |
+
+---
+
+## 📖 Cheatsheets
+
+| Topic | Reference |
+|-------|-----------|
+| GCP CLI (gcloud) | [docs/gcloud-cheatsheet.md](docs/gcloud-cheatsheet.md) |
+| Docker | [docs/docker-cheatsheet.md](docs/docker-cheatsheet.md) |
+| Terraform | [docs/terraform-cheatsheet.md](docs/terraform-cheatsheet.md) |
+| Cloud Build & CI/CD | [docs/cloudbuild-cheatsheet.md](docs/cloudbuild-cheatsheet.md) |
+| YAML | [docs/yaml-cheatsheet.md](docs/yaml-cheatsheet.md) |
+| Git | [docs/git-cheatsheet.md](docs/git-cheatsheet.md) |
 
 ---
 
@@ -102,7 +95,7 @@ This workshop focuses on **real-world cloud deployment** — not just theory. By
 └─────────────┘     └──────┬───────┘     └──────────────────┘
                            │
                     ┌──────▼───────┐     ┌──────────────────┐
-                    │  Container   │     │  Secret Manager  │
+                    │  Artifact    │     │  Secret Manager  │
                     │  Registry    │     │  (API Keys)      │
                     └──────────────┘     └──────────────────┘
 
@@ -112,219 +105,148 @@ This workshop focuses on **real-world cloud deployment** — not just theory. By
                     └──────────────────────────────────────┘
 ```
 
----
+### GCP Services Used
 
-## 🎯 Prerequisites
-
-Before starting the workshop, ensure you have:
-
-- [ ] **GCP Account** — With billing enabled ([Free tier](https://cloud.google.com/free))
-- [ ] **Git installed** — [Download Git](https://git-scm.com/downloads)
-- [ ] **VS Code installed** — [Download VS Code](https://code.visualstudio.com/)
-- [ ] **Docker installed** — [Download Docker](https://docs.docker.com/get-docker/)
-- [ ] **Google Cloud SDK** — [Install gcloud CLI](https://cloud.google.com/sdk/docs/install)
-- [ ] **Terraform** — [Install Terraform](https://developer.hashicorp.com/terraform/downloads)
-- [ ] **Node.js 20+** — [Download Node.js](https://nodejs.org/)
-
-> 💡 GCP credentials and Firebase project details will be provided during the workshop
+| Service | Purpose |
+|---------|---------|
+| **Cloud Run** | Serverless container hosting — scales to zero |
+| **Cloud Build** | CI/CD pipeline — automated build, scan & deploy |
+| **Artifact Registry** | Docker image storage — versioned, scannable |
+| **Secret Manager** | Secure storage for API keys & config |
+| **VPC Network** | Private network with subnet & firewall rules |
+| **Firestore** | NoSQL real-time database |
+| **Firebase Auth** | User authentication (email + Google sign-in) |
 
 ---
 
-## 🔐 Student Access
+## 🧱 Tech Stack
 
-| Setting | Value |
-|---------|-------|
-| **GCP Project** | `ml-gcp-workshop-487117` |
-| **Region** | `us-central1` |
-| **Firebase Console** | [console.firebase.google.com](https://console.firebase.google.com/) |
-| **GCP Console** | [console.cloud.google.com](https://console.cloud.google.com/) |
+| Layer | Technology |
+|-------|-----------|
+| **Frontend** | React 18, TypeScript, Vite, Tailwind CSS |
+| **Backend** | Firebase Auth + Firestore |
+| **Container** | Docker multi-stage (Node.js build → nginx serve) |
+| **CI/CD** | Google Cloud Build with Hadolint + Trivy scanning |
+| **Hosting** | Google Cloud Run |
+| **Secrets** | GCP Secret Manager |
+| **IaC** | Terraform |
 
-### Important Guidelines
+---
 
-✅ Always deploy to `us-central1` region  
-✅ Use your assigned namespace: `VITE_NAMESPACE=yourname`  
-✅ Use minimum resources (256Mi memory, 1 CPU)  
-⚠️ Clean up resources after labs  
-❌ Do not modify shared Firestore security rules  
+## ✨ Sample Application Features
+
+| Feature | Description |
+|---------|-------------|
+| 🕐 **Prayer Times** | Real-time schedule via Aladhan API |
+| 📅 **Community Events** | RSVP system, category filters |
+| 💬 **Community Chat** | Group channels with mentions & reactions |
+| 🏢 **Business Directory** | Listings with reviews & ratings |
+| 🛡️ **Admin Panel** | User management, event moderation |
+| 🌐 **Trilingual** | English, Arabic, Urdu with RTL support |
+| 🌙 **Dark Mode** | Full dark/light theme toggle |
+
+---
+
+## 📁 Repository Structure
+
+```
+ml-gcp-ws/
+├── README.md                   # This file
+├── Dockerfile                  # Multi-stage Docker build (Lab 1, 2)
+├── docker-compose.yml          # Local development
+├── firebase.json               # Firebase config
+├── firestore.rules             # Firestore security rules
+├── package.json                # Node.js dependencies
+│
+├── .pipelines/                 # CI/CD pipeline definitions
+│   ├── cloudbuild-app.yaml     # App build & deploy pipeline (Lab 2)
+│   └── cloudbuild-tf.yaml      # Terraform pipeline (Lab 3)
+│
+├── labs/                       # Workshop lab guides
+│   ├── CREDENTIALS.md
+│   ├── LAB1.md
+│   ├── LAB2.md
+│   └── LAB3.md
+│
+├── docs/                       # Cheatsheets & reference
+│   ├── gcloud-cheatsheet.md
+│   ├── docker-cheatsheet.md
+│   ├── terraform-cheatsheet.md
+│   ├── cloudbuild-cheatsheet.md
+│   ├── yaml-cheatsheet.md
+│   └── git-cheatsheet.md
+│
+├── scripts/                    # Instructor scripts
+│   ├── setup.sh                # Infrastructure provisioning
+│   ├── cleanup.sh              # Resource cleanup
+│   └── validate.sh             # Validation checks
+│
+├── terraform/                  # IaC files (Lab 3)
+│   ├── main.tf
+│   ├── cloud_run.tf
+│   ├── iam.tf
+│   ├── secrets.tf
+│   ├── setup.tf
+│   ├── variables.tf
+│   ├── outputs.tf
+│   └── terraform.tfvars.example
+│
+├── src/                        # React application source
+└── public/                     # Static assets
+```
 
 ---
 
 ## 🚀 Quick Start
 
+### Deploy (Workshop — one command)
+
+```bash
+git clone https://github.com/bedairahmed/ml-gcp-ws.git
+cd ml-gcp-ws
+gcloud builds submit --config .pipelines/cloudbuild-app.yaml --substitutions=_TEAM=teamN .
+```
+
 ### Local Development
 
 ```bash
-# Clone and install
-git clone <YOUR_GIT_URL>
-cd madina-lab
 npm install
-
-# Start dev server
 npm run dev
 # Visit http://localhost:8080
 ```
 
-### Docker
+### Docker (Local)
 
 ```bash
-# Build and run
 docker compose up --build
 # Visit http://localhost:8080
 ```
 
-### Docker (manual)
+---
 
-```bash
-docker build -t madina-lab .
-docker run -p 8080:8080 madina-lab
-```
+## 🔄 CI/CD Pipeline
+
+The pipeline ([`cloudbuild-app.yaml`](.pipelines/cloudbuild-app.yaml)) runs 6 steps:
+
+| Step | Name | What |
+|------|------|------|
+| 1 | `lint-dockerfile` | Hadolint — Dockerfile best practices |
+| 2 | `build` | Docker build with secrets from Secret Manager |
+| 3 | `scan-image` | Trivy — container vulnerability scan |
+| 4 | `push` | Push image to Artifact Registry |
+| 5 | `deploy-app` | Deploy to Cloud Run |
+| 6 | `allow-public-access` | Grant public access |
 
 ---
 
-## ☁️ GCP Deployment
+## 🔀 Team Isolation
 
-### Step 1: Enable APIs
-
-```bash
-export PROJECT_ID="your-gcp-project-id"
-gcloud config set project $PROJECT_ID
-
-gcloud services enable \
-  cloudbuild.googleapis.com \
-  run.googleapis.com \
-  containerregistry.googleapis.com \
-  secretmanager.googleapis.com \
-  firebase.googleapis.com \
-  firestore.googleapis.com
-```
-
-### Step 2: Configure IAM
-
-```bash
-export CB_SA=$(gcloud projects describe $PROJECT_ID \
-  --format='value(projectNumber)')@cloudbuild.gserviceaccount.com
-
-gcloud projects add-iam-policy-binding $PROJECT_ID \
-  --member="serviceAccount:$CB_SA" --role="roles/run.admin"
-gcloud projects add-iam-policy-binding $PROJECT_ID \
-  --member="serviceAccount:$CB_SA" --role="roles/iam.serviceAccountUser"
-gcloud projects add-iam-policy-binding $PROJECT_ID \
-  --member="serviceAccount:$CB_SA" --role="roles/secretmanager.secretAccessor"
-```
-
-### Step 3: Create Secrets
-
-```bash
-echo -n "YOUR_API_KEY" | gcloud secrets create firebase-api-key --data-file=-
-echo -n "your-project.firebaseapp.com" | gcloud secrets create firebase-auth-domain --data-file=-
-echo -n "your-project-id" | gcloud secrets create firebase-project-id --data-file=-
-echo -n "your-project.appspot.com" | gcloud secrets create firebase-storage-bucket --data-file=-
-echo -n "123456789" | gcloud secrets create firebase-messaging-sender-id --data-file=-
-echo -n "1:123456789:web:abcdef" | gcloud secrets create firebase-app-id --data-file=-
-```
-
-### Step 4: Deploy
-
-```bash
-# Option A: Cloud Build
-gcloud builds submit --config cloudbuild.yaml .
-
-# Option B: Terraform
-cd terraform
-cp terraform.tfvars.example terraform.tfvars
-terraform init && terraform apply
-```
-
----
-
-## 🔀 Namespace Isolation (Lab Mode)
-
-For workshops where multiple students deploy to the **same Firestore**, each student sets `VITE_NAMESPACE` to isolate their data:
-
-```bash
-# Student 1
-VITE_NAMESPACE=student1 docker compose up --build
-
-# Student 2
-VITE_NAMESPACE=student2 docker compose up --build
-```
-
-| Without namespace | With `VITE_NAMESPACE=alice` |
-|---|---|
-| `users` | `alice_users` |
-| `events` | `alice_events` |
-| `businesses` | `alice_businesses` |
-| `notifications` | `alice_notifications` |
-| `messages` | `alice_messages` |
-
-> 💡 If `VITE_NAMESPACE` is not set, collections use their default names (no prefix).
-
----
-
-## 🔥 Firebase Setup
-
-1. [Firebase Console](https://console.firebase.google.com/) → Add/select your GCP project
-2. **Authentication** → Enable Google provider → Add authorized domains
-3. **Firestore** → Create database in production mode (`us-central1`)
-4. **Deploy security rules:** `firebase deploy --only firestore:rules`
-
-### Firestore Collections
-
-| Collection | Purpose |
-|-----------|---------|
-| `users` | User profiles with roles, language, groups |
-| `groups` | Chat groups/channels |
-| `messages` | Chat messages per group |
-| `events` | Community events with RSVPs |
-| `announcements` | Admin announcements |
-| `businesses` | Business directory listings |
-| `businesses/{id}/reviews` | Business reviews (subcollection) |
-| `businessClaims` | Business claim requests |
-| `notifications` | In-app user notifications |
-
-### User Roles
-
-| Role | Access |
-|------|--------|
-| `admin` | Full platform control, user management, claim approvals |
-| `moderator` | Event moderation, content management |
-| `business` | Business listing management, review responses |
-| `member` | Standard community access |
-
----
-
-## 📁 Project Structure
-
-```
-madina-lab/
-├── README.md                    # This file
-├── Dockerfile                   # Multi-stage Docker build
-├── docker-compose.yml           # Local Docker development
-├── cloudbuild.yaml              # GCP Cloud Build CI/CD
-├── firebase.json                # Firebase configuration
-├── firestore.rules              # Firestore security rules
-├── src/
-│   ├── components/
-│   │   ├── admin/               # Admin panel (UserManagement, EventModeration, etc.)
-│   │   ├── chat/                # Chat UI (GroupList, MessageBubble, MessageComposer)
-│   │   ├── directory/           # Business cards, detail dialog, star ratings
-│   │   ├── events/              # Event cards, category filters, add event dialog
-│   │   ├── home/                # Prayer times, weather, welcome banner
-│   │   ├── layout/              # Header, BottomNav, Sidebar, NotificationBell
-│   │   └── ui/                  # shadcn/ui components
-│   ├── config/                  # Firebase configuration
-│   ├── contexts/                # Auth, Language, Theme providers
-│   ├── data/                    # Sample data, translations, athkar
-│   ├── hooks/                   # useChat, useEvents, useAdmin, useDirectory
-│   ├── lib/                     # Utilities, notifications, namespace isolation
-│   └── pages/                   # Route pages
-└── terraform/                   # GCP infrastructure as code
-    ├── main.tf
-    ├── cloud_run.tf
-    ├── iam.tf
-    ├── secrets.tf
-    └── variables.tf
-```
+| What | How |
+|------|-----|
+| **Service name** | `madina-lab-team1`, `madina-lab-team2`, etc. |
+| **Data namespace** | `VITE_NAMESPACE=team1` → `team1_users`, `team1_events` |
+| **Service account** | `team1-sa@ml-gcp-workshop-487117.iam.gserviceaccount.com` |
+| **Container image** | `madina-lab-team1:latest` in Artifact Registry |
 
 ---
 
@@ -332,61 +254,65 @@ madina-lab/
 
 | Problem | Solution |
 |---------|----------|
-| `Permission denied` on Cloud Build | Re-run IAM commands above |
-| Build fails with `secret not found` | Verify: `gcloud secrets list` |
-| Blank page after deploy | Check logs: `gcloud run services logs read madina-lab` |
-| Firebase auth popup blocked | Add Cloud Run domain to Firebase authorized domains |
-| Docker build fails locally | Ensure Node.js 20+ and run `npm install` first |
-| Firebase config missing error | Set `VITE_FIREBASE_*` environment variables |
-
-### Useful Commands
-
-```bash
-gcloud config get-value project          # Check active project
-gcloud services list --enabled           # Check enabled APIs
-gcloud run services list                 # List Cloud Run services
-curl https://YOUR_URL/health             # Test health endpoint
-firebase deploy --only firestore:rules   # Deploy security rules
-```
+| `Permission denied` on Cloud Build | Ask instructor — IAM roles may be missing |
+| Build fails `secret not found` | Verify: `gcloud secrets list` |
+| Blank page after deploy | Check: Console → Cloud Run → Logs |
+| Firebase auth popup blocked | Add Cloud Run URL to Firebase authorized domains |
+| `memory < 512Mi` error | Ensure `--cpu-throttling` is in deploy step |
 
 ---
 
 ## 📚 Resources
 
+### GCP Documentation
+
 | Resource | Link |
 |----------|------|
-| **Cloud Build Docs** | [cloud.google.com/build/docs](https://cloud.google.com/build/docs) |
-| **Cloud Run Docs** | [cloud.google.com/run/docs](https://cloud.google.com/run/docs) |
-| **Secret Manager Docs** | [cloud.google.com/secret-manager/docs](https://cloud.google.com/secret-manager/docs) |
-| **Terraform GCP** | [registry.terraform.io/providers/hashicorp/google](https://registry.terraform.io/providers/hashicorp/google/latest/docs) |
-| **Firebase Docs** | [firebase.google.com/docs](https://firebase.google.com/docs) |
-| **Docker Multi-stage** | [docs.docker.com/build/building/multi-stage](https://docs.docker.com/build/building/multi-stage/) |
+| Cloud Build Docs | [cloud.google.com/build/docs](https://cloud.google.com/build/docs) |
+| Cloud Run Docs | [cloud.google.com/run/docs](https://cloud.google.com/run/docs) |
+| Secret Manager | [cloud.google.com/secret-manager/docs](https://cloud.google.com/secret-manager/docs) |
+| Terraform GCP | [registry.terraform.io/providers/hashicorp/google](https://registry.terraform.io/providers/hashicorp/google/latest/docs) |
+| Firebase Docs | [firebase.google.com/docs](https://firebase.google.com/docs) |
+| Docker Multi-stage | [docs.docker.com/build/building/multi-stage](https://docs.docker.com/build/building/multi-stage/) |
+
+### Workshop Cheatsheets
+
+| Cheatsheet | Description |
+|-----------|-------------|
+| [GCP CLI (gcloud)](docs/gcloud-cheatsheet.md) | Cloud Run, Cloud Build, Secret Manager, IAM commands |
+| [Docker](docs/docker-cheatsheet.md) | Images, containers, compose, multi-stage builds |
+| [Terraform](docs/terraform-cheatsheet.md) | Init, plan, apply, HCL syntax, state management |
+| [Cloud Build & CI/CD](docs/cloudbuild-cheatsheet.md) | Pipeline YAML structure, security scanning |
+| [YAML](docs/yaml-cheatsheet.md) | Syntax, substitutions, Cloud Build YAML |
+| [Git](docs/git-cheatsheet.md) | Clone, commit, push, branches, .gitignore |
 
 ---
 
 ## 📞 Workshop Instructor
 
-**Ahmed Bedair**  
+**Ahmed Bedair**
 Senior Cloud Architect
 
 | | |
 |---|---|
-| 📧 **Email** | abedair@gmail.com |
-| 💼 **LinkedIn** | [linkedin.com/in/ahmedbedair](https://linkedin.com/in/ahmedbedair) |
-| 🐙 **GitHub** | [github.com/bedairahmed](https://github.com/bedairahmed) |
+| 📧 Email | abedair@gmail.com |
+| 💼 LinkedIn | [linkedin.com/in/ahmedbedair](https://linkedin.com/in/ahmedbedair) |
+| 🐙 GitHub | [github.com/bedairahmed](https://github.com/bedairahmed) |
 
 ### Need Help?
 
-🙋 Raise your hand  
-💬 Post in the workshop chat  
-📧 Email for follow-up questions  
+🙋 Raise your hand · 💬 Workshop chat · 📧 Email for follow-up
 
 ---
 
-> 💡 **Remember:** This workshop is a starting point — not the finish line.  
-> By the end, you'll have a solid foundation to continue your cloud learning journey with confidence.
+> 💡 *This workshop is a starting point — not the finish line. By the end, you'll have a solid foundation to continue your cloud learning journey with confidence.*
 
 ---
 
-**Made with ❤️ for the MCWS Community**  
-*☁️ GCP Cloud Engineering Workshop*
+<div align="center">
+
+**Made with ❤️ for the MCWS Community**
+
+*☁️ GCP Cloud Workshop — Feb 15, 2026*
+
+</div>

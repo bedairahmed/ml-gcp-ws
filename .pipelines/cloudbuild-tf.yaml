@@ -1,0 +1,89 @@
+# =============================================================================
+#  🕌  Madina Lab — Terraform Pipeline (cloudbuild-tf.yaml)
+# =============================================================================
+#
+#  Deploys infrastructure using Terraform through Cloud Build.
+#
+#  HOW TO USE:
+#  ───────────
+#  cd terraform
+#  gcloud builds submit --config cloudbuild-tf.yaml \
+#    --substitutions=_TEAM=team1 .
+#
+#  PIPELINE STAGES:
+#  ────────────────
+#  Step 1: INIT    → Download providers (Google Cloud plugin)
+#  Step 2: PLAN    → Preview what will change (no changes applied yet)
+#  Step 3: APPLY   → Create/update the resources
+#
+# =============================================================================
+
+substitutions:
+  _TEAM: "team1"
+
+steps:
+  # ════════════════════════════════════════════════════════
+  # STEP 1: INIT — Download providers
+  # ════════════════════════════════════════════════════════
+  # Terraform needs the Google Cloud provider plugin to talk to GCP.
+  # This step downloads it. Think of it like `npm install` for infrastructure.
+  - name: "hashicorp/terraform:latest"
+    id: "init"
+    entrypoint: "sh"
+    args:
+      - "-c"
+      - |
+        echo "═══════════════════════════════════════════════════"
+        echo "  📦 Terraform Init — Downloading providers"
+        echo "═══════════════════════════════════════════════════"
+        terraform init -no-color
+    dir: "."
+
+  # ════════════════════════════════════════════════════════
+  # STEP 2: PLAN — Preview changes
+  # ════════════════════════════════════════════════════════
+  # Shows what Terraform WILL do — without doing it yet.
+  # This is like a dry run. Review the output carefully:
+  #   + means CREATE (new resource)
+  #   ~ means UPDATE (change existing)
+  #   - means DESTROY (delete resource)
+  - name: "hashicorp/terraform:latest"
+    id: "plan"
+    entrypoint: "sh"
+    args:
+      - "-c"
+      - |
+        echo "═══════════════════════════════════════════════════"
+        echo "  🔍 Terraform Plan — Preview changes"
+        echo "  Team: ${_TEAM}"
+        echo "═══════════════════════════════════════════════════"
+        terraform plan \
+          -var="team=${_TEAM}" \
+          -no-color
+    dir: "."
+
+  # ════════════════════════════════════════════════════════
+  # STEP 3: APPLY — Create/update resources
+  # ════════════════════════════════════════════════════════
+  # This step actually creates the resources in GCP.
+  # -auto-approve skips the confirmation prompt (since this is CI/CD).
+  - name: "hashicorp/terraform:latest"
+    id: "apply"
+    entrypoint: "sh"
+    args:
+      - "-c"
+      - |
+        echo "═══════════════════════════════════════════════════"
+        echo "  🚀 Terraform Apply — Creating resources"
+        echo "  Team: ${_TEAM}"
+        echo "═══════════════════════════════════════════════════"
+        terraform apply \
+          -var="team=${_TEAM}" \
+          -auto-approve \
+          -no-color
+    dir: "."
+
+options:
+  logging: CLOUD_LOGGING_ONLY
+
+timeout: "600s"
