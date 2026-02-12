@@ -1,6 +1,6 @@
 # 🕌 Madina Lab — Lab 2: Ship Your App
 
-> *The community board reviewed the demo. "We love it. Now each team ships their own version — live, today." Each team must be isolated: separate data, separate identity, separate URL. And every deploy must be scanned for security issues first.*
+> *The community board reviewed the demo. "We love it. Now each team ships their own version — live, today." Each team must be isolated: separate data, separate identity, separate URL. And every deploy must be scanned first.*
 
 ---
 
@@ -17,25 +17,25 @@
 
 | Role A — Builder | Role B — Observer |
 |-----------------|-------------------|
-| Runs the deploy command in Cloud Shell | Opens Cloud Build → watches each step |
+| Runs deploy command in Cloud Shell | Watches Cloud Build → each step |
 | Reads terminal output | Checks Cloud Run: logs, metrics, secrets |
 
 > **Switch from Lab 1!**
 
-## 📖 Helpful Cheatsheets: [`docs/gcloud-cheatsheet.md`](../docs/gcloud-cheatsheet.md) · [`docs/cloudbuild-cheatsheet.md`](../docs/cloudbuild-cheatsheet.md)
+## 📖 Cheatsheets: [`docs/gcloud-cheatsheet.md`](../docs/gcloud-cheatsheet.md) · [`docs/cloudbuild-cheatsheet.md`](../docs/cloudbuild-cheatsheet.md)
 
 ---
 
 ## The Business Requirements
 
-| # | Requirement | Why? | Where in the pipeline? |
-|---|------------|------|----------------------|
-| 1 | Each team gets its own URL | Work independently | `madina-lab-${_TEAM}` in [`cloudbuild-app.yaml`](../cloudbuild-app.yaml) → Step 5 |
-| 2 | Data is isolated per team | Team 1 can't see Team 2 data | `VITE_NAMESPACE=${_TEAM}` in [`cloudbuild-app.yaml`](../cloudbuild-app.yaml) → Step 2 |
-| 3 | Own service account per team | Least privilege | `${_TEAM}-sa@...` in [`cloudbuild-app.yaml`](../cloudbuild-app.yaml) → Step 5 |
-| 4 | Secrets from Secret Manager | Never hardcode API keys | `secretEnv` + `--set-secrets` in [`cloudbuild-app.yaml`](../cloudbuild-app.yaml) |
-| 5 | Security scan before deploy | Catch vulnerabilities early | Hadolint (Step 1) + Trivy (Step 3) in [`cloudbuild-app.yaml`](../cloudbuild-app.yaml) |
-| 6 | Monitoring built-in | Logs, metrics from day one | Cloud Run automatic — Console → Metrics |
+| # | Requirement | Why? | Where in pipeline? |
+|---|------------|------|-------------------|
+| 1 | Own URL per team | Work independently | `madina-lab-${_TEAM}` in [`.pipelines/cloudbuild-app.yaml`](../.pipelines/cloudbuild-app.yaml) → Step 5 |
+| 2 | Isolated data | Team 1 ≠ Team 2 | `VITE_NAMESPACE=${_TEAM}` → Step 2 |
+| 3 | Own service account | Least privilege | `${_TEAM}-sa@...` → Step 5 |
+| 4 | Secrets from Secret Manager | Never hardcode keys | `secretEnv` + `--set-secrets` |
+| 5 | Security scan before deploy | Catch vulns early | Hadolint (Step 1) + Trivy (Step 3) |
+| 6 | Monitoring built-in | Logs & metrics day one | Cloud Run automatic |
 
 ---
 
@@ -43,28 +43,28 @@
 
 ### Task 1: Trace Your Team Name
 
-📍 **Open:** [`cloudbuild-app.yaml`](../cloudbuild-app.yaml)
+📍 **Open:** [`.pipelines/cloudbuild-app.yaml`](../.pipelines/cloudbuild-app.yaml)
 
-Find every place `${_TEAM}` appears. This is what makes each team's deployment unique.
+Find every `${_TEAM}`. This makes each deployment unique.
 
-> ❓ How many times does `_TEAM` appear? What does it affect?
+> ❓ How many times? What does it affect? (image name, service name, namespace, SA, labels)
 
 ---
 
 ### Task 2: Find the Secrets
 
 In the same file, find:
-- `secretEnv:` — Cloud Build injects secrets into the build step
-- `--set-secrets=` — Cloud Run mounts secrets at runtime
-- `availableSecrets:` — secret definitions at the bottom
+- `secretEnv:` — injected at build time
+- `--set-secrets=` — mounted at runtime
+- `availableSecrets:` — definitions at bottom
 
-> ❓ What's the difference between build-time secrets (Step 2) and runtime secrets (Step 5)?
+> ❓ Difference between build-time secrets (Step 2) and runtime secrets (Step 5)?
 
 ---
 
 ### Task 3: Find the Security Scans
 
-Look at Step 1 (`lint-dockerfile`) and Step 3 (`scan-image`).
+Step 1 (`lint-dockerfile`) and Step 3 (`scan-image`).
 
 > ❓ What does Hadolint check? What does Trivy check? What severity levels?
 
@@ -74,9 +74,7 @@ Look at Step 1 (`lint-dockerfile`) and Step 3 (`scan-image`).
 
 ### Task 4: Open Cloud Shell
 
-📍 **Console → Click the Cloud Shell icon** (top right, `>_` button)
-
----
+📍 **Console → Cloud Shell icon** (top right, `>_`)
 
 ### Task 5: Clone the Repo
 
@@ -85,17 +83,15 @@ git clone https://github.com/bedairahmed/ml-gcp-ws.git
 cd ml-gcp-ws
 ```
 
----
-
 ### Task 6: Deploy!
 
-Replace `teamN` with **your team number** (team1 – team8):
+Replace `teamN` with **your team number**:
 
 ```bash
-gcloud builds submit --config cloudbuild-app.yaml --substitutions=_TEAM=teamN .
+gcloud builds submit --config .pipelines/cloudbuild-app.yaml --substitutions=_TEAM=teamN .
 ```
 
-> ⏳ Takes ~4-5 min. **Role B:** watch in Console → Cloud Build → History.
+> ⏳ ~4-5 min. **Role B:** watch Console → Cloud Build → History.
 
 ---
 
@@ -105,62 +101,53 @@ gcloud builds submit --config cloudbuild-app.yaml --substitutions=_TEAM=teamN .
 
 📍 **Console → Cloud Build → History → click your build**
 
-Expand each step and read the logs:
+**Step 1 — Hadolint:**
+> ❓ Any issues? What rules? (DL3018, DL3025)
 
-**Step 1 — Hadolint (Dockerfile lint):**
-> ❓ Any issues found? What rule numbers? (e.g., DL3018, DL3025)
-
-**Step 3 — Trivy (vulnerability scan):**
-> ❓ How many vulnerabilities? Any HIGH or CRITICAL?
+**Step 3 — Trivy:**
+> ❓ How many vulns? Any HIGH or CRITICAL?
 
 ---
 
-### Task 8: Check Your Cloud Run Service
+### Task 8: Check Cloud Run
 
 📍 **Console → Cloud Run → `madina-lab-teamN`**
 
-| Tab | What to look for |
-|-----|-----------------|
+| Tab | Look for |
+|-----|---------|
 | **Metrics** | Request count, latency |
-| **Logs** | Startup logs — any errors? |
-| **Revisions** | When was it created? |
-| **Variables & Secrets** | Secret Manager references |
-| **Security** | Is `allUsers` listed? |
-
----
+| **Logs** | Startup logs, errors |
+| **Revisions** | When created? |
+| **Variables & Secrets** | Secret Manager refs |
+| **Security** | `allUsers` listed? |
 
 ### Task 9: Visit Your App
 
-Copy your Cloud Run URL and open it in a new tab.
+> ❓ Does it load? Can you sign up? Separate from instructor's app?
 
-> ❓ Does it load? Can you sign up? Is it separate from the instructor's app?
-
----
-
-### Task 10: Check Artifact Registry
+### Task 10: Artifact Registry
 
 📍 **Console → Artifact Registry → `madina-lab`**
 
-> ❓ Can you find your team's image? What's the tag?
+> ❓ Find your team's image. What tag?
 
 ---
 
 ## 💬 Discussion
 
-1. What if Trivy found a CRITICAL vulnerability? Should the build stop?
-2. Why does each team need its own service account?
-3. How would you roll back? (Hint: Cloud Run → Revisions)
-4. What other steps would a production pipeline have?
+1. CRITICAL vulnerability found — should the build stop?
+2. Why own service account per team?
+3. How to roll back? (Cloud Run → Revisions)
+4. What other steps for a production pipeline?
 
 ---
 
 ## ✅ Checklist
 
-- [ ] Understood all 6 business requirements
-- [ ] Traced `_TEAM` through [`cloudbuild-app.yaml`](../cloudbuild-app.yaml)
+- [ ] Understood 6 business requirements
+- [ ] Traced `_TEAM` through [`.pipelines/cloudbuild-app.yaml`](../.pipelines/cloudbuild-app.yaml)
 - [ ] Deployed with one command
-- [ ] Read Hadolint results in Cloud Build logs
-- [ ] Read Trivy scan results in Cloud Build logs
+- [ ] Read Hadolint + Trivy results
 - [ ] Checked Cloud Run: metrics, logs, secrets
-- [ ] Visited app URL — it's live
+- [ ] App is live
 - [ ] Found image in Artifact Registry

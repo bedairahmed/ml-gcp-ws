@@ -1,13 +1,14 @@
 # 🕌 Madina Lab — Lab 3: Infrastructure as Code
 
-> *The board is excited. "50 other communities want this same platform. Can we deploy it for all of them?" You can't click through Console 50 times. There has to be a better way. Enter Terraform — infrastructure defined in code.*
+> *The board is excited. "50 other communities want this platform." You can't click through Console 50 times. Enter Terraform — infrastructure defined in code.*
 
 ---
 
 ## 🎯 Objectives
 
 - Understand why Infrastructure as Code (IaC) matters
-- Read and complete a Terraform configuration
+- Read Terraform configuration files and understand the structure
+- See Checkov security scanning for Terraform
 - Deploy infrastructure through a pipeline
 - Compare imperative (gcloud) vs declarative (Terraform)
 
@@ -17,23 +18,17 @@
 
 | Role A — Builder | Role B — Observer |
 |-----------------|-------------------|
-| Edits `main.tf`, fills in the blanks | Runs the pipeline, checks plan output |
+| Reads Terraform files, edits tfvars | Runs pipeline, checks plan output & Checkov results |
 
 > **Switch from Lab 2!**
 
-## 📖 Helpful Cheatsheet: [`docs/terraform-cheatsheet.md`](../docs/terraform-cheatsheet.md)
+## 📖 Cheatsheets: [`docs/terraform-cheatsheet.md`](../docs/terraform-cheatsheet.md) · [`docs/yaml-cheatsheet.md`](../docs/yaml-cheatsheet.md)
 
 ---
 
 ## The Problem
 
-In Lab 2, you deployed with this command:
-
-```bash
-gcloud builds submit --config cloudbuild-app.yaml --substitutions=_TEAM=team1 .
-```
-
-That worked for **one team**. But what about 50?
+Lab 2 used `gcloud` commands (imperative). That works for 1 team:
 
 | Approach | 1 Team | 8 Teams | 50 Teams |
 |----------|--------|---------|----------|
@@ -43,9 +38,9 @@ That worked for **one team**. But what about 50?
 
 With Terraform:
 - Infrastructure is **code** — stored in Git, peer-reviewed, versioned
-- Changes are **planned** before applied — see what will happen first
+- Changes are **planned** before applied — see what happens first
 - State is **tracked** — knows what exists, what needs to change
-- Everything is **repeatable** — run 50 times, same result
+- Security is **scanned** — Checkov catches misconfigurations before deploy
 
 ---
 
@@ -57,151 +52,154 @@ With Terraform:
 
 ```
 ml-gcp-ws/terraform/
-├── main.tf              ← Resource definitions (you edit this)
-├── variables.tf         ← Input variables
-├── outputs.tf           ← Output values (URL, service name, SA)
-├── terraform.tfvars     ← Your team's values (you edit this)
-└── cloudbuild-tf.yaml   ← Terraform pipeline
+├── main.tf                  ← Provider config & backend
+├── cloud_run.tf             ← Cloud Run service definition
+├── iam.tf                   ← IAM bindings (public access, Cloud Build)
+├── secrets.tf               ← Secret Manager resources
+├── variables.tf             ← Input variables
+├── outputs.tf               ← Output values (URL, service name)
+└── terraform.tfvars.example ← Example values
 ```
 
-Open [`terraform/main.tf`](../terraform/main.tf) and read through it.
+Open each file and understand what it does:
 
-> ❓ What resources does it define? What data source does it use? (Hint: look for `resource` and `data`)
+| File | Purpose | Key resource |
+|------|---------|-------------|
+| [`terraform/main.tf`](../terraform/main.tf) | Provider & backend | `provider "google"` |
+| [`terraform/cloud_run.tf`](../terraform/cloud_run.tf) | The app service | `google_cloud_run_v2_service` |
+| [`terraform/iam.tf`](../terraform/iam.tf) | Who can access | `google_cloud_run_v2_service_iam_member` |
+| [`terraform/secrets.tf`](../terraform/secrets.tf) | Firebase config | `google_secret_manager_secret` |
+| [`terraform/variables.tf`](../terraform/variables.tf) | Inputs | `variable "student_namespace"` |
+| [`terraform/outputs.tf`](../terraform/outputs.tf) | Results | `output "service_url"` |
 
----
-
-### Task 2: Find the TODOs
-
-In [`terraform/main.tf`](../terraform/main.tf), look for lines marked with `# TODO`:
-
-| TODO | What's missing | Hint |
-|------|---------------|------|
-| TODO 1 | Service account email | `${var.team}-sa@${var.project_id}.iam.gserviceaccount.com` |
-| TODO 2 | Container image URL | `${var.region}-docker.pkg.dev/${var.project_id}/madina-lab/madina-lab-${var.team}:latest` |
-| TODO 3 | Container port | Check [`Dockerfile`](../Dockerfile) — what port does nginx listen on? |
-
-> ❓ How many TODOs are there?
+> ❓ What resources does `cloud_run.tf` create? What port, memory, scaling?
 
 ---
 
-### Task 3: Read the Terraform Pipeline
+### Task 2: Compare to the gcloud Command
 
-📍 **Open:** [`terraform/cloudbuild-tf.yaml`](../terraform/cloudbuild-tf.yaml)
+In Lab 2, you deployed with this gcloud command (from [`.pipelines/cloudbuild-app.yaml`](../.pipelines/cloudbuild-app.yaml)):
 
-This pipeline has 3 stages:
-
-| Stage | Command | What it does |
-|-------|---------|-------------|
-| 1 | `terraform init` | Downloads providers (like `npm install` for infra) |
-| 2 | `terraform plan` | Shows what WILL change — preview, no changes yet |
-| 3 | `terraform apply` | Actually creates/updates the resources |
-
-> ❓ Why is `plan` separate from `apply`?
-
----
-
-## Part B: Fill & Deploy (15 min)
-
-### Task 4: Edit terraform.tfvars
-
-📍 **Open:** [`terraform/terraform.tfvars`](../terraform/terraform.tfvars)
-
-Replace `teamN` with your team number:
-
-```hcl
-team       = "teamN"
-project_id = "ml-gcp-workshop-487117"
-region     = "us-central1"
-```
-
----
-
-### Task 5: Complete main.tf
-
-📍 **Open:** [`terraform/main.tf`](../terraform/main.tf)
-
-Fill in all 3 `# TODO` sections using the hints from Task 2.
-
----
-
-### Task 6: Deploy with Terraform Pipeline
-
-```bash
-cd terraform
-gcloud builds submit --config cloudbuild-tf.yaml \
-  --substitutions=_TEAM=teamN .
-```
-
-📍 **Role B:** Watch in Console → Cloud Build → History.
-
-You'll see 3 steps:
-1. **init** — downloading providers
-2. **plan** — preview of changes (read this!)
-3. **apply** — creating resources
-
-> ❓ In the plan output: what resources will be created? Look for `+` symbols.
-
----
-
-## Part C: Compare & Reflect (5 min)
-
-### Task 7: Side by Side
-
-**Lab 2 — Imperative (gcloud):**
 ```bash
 gcloud run deploy madina-lab-team1 \
-  --image=us-central1-docker.pkg.dev/.../madina-lab-team1:latest \
-  --region=us-central1 \
-  --memory=256Mi --cpu=1 --cpu-throttling \
-  --min-instances=0 --max-instances=3 \
-  --port=8080 \
-  --service-account=team1-sa@...iam.gserviceaccount.com \
-  --labels=team=team1,env=workshop \
-  --set-secrets=FIREBASE_API_KEY=firebase-api-key:latest,...
+  --image=... --region=us-central1 --memory=256Mi --cpu=1 \
+  --min-instances=0 --max-instances=3 --port=8080 \
+  --service-account=team1-sa@...
 ```
 
-**Lab 3 — Declarative (Terraform):**
-```hcl
-resource "google_cloud_run_service" "app" {
-  name     = "madina-lab-${var.team}"
-  location = var.region
+Now look at [`terraform/cloud_run.tf`](../terraform/cloud_run.tf):
 
+```hcl
+resource "google_cloud_run_v2_service" "app" {
+  name     = "madina-lab-${var.student_namespace}"
+  location = var.region
   template {
-    spec {
-      containers {
-        image = ".../${var.team}:latest"
-        ports { container_port = 8080 }
-        resources {
-          limits = { memory = "256Mi", cpu = "1" }
-        }
-      }
-      service_account_name = "${var.team}-sa@..."
+    containers {
+      image = var.image
+      ports { container_port = 8080 }
+      resources { limits = { cpu = var.cpu, memory = var.memory } }
     }
   }
 }
 ```
 
-> ❓ Which is easier to read? Which is easier to review in a pull request?
+> ❓ Same result — which is easier to read? To review in a pull request? To scale to 50?
+
+---
+
+### Task 3: Read the Terraform Pipeline
+
+📍 **Open:** [`.pipelines/cloudbuild-tf.yaml`](../.pipelines/cloudbuild-tf.yaml)
+
+This pipeline has **5 stages**:
+
+| Stage | Name | What it does |
+|-------|------|-------------|
+| 1 | `build-app` | Build & push container image (app needs to exist first) |
+| 2 | `checkov-scan` | Scan Terraform for security issues |
+| 3 | `tf-init` | Download providers (`npm install` for infra) |
+| 4 | `tf-plan` | Preview changes — nothing applied yet |
+| 5 | `tf-apply` | Create/update resources |
+
+> ❓ Why build the app image BEFORE running Terraform? (Hint: Terraform deploys the Cloud Run service that references this image)
+
+> ❓ What does Checkov scan for? What does `--soft-fail` mean?
+
+---
+
+## Part B: Deploy with Terraform (15 min)
+
+### Task 4: Run the Terraform Pipeline
+
+Replace `teamN` with your team number:
+
+```bash
+gcloud builds submit --config .pipelines/cloudbuild-tf.yaml \
+  --substitutions=_TEAM=teamN .
+```
+
+📍 **Role B:** Watch Console → Cloud Build → History.
+
+---
+
+### Task 5: Read the Results
+
+Expand each step in Cloud Build:
+
+**Step 2 — Checkov:**
+> ❓ How many checks passed? How many failed? What did it flag?
+
+**Step 4 — Terraform Plan:**
+> ❓ What resources will be created? Look for `+` symbols. How many?
+
+**Step 5 — Terraform Apply:**
+> ❓ What outputs are displayed? (service URL, service name)
+
+---
+
+### Task 6: Visit Your Terraform-Deployed App
+
+Find the service URL in the apply output, or:
+
+📍 **Console → Cloud Run** → look for `madina-lab-teamN-tf` (note the `-tf` suffix)
+
+> ❓ Same app, but deployed by Terraform instead of gcloud. Can you tell the difference?
+
+---
+
+## Part C: Compare & Reflect (5 min)
+
+### Lab 2 Pipeline vs Lab 3 Pipeline
+
+| | Lab 2 (App Pipeline) | Lab 3 (Terraform Pipeline) |
+|---|---|---|
+| **Pipeline** | [`.pipelines/cloudbuild-app.yaml`](../.pipelines/cloudbuild-app.yaml) | [`.pipelines/cloudbuild-tf.yaml`](../.pipelines/cloudbuild-tf.yaml) |
+| **Approach** | Imperative (`gcloud run deploy`) | Declarative (`terraform apply`) |
+| **Security scan** | Hadolint + Trivy (container) | Checkov (infrastructure) |
+| **Infra defined in** | YAML flags | `.tf` files |
+| **State tracking** | None | Terraform state |
+| **Scaling to 50** | 50 commands | Change one variable |
 
 ---
 
 ## 💬 Discussion
 
 1. When would you use `gcloud`? When Terraform?
-2. What if someone changes something in Console after Terraform deployed it?
-3. How would you handle different configs per community?
-4. Where would you store the Terraform state file in production?
+2. What if someone changes something in Console after Terraform deployed it? (Drift)
+3. Where would you store the Terraform state file in production?
+4. Lab 2 scans the container (Trivy). Lab 3 scans the infra (Checkov). A real pipeline would do both — why?
 
 ---
 
 ## ✅ Checklist
 
-- [ ] Read [`terraform/main.tf`](../terraform/main.tf) — understood the resources
-- [ ] Found and completed all 3 TODOs
-- [ ] Read [`terraform/cloudbuild-tf.yaml`](../terraform/cloudbuild-tf.yaml) — understood init/plan/apply
-- [ ] Deployed via Terraform pipeline
-- [ ] Read the plan output
-- [ ] Compared gcloud (Lab 2) vs Terraform (Lab 3)
+- [ ] Read all Terraform files in [`terraform/`](../terraform/)
+- [ ] Compared `cloud_run.tf` to gcloud command from Lab 2
+- [ ] Read [`.pipelines/cloudbuild-tf.yaml`](../.pipelines/cloudbuild-tf.yaml) — understood all 5 steps
+- [ ] Ran the Terraform pipeline
+- [ ] Read Checkov scan results
+- [ ] Read Terraform plan output
+- [ ] Visited Terraform-deployed app
 
 ---
 
@@ -213,7 +211,7 @@ You've gone from exploring GCP → deploying with CI/CD → managing infrastruct
 - ☁️ GCP Console — VPC, Artifact Registry, Secret Manager, Cloud Build, Cloud Run, Firestore
 - 🐳 Docker — multi-stage builds, container images
 - 🔄 CI/CD — automated pipelines with security scanning
-- 🔒 Security — Hadolint, Trivy, Secret Manager
+- 🔒 Security — Hadolint, Trivy (container) + Checkov (infrastructure)
 - 📊 Monitoring — logs, metrics, health checks
 - 🏗️ IaC — Terraform, plan before apply
 

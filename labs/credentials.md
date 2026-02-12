@@ -4,7 +4,7 @@
 
 📋 [**Workshop Registration Sheet**](https://docs.google.com/spreadsheets/d/e/2PACX-1vSxQhQ5DcSui7mcSfXHVfUcVQpQWMklq4jzJzI1P9YLRgww02kMuk7HV3tdNUjxyJsYysvFosiCPy9J/pubhtml?gid=959209679&single=true) — Find your team, email, and password here.
 
-<iframe src="https://docs.google.com/spreadsheets/d/e/2PACX-1vSxQhQ5DcSui7mcSfXHVfUcVQpQWMklq4jzJzI1P9YLRgww02kMuk7HV3tdNUjxyJsYysvFosiCPy9J/pubhtml?gid=959209679&amp;single=true&amp;widget=true&amp;headers=false" width="100%" height="400" frameborder="0"></iframe>
+
 
 ## Login
 
@@ -26,19 +26,23 @@ Each team has **two members**. Pick your roles and **switch between labs**:
 ```
 ml-gcp-ws/
 ├── Dockerfile                  ← Docker image (Lab 1, 2)
-├── cloudbuild-app.yaml         ← CI/CD pipeline (Lab 1, 2)
 ├── docker-compose.yml          ← Local dev only
-├── labs/
-│   ├── CREDENTIALS.md          ← This file
-│   ├── LAB1.md                 ← Lab 1: Explore & Meet the App
-│   ├── LAB2.md                 ← Lab 2: Ship Your App
-│   └── LAB3.md                 ← Lab 3: Infrastructure as Code
+├── .pipelines/                 ← CI/CD pipelines
+│   ├── cloudbuild-app.yaml     ← App pipeline (Lab 1, 2)
+│   └── cloudbuild-tf.yaml      ← Terraform pipeline (Lab 3)
+├── labs/                       ← Lab guides
+│   ├── credentials.md          ← This file
+│   ├── lab1.md                 ← Lab 1: Explore & Meet the App
+│   ├── lab2.md                 ← Lab 2: Ship Your App
+│   └── lab3.md                 ← Lab 3: Infrastructure as Code
 ├── terraform/                  ← IaC files (Lab 3)
-│   ├── main.tf
-│   ├── variables.tf
-│   ├── outputs.tf
-│   ├── terraform.tfvars
-│   └── cloudbuild-tf.yaml
+│   ├── main.tf                 ← Provider config
+│   ├── cloud_run.tf            ← Cloud Run service
+│   ├── iam.tf                  ← IAM bindings
+│   ├── secrets.tf              ← Secret Manager
+│   ├── variables.tf            ← Input variables
+│   ├── outputs.tf              ← Output values
+│   └── terraform.tfvars.example
 ├── scripts/                    ← Instructor scripts
 │   ├── setup.sh
 │   ├── cleanup.sh
@@ -68,7 +72,7 @@ ml-gcp-ws/
 ## Deploy Command
 
 ```bash
-gcloud builds submit --config cloudbuild-app.yaml --substitutions=_TEAM=teamN .
+gcloud builds submit --config .pipelines/cloudbuild-app.yaml --substitutions=_TEAM=teamN .
 ```
 
 Replace `teamN` with your team number (team1 – team8).

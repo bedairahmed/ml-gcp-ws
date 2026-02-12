@@ -52,37 +52,16 @@ Using a sample community platform (chat, events, business directory) as our use 
 | **Region** | `us-central1` |
 | **Login** | `studentN@ml-gcp.cloud-people.net` |
 
-### Team Roles
-
-Each team has **two members**. Pick your roles and **switch between labs**:
-
-| Role A — Builder | Role B — Observer |
-|-----------------|-------------------|
-| Drives keyboard, runs commands | Follows in Console, checks logs & metrics |
-
 ---
 
 ## 🧪 Labs
 
 | Lab | Title | Duration | Guide |
 |-----|-------|----------|-------|
-| 0 | Credentials & Setup | 10 min | [labs/CREDENTIALS.md](labs/CREDENTIALS.md) |
-| 1 | Explore Your Cloud & Meet the App | 30 min | [labs/LAB1.md](labs/LAB1.md) |
-| 2 | Ship Your App | 35 min | [labs/LAB2.md](labs/LAB2.md) |
-| 3 | Infrastructure as Code | 30 min | [labs/LAB3.md](labs/LAB3.md) |
-
----
-
-## 📖 Cheatsheets
-
-| Topic | Reference |
-|-------|-----------|
-| GCP CLI (gcloud) | [docs/gcloud-cheatsheet.md](docs/gcloud-cheatsheet.md) |
-| Docker | [docs/docker-cheatsheet.md](docs/docker-cheatsheet.md) |
-| Terraform | [docs/terraform-cheatsheet.md](docs/terraform-cheatsheet.md) |
-| Cloud Build & CI/CD | [docs/cloudbuild-cheatsheet.md](docs/cloudbuild-cheatsheet.md) |
-| YAML | [docs/yaml-cheatsheet.md](docs/yaml-cheatsheet.md) |
-| Git | [docs/git-cheatsheet.md](docs/git-cheatsheet.md) |
+| 0 | Credentials & Setup | 10 min | [labs/credentials.md](labs/credentials.md) |
+| 1 | Explore Your Cloud & Meet the App | 30 min | [labs/lab1.md](labs/lab1.md) |
+| 2 | Ship Your App | 35 min | [labs/lab2.md](labs/lab2.md) |
+| 3 | Infrastructure as Code | 30 min | [labs/lab3.md](labs/lab3.md) |
 
 ---
 
@@ -119,31 +98,28 @@ Each team has **two members**. Pick your roles and **switch between labs**:
 
 ---
 
-## 🧱 Tech Stack
+## 🔄 CI/CD Pipelines
 
-| Layer | Technology |
-|-------|-----------|
-| **Frontend** | React 18, TypeScript, Vite, Tailwind CSS |
-| **Backend** | Firebase Auth + Firestore |
-| **Container** | Docker multi-stage (Node.js build → nginx serve) |
-| **CI/CD** | Google Cloud Build with Hadolint + Trivy scanning |
-| **Hosting** | Google Cloud Run |
-| **Secrets** | GCP Secret Manager |
-| **IaC** | Terraform |
+### App Pipeline ([`.pipelines/cloudbuild-app.yaml`](.pipelines/cloudbuild-app.yaml)) — 6 steps
 
----
+| Step | Name | What |
+|------|------|------|
+| 1 | `lint-dockerfile` | Hadolint — Dockerfile best practices |
+| 2 | `build` | Docker build with secrets from Secret Manager |
+| 3 | `scan-image` | Trivy — container vulnerability scan |
+| 4 | `push` | Push image to Artifact Registry |
+| 5 | `deploy-app` | Deploy to Cloud Run |
+| 6 | `allow-public-access` | Grant public access |
 
-## ✨ Sample Application Features
+### Terraform Pipeline ([`.pipelines/cloudbuild-tf.yaml`](.pipelines/cloudbuild-tf.yaml)) — 5 steps
 
-| Feature | Description |
-|---------|-------------|
-| 🕐 **Prayer Times** | Real-time schedule via Aladhan API |
-| 📅 **Community Events** | RSVP system, category filters |
-| 💬 **Community Chat** | Group channels with mentions & reactions |
-| 🏢 **Business Directory** | Listings with reviews & ratings |
-| 🛡️ **Admin Panel** | User management, event moderation |
-| 🌐 **Trilingual** | English, Arabic, Urdu with RTL support |
-| 🌙 **Dark Mode** | Full dark/light theme toggle |
+| Step | Name | What |
+|------|------|------|
+| 1 | `build-app` | Build & push container image |
+| 2 | `checkov-scan` | Checkov — Terraform security scan |
+| 3 | `tf-init` | Download providers |
+| 4 | `tf-plan` | Preview changes |
+| 5 | `tf-apply` | Create/update resources |
 
 ---
 
@@ -152,21 +128,21 @@ Each team has **two members**. Pick your roles and **switch between labs**:
 ```
 ml-gcp-ws/
 ├── README.md                   # This file
-├── Dockerfile                  # Multi-stage Docker build (Lab 1, 2)
+├── Dockerfile                  # Multi-stage Docker build
 ├── docker-compose.yml          # Local development
 ├── firebase.json               # Firebase config
 ├── firestore.rules             # Firestore security rules
 ├── package.json                # Node.js dependencies
 │
 ├── .pipelines/                 # CI/CD pipeline definitions
-│   ├── cloudbuild-app.yaml     # App build & deploy pipeline (Lab 2)
+│   ├── cloudbuild-app.yaml     # App build & deploy (Lab 2)
 │   └── cloudbuild-tf.yaml      # Terraform pipeline (Lab 3)
 │
 ├── labs/                       # Workshop lab guides
-│   ├── CREDENTIALS.md
-│   ├── LAB1.md
-│   ├── LAB2.md
-│   └── LAB3.md
+│   ├── credentials.md
+│   ├── lab1.md
+│   ├── lab2.md
+│   └── lab3.md
 │
 ├── docs/                       # Cheatsheets & reference
 │   ├── gcloud-cheatsheet.md
@@ -177,16 +153,15 @@ ml-gcp-ws/
 │   └── git-cheatsheet.md
 │
 ├── scripts/                    # Instructor scripts
-│   ├── setup.sh                # Infrastructure provisioning
-│   ├── cleanup.sh              # Resource cleanup
-│   └── validate.sh             # Validation checks
+│   ├── setup.sh
+│   ├── cleanup.sh
+│   └── validate.sh
 │
 ├── terraform/                  # IaC files (Lab 3)
 │   ├── main.tf
 │   ├── cloud_run.tf
 │   ├── iam.tf
 │   ├── secrets.tf
-│   ├── setup.tf
 │   ├── variables.tf
 │   ├── outputs.tf
 │   └── terraform.tfvars.example
@@ -199,7 +174,7 @@ ml-gcp-ws/
 
 ## 🚀 Quick Start
 
-### Deploy (Workshop — one command)
+### Deploy (Workshop)
 
 ```bash
 git clone https://github.com/bedairahmed/ml-gcp-ws.git
@@ -210,55 +185,9 @@ gcloud builds submit --config .pipelines/cloudbuild-app.yaml --substitutions=_TE
 ### Local Development
 
 ```bash
-npm install
-npm run dev
+npm install && npm run dev
 # Visit http://localhost:8080
 ```
-
-### Docker (Local)
-
-```bash
-docker compose up --build
-# Visit http://localhost:8080
-```
-
----
-
-## 🔄 CI/CD Pipeline
-
-The pipeline ([`cloudbuild-app.yaml`](.pipelines/cloudbuild-app.yaml)) runs 6 steps:
-
-| Step | Name | What |
-|------|------|------|
-| 1 | `lint-dockerfile` | Hadolint — Dockerfile best practices |
-| 2 | `build` | Docker build with secrets from Secret Manager |
-| 3 | `scan-image` | Trivy — container vulnerability scan |
-| 4 | `push` | Push image to Artifact Registry |
-| 5 | `deploy-app` | Deploy to Cloud Run |
-| 6 | `allow-public-access` | Grant public access |
-
----
-
-## 🔀 Team Isolation
-
-| What | How |
-|------|-----|
-| **Service name** | `madina-lab-team1`, `madina-lab-team2`, etc. |
-| **Data namespace** | `VITE_NAMESPACE=team1` → `team1_users`, `team1_events` |
-| **Service account** | `team1-sa@ml-gcp-workshop-487117.iam.gserviceaccount.com` |
-| **Container image** | `madina-lab-team1:latest` in Artifact Registry |
-
----
-
-## 🐛 Troubleshooting
-
-| Problem | Solution |
-|---------|----------|
-| `Permission denied` on Cloud Build | Ask instructor — IAM roles may be missing |
-| Build fails `secret not found` | Verify: `gcloud secrets list` |
-| Blank page after deploy | Check: Console → Cloud Run → Logs |
-| Firebase auth popup blocked | Add Cloud Run URL to Firebase authorized domains |
-| `memory < 512Mi` error | Ensure `--cpu-throttling` is in deploy step |
 
 ---
 
@@ -279,33 +208,22 @@ The pipeline ([`cloudbuild-app.yaml`](.pipelines/cloudbuild-app.yaml)) runs 6 st
 
 | Cheatsheet | Description |
 |-----------|-------------|
-| [GCP CLI (gcloud)](docs/gcloud-cheatsheet.md) | Cloud Run, Cloud Build, Secret Manager, IAM commands |
-| [Docker](docs/docker-cheatsheet.md) | Images, containers, compose, multi-stage builds |
-| [Terraform](docs/terraform-cheatsheet.md) | Init, plan, apply, HCL syntax, state management |
-| [Cloud Build & CI/CD](docs/cloudbuild-cheatsheet.md) | Pipeline YAML structure, security scanning |
+| [GCP CLI (gcloud)](docs/gcloud-cheatsheet.md) | Cloud Run, Cloud Build, Secret Manager, IAM |
+| [Docker](docs/docker-cheatsheet.md) | Images, containers, compose, multi-stage |
+| [Terraform](docs/terraform-cheatsheet.md) | Init, plan, apply, HCL syntax |
+| [Cloud Build & CI/CD](docs/cloudbuild-cheatsheet.md) | Pipeline YAML, security scanning |
 | [YAML](docs/yaml-cheatsheet.md) | Syntax, substitutions, Cloud Build YAML |
-| [Git](docs/git-cheatsheet.md) | Clone, commit, push, branches, .gitignore |
+| [Git](docs/git-cheatsheet.md) | Clone, commit, push, branches |
 
 ---
 
 ## 📞 Workshop Instructor
 
-**Ahmed Bedair**
-Senior Cloud Architect
+**Ahmed Bedair** — Senior Cloud Architect
 
-| | |
-|---|---|
-| 📧 Email | abedair@gmail.com |
-| 💼 LinkedIn | [linkedin.com/in/ahmedbedair](https://linkedin.com/in/ahmedbedair) |
-| 🐙 GitHub | [github.com/bedairahmed](https://github.com/bedairahmed) |
-
-### Need Help?
+📧 abedair@gmail.com · 💼 [LinkedIn](https://linkedin.com/in/ahmedbedair) · 🐙 [GitHub](https://github.com/bedairahmed)
 
 🙋 Raise your hand · 💬 Workshop chat · 📧 Email for follow-up
-
----
-
-> 💡 *This workshop is a starting point — not the finish line. By the end, you'll have a solid foundation to continue your cloud learning journey with confidence.*
 
 ---
 

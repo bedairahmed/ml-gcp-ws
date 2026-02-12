@@ -2,33 +2,101 @@
 #  🕌  Madina Lab — Terraform Pipeline (cloudbuild-tf.yaml)
 # =============================================================================
 #
-#  Deploys infrastructure using Terraform through Cloud Build.
+#  This pipeline builds the app, scans Terraform with Checkov,
+#  then deploys infrastructure using Terraform.
 #
 #  HOW TO USE:
 #  ───────────
-#  cd terraform
-#  gcloud builds submit --config cloudbuild-tf.yaml \
+#  gcloud builds submit --config .pipelines/cloudbuild-tf.yaml \
 #    --substitutions=_TEAM=team1 .
 #
 #  PIPELINE STAGES:
 #  ────────────────
-#  Step 1: INIT    → Download providers (Google Cloud plugin)
-#  Step 2: PLAN    → Preview what will change (no changes applied yet)
-#  Step 3: APPLY   → Create/update the resources
+#  Step 1: BUILD-APP    → Build & push container image (same as app pipeline)
+#  Step 2: CHECKOV      → Scan Terraform for security & best practices
+#  Step 3: TF-INIT      → Download providers
+#  Step 4: TF-PLAN      → Preview what will change
+#  Step 5: TF-APPLY     → Create/update resources
 #
 # =============================================================================
 
 substitutions:
   _TEAM: "team1"
+  _REGION: "us-central1"
+  _AR_REPO: "madina-lab"
+  _PROJECT_ID: "ml-gcp-workshop-487117"
 
 steps:
   # ════════════════════════════════════════════════════════
-  # STEP 1: INIT — Download providers
+  # STEP 1: BUILD-APP — Build & push container image
   # ════════════════════════════════════════════════════════
-  # Terraform needs the Google Cloud provider plugin to talk to GCP.
-  # This step downloads it. Think of it like `npm install` for infrastructure.
+  # Terraform deploys a Cloud Run service that needs an image.
+  # This step builds and pushes it to Artifact Registry first.
+  - name: "gcr.io/cloud-builders/docker"
+    id: "build-app"
+    entrypoint: "bash"
+    args:
+      - "-c"
+      - |
+        echo "═══════════════════════════════════════════════════"
+        echo "  🐳 Building container image"
+        echo "  Team: ${_TEAM}"
+        echo "═══════════════════════════════════════════════════"
+        docker build \
+          --build-arg VITE_FIREBASE_API_KEY=$$FIREBASE_API_KEY \
+          --build-arg VITE_FIREBASE_AUTH_DOMAIN=$$FIREBASE_AUTH_DOMAIN \
+          --build-arg VITE_FIREBASE_PROJECT_ID=$$FIREBASE_PROJECT_ID \
+          --build-arg VITE_FIREBASE_STORAGE_BUCKET=$$FIREBASE_STORAGE_BUCKET \
+          --build-arg VITE_FIREBASE_MESSAGING_SENDER_ID=$$FIREBASE_MESSAGING_SENDER_ID \
+          --build-arg VITE_FIREBASE_APP_ID=$$FIREBASE_APP_ID \
+          --build-arg VITE_FIREBASE_MEASUREMENT_ID=$$FIREBASE_MEASUREMENT_ID \
+          --build-arg VITE_APP_ENV=production \
+          --build-arg VITE_NAMESPACE=${_TEAM} \
+          -t ${_REGION}-docker.pkg.dev/$PROJECT_ID/${_AR_REPO}/madina-lab-${_TEAM}:latest \
+          .
+        docker push ${_REGION}-docker.pkg.dev/$PROJECT_ID/${_AR_REPO}/madina-lab-${_TEAM}:latest
+        echo "✔ Image built and pushed"
+    secretEnv:
+      - "FIREBASE_API_KEY"
+      - "FIREBASE_AUTH_DOMAIN"
+      - "FIREBASE_PROJECT_ID"
+      - "FIREBASE_STORAGE_BUCKET"
+      - "FIREBASE_MESSAGING_SENDER_ID"
+      - "FIREBASE_APP_ID"
+      - "FIREBASE_MEASUREMENT_ID"
+
+  # ════════════════════════════════════════════════════════
+  # STEP 2: CHECKOV — Scan Terraform for security issues
+  # ════════════════════════════════════════════════════════
+  # Checkov is a static analysis tool for Infrastructure as Code.
+  # It checks Terraform files for:
+  #   - Security misconfigurations (public access, missing encryption)
+  #   - Best practices (resource naming, tagging)
+  #   - Compliance issues (CIS benchmarks)
+  #
+  # Non-blocking (--soft-fail): shows results but doesn't stop the build.
+  # Remove --soft-fail to block deployment on security issues.
+  #
+  # View results: Cloud Build → History → click build → Step 2 logs
+  - name: "bridgecrew/checkov"
+    id: "checkov-scan"
+    entrypoint: "checkov"
+    args:
+      - "--directory"
+      - "terraform"
+      - "--framework"
+      - "terraform"
+      - "--soft-fail"
+      - "--compact"
+      - "--quiet"
+
+  # ════════════════════════════════════════════════════════
+  # STEP 3: TF-INIT — Download providers
+  # ════════════════════════════════════════════════════════
+  # Downloads the Google Cloud provider plugin.
+  # Think of it like `npm install` for infrastructure.
   - name: "hashicorp/terraform:latest"
-    id: "init"
+    id: "tf-init"
     entrypoint: "sh"
     args:
       - "-c"
@@ -37,18 +105,17 @@ steps:
         echo "  📦 Terraform Init — Downloading providers"
         echo "═══════════════════════════════════════════════════"
         terraform init -no-color
-    dir: "."
+    dir: "terraform"
 
   # ════════════════════════════════════════════════════════
-  # STEP 2: PLAN — Preview changes
+  # STEP 4: TF-PLAN — Preview changes
   # ════════════════════════════════════════════════════════
   # Shows what Terraform WILL do — without doing it yet.
-  # This is like a dry run. Review the output carefully:
   #   + means CREATE (new resource)
   #   ~ means UPDATE (change existing)
   #   - means DESTROY (delete resource)
   - name: "hashicorp/terraform:latest"
-    id: "plan"
+    id: "tf-plan"
     entrypoint: "sh"
     args:
       - "-c"
@@ -58,17 +125,19 @@ steps:
         echo "  Team: ${_TEAM}"
         echo "═══════════════════════════════════════════════════"
         terraform plan \
-          -var="team=${_TEAM}" \
+          -var="student_namespace=${_TEAM}" \
+          -var="project_id=${_PROJECT_ID}" \
+          -var="image=${_REGION}-docker.pkg.dev/${_PROJECT_ID}/${_AR_REPO}/madina-lab-${_TEAM}:latest" \
           -no-color
-    dir: "."
+    dir: "terraform"
 
   # ════════════════════════════════════════════════════════
-  # STEP 3: APPLY — Create/update resources
+  # STEP 5: TF-APPLY — Create/update resources
   # ════════════════════════════════════════════════════════
-  # This step actually creates the resources in GCP.
-  # -auto-approve skips the confirmation prompt (since this is CI/CD).
+  # Actually creates the resources in GCP.
+  # -auto-approve skips confirmation (since this is CI/CD).
   - name: "hashicorp/terraform:latest"
-    id: "apply"
+    id: "tf-apply"
     entrypoint: "sh"
     args:
       - "-c"
@@ -78,12 +147,32 @@ steps:
         echo "  Team: ${_TEAM}"
         echo "═══════════════════════════════════════════════════"
         terraform apply \
-          -var="team=${_TEAM}" \
+          -var="student_namespace=${_TEAM}" \
+          -var="project_id=${_PROJECT_ID}" \
+          -var="image=${_REGION}-docker.pkg.dev/${_PROJECT_ID}/${_AR_REPO}/madina-lab-${_TEAM}:latest" \
           -auto-approve \
           -no-color
-    dir: "."
+    dir: "terraform"
+
+# ── Secrets ──────────────────────────────────────────────
+availableSecrets:
+  secretManager:
+    - versionName: projects/$PROJECT_ID/secrets/firebase-api-key/versions/latest
+      env: "FIREBASE_API_KEY"
+    - versionName: projects/$PROJECT_ID/secrets/firebase-auth-domain/versions/latest
+      env: "FIREBASE_AUTH_DOMAIN"
+    - versionName: projects/$PROJECT_ID/secrets/firebase-project-id/versions/latest
+      env: "FIREBASE_PROJECT_ID"
+    - versionName: projects/$PROJECT_ID/secrets/firebase-storage-bucket/versions/latest
+      env: "FIREBASE_STORAGE_BUCKET"
+    - versionName: projects/$PROJECT_ID/secrets/firebase-messaging-sender-id/versions/latest
+      env: "FIREBASE_MESSAGING_SENDER_ID"
+    - versionName: projects/$PROJECT_ID/secrets/firebase-app-id/versions/latest
+      env: "FIREBASE_APP_ID"
+    - versionName: projects/$PROJECT_ID/secrets/firebase-measurement-id/versions/latest
+      env: "FIREBASE_MEASUREMENT_ID"
 
 options:
   logging: CLOUD_LOGGING_ONLY
 
-timeout: "600s"
+timeout: "900s"

@@ -27,15 +27,13 @@
 
 Log into the GCP Console → project: **ml-gcp-workshop-487117**
 
-*(See [CREDENTIALS.md](CREDENTIALS.md) for login details)*
+*(See [credentials.md](credentials.md) for login details)*
 
 ---
 
 ### Task 1: VPC Network
 
 📍 **Console → VPC Network → VPC Networks → `madina-lab-vpc`**
-
-Click into it. Explore the subnet and firewall rules.
 
 > ❓ What subnet is attached? What IP range? How many firewall rules?
 
@@ -45,9 +43,7 @@ Click into it. Explore the subnet and firewall rules.
 
 📍 **Console → Artifact Registry → `madina-lab`**
 
-Click into the repository.
-
-> ❓ What type of repository is this? Can you find the instructor's image?
+> ❓ What type of repository? Can you find the instructor's image?
 
 ---
 
@@ -55,9 +51,7 @@ Click into the repository.
 
 📍 **Console → Security → Secret Manager**
 
-Browse the list of secrets.
-
-> ❓ How many secrets exist? Can you see the actual values? What kind of config is stored here?
+> ❓ How many secrets? Can you see the values? What kind of config is stored?
 
 ---
 
@@ -65,7 +59,7 @@ Browse the list of secrets.
 
 📍 **Console → Cloud Build → History**
 
-Find the instructor's most recent build. Click into it and expand each step.
+Find the instructor's build. Click into it and expand each step.
 
 > ❓ How many steps? How long did it take? What does each step do?
 
@@ -75,14 +69,9 @@ Find the instructor's most recent build. Click into it and expand each step.
 
 📍 **Console → Cloud Run → `madina-lab-instructor`**
 
-Explore these tabs:
-- **Metrics** — requests, latency, errors
-- **Logs** — container output
-- **Revisions** — deployment history
-- **Security** — who can access?
-- **Variables & Secrets** — Secret Manager references
+Explore: **Metrics**, **Logs**, **Revisions**, **Security**, **Variables & Secrets**
 
-> ❓ What URL is assigned? How many instances running? What service account is attached?
+> ❓ What URL is assigned? How many instances? What service account?
 
 ---
 
@@ -90,9 +79,7 @@ Explore these tabs:
 
 📍 **Console → Firestore**
 
-Check the Data tab and the Rules tab.
-
-> ❓ What collections exist? Where are the security rules defined?
+> ❓ What collections exist? Where are the security rules?
 
 ---
 
@@ -100,10 +87,9 @@ Check the Data tab and the Rules tab.
 
 ### Task 7: Visit the Live App
 
-Copy the Cloud Run URL from Task 5 and open it in a new tab.
+Copy the Cloud Run URL from Task 5 and open it.
 
-- Sign up with your workshop email
-- Explore: chat, events, business directory
+- Sign up, explore chat, events, business directory
 
 > ❓ How would each feature use Firestore?
 
@@ -113,40 +99,34 @@ Copy the Cloud Run URL from Task 5 and open it in a new tab.
 
 📍 **Open in repo:** [`Dockerfile`](../Dockerfile)
 
-Read through it and answer:
+> ❓ How many stages? What does each stage do? What port? What is `/health` for?
 
-> ❓ How many stages? What does Stage 1 do? What does Stage 2 do? What port? What is `/health` for?
-
-**Key things to notice:**
-- Stage 1 (`node:20-alpine`) — installs dependencies and builds the React app
-- Stage 2 (`nginx:alpine`) — copies the built files and serves them
+**Key things:**
+- Stage 1 (`node:20-alpine`) — builds the React app
+- Stage 2 (`nginx:alpine`) — serves the built files
 - Port `8080` — Cloud Run requirement
-- `/health` endpoint — Cloud Run uses this to check if the container is healthy
+- `/health` — Cloud Run health check
 
-📖 *Need help with Docker concepts?* See [`docs/docker-cheatsheet.md`](../docs/docker-cheatsheet.md)
+📖 See [`docs/docker-cheatsheet.md`](../docs/docker-cheatsheet.md)
 
 ---
 
 ### Task 9: Read the Pipeline
 
-📍 **Open in repo:** [`cloudbuild-app.yaml`](../cloudbuild-app.yaml)
+📍 **Open in repo:** [`.pipelines/cloudbuild-app.yaml`](../.pipelines/cloudbuild-app.yaml)
 
-Read through each step and answer:
-
-> ❓ How many steps? Which step builds the image? Which step scans for vulnerabilities? Where are secrets injected? What does `_TEAM` control?
-
-**Pipeline steps at a glance:**
+> ❓ How many steps? Which builds? Which scans? Where are secrets? What does `_TEAM` do?
 
 | Step | Name | What it does |
 |------|------|-------------|
-| 1 | `lint-dockerfile` | Hadolint checks Dockerfile for best practices |
+| 1 | `lint-dockerfile` | Hadolint — Dockerfile best practices |
 | 2 | `build` | Docker build with secrets from Secret Manager |
-| 3 | `scan-image` | Trivy scans for CVEs (vulnerabilities) |
+| 3 | `scan-image` | Trivy — vulnerability scan (CVEs) |
 | 4 | `push` | Push image to Artifact Registry |
 | 5 | `deploy-app` | Deploy to Cloud Run |
-| 6 | `allow-public-access` | Make app accessible to everyone |
+| 6 | `allow-public-access` | Grant public access |
 
-📖 *Need help with pipeline concepts?* See [`docs/cloudbuild-cheatsheet.md`](../docs/cloudbuild-cheatsheet.md)
+📖 See [`docs/cloudbuild-cheatsheet.md`](../docs/cloudbuild-cheatsheet.md)
 
 ---
 
@@ -163,5 +143,5 @@ Read through each step and answer:
 - [ ] Logged into GCP Console
 - [ ] Explored: VPC, Artifact Registry, Secret Manager, Cloud Build, Cloud Run, Firestore
 - [ ] Visited the live app
-- [ ] Read [`Dockerfile`](../Dockerfile) — understand the two stages
-- [ ] Read [`cloudbuild-app.yaml`](../cloudbuild-app.yaml) — can identify each step
+- [ ] Read [`Dockerfile`](../Dockerfile) — understand two stages
+- [ ] Read [`.pipelines/cloudbuild-app.yaml`](../.pipelines/cloudbuild-app.yaml) — identify each step
