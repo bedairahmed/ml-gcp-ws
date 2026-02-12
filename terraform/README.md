@@ -33,11 +33,11 @@ gcloud builds submit --config .pipelines/cloudbuild-tf.yaml \
 
 ```
 terraform/
-├── providers.tf             ← Provider (Google Cloud) + GCS state backend
+├── provider.tf              ← Provider (Google Cloud) + GCS state backend
 ├── main.tf                  ← Data sources + locals
 ├── cloud_run.tf             ← Cloud Run v2 service definition
 ├── iam.tf                   ← IAM bindings (public access, Cloud Build SA)
-├── secrets.tf               ← Secret Manager resources (Firebase config)
+├── secrets.tf               ← Secret Manager resources (reference only — see note)
 ├── variables.tf             ← Input variables (project, region, namespace, etc.)
 ├── outputs.tf               ← Output values (service URL, name, namespace)
 └── terraform.tfvars.example ← Example variable values
@@ -47,13 +47,15 @@ terraform/
 
 | File | Purpose | Key resources |
 |------|---------|--------------|
-| [`providers.tf`](providers.tf) | Configures the Google Cloud provider and GCS backend for state storage | `provider "google"`, `backend "gcs"` |
+| [`provider.tf`](provider.tf) | Configures the Google Cloud provider and GCS backend for state storage | `provider "google"`, `backend "gcs"` |
 | [`main.tf`](main.tf) | Shared data sources and computed values | `data "google_project"`, `locals` |
 | [`cloud_run.tf`](cloud_run.tf) | Defines the Cloud Run service — container image, port, memory, scaling, health check | `google_cloud_run_v2_service` |
 | [`iam.tf`](iam.tf) | Makes the service publicly accessible + grants Cloud Build access to secrets | `google_cloud_run_v2_service_iam_member`, `google_project_iam_member` |
-| [`secrets.tf`](secrets.tf) | Creates Secret Manager secrets for Firebase config | `google_secret_manager_secret`, `google_secret_manager_secret_version` |
+| [`secrets.tf`](secrets.tf) | Defines Secret Manager secrets for Firebase config — **see note below** | `google_secret_manager_secret` |
 | [`variables.tf`](variables.tf) | All input variables with types, descriptions, and defaults | `variable "project_id"`, `variable "student_namespace"`, etc. |
 | [`outputs.tf`](outputs.tf) | Values displayed after `terraform apply` | `output "service_url"`, `output "service_name"` |
+
+> **📝 Note on `secrets.tf`:** This file shows how secrets *could* be managed in Terraform for a full standalone deployment. In this workshop, secrets are already created by [`scripts/setup.sh`](../scripts/setup.sh). The pipeline uses `-target` flags to only deploy Cloud Run + IAM, so `secrets.tf` is **never executed** during the workshop — it's there for reference only.
 
 ---
 
@@ -89,13 +91,13 @@ When a student runs the Terraform pipeline, it creates:
 | **Cloud Run service** | `madina-lab-teamN` | Serves the React app |
 | **IAM binding** | `allUsers → run.invoker` | Makes the app publicly accessible |
 
-> **Note:** Secrets, VPC, Artifact Registry, and service accounts are created by [`scripts/setup.sh`](../scripts/setup.sh) — not by Terraform. The pipeline uses `-target` to only manage Cloud Run + IAM.
+> Secrets, VPC, Artifact Registry, and service accounts are created by [`scripts/setup.sh`](../scripts/setup.sh) — not by Terraform. The pipeline uses `-target` to only manage Cloud Run + IAM.
 
 ---
 
 ## Security Scanning
 
-The pipeline runs [Checkov](https://www.checkov.io/) (Step 2) before Terraform init. Checkov checks for:
+The pipeline runs [Checkov](https://www.checkov.io/) (Step 2) before Terraform init. Checkov scans all `.tf` files for:
 
 - Public access without authentication
 - Missing encryption settings
@@ -103,9 +105,9 @@ The pipeline runs [Checkov](https://www.checkov.io/) (Step 2) before Terraform i
 - Missing resource labels/tags
 - CIS benchmark compliance
 
-Results are visible in **Cloud Build → History → click build → Step 2 logs**.
+Results visible in **Cloud Build → History → click build → Step 2 logs**.
 
-Currently set to `--soft-fail` (warnings only). Remove `--soft-fail` to block deployment on security findings.
+Currently `--soft-fail` (warnings only). Remove `--soft-fail` to block deployment on findings.
 
 ---
 
@@ -128,8 +130,8 @@ terraform apply
 | File | Location | Purpose |
 |------|----------|---------|
 | Terraform pipeline | [`.pipelines/cloudbuild-tf.yaml`](../.pipelines/cloudbuild-tf.yaml) | CI/CD for Terraform |
-| App pipeline | [`.pipelines/cloudbuild-app.yaml`](../.pipelines/cloudbuild-app.yaml) | CI/CD for app (imperative) |
-| Dockerfile | [`Dockerfile`](../Dockerfile) | Container image built by Step 1 |
-| Lab 3 guide | [`labs/lab3.md`](../labs/lab3.md) | Student instructions for this lab |
+| App pipeline | [`.pipelines/cloudbuild-app.yaml`](../.pipelines/cloudbuild-app.yaml) | CI/CD for app (imperative approach) |
+| Dockerfile | [`Dockerfile`](../Dockerfile) | Container image built by pipeline Step 1 |
+| Lab 3 guide | [`labs/lab3.md`](../labs/lab3.md) | Student instructions |
 | Terraform cheatsheet | [`docs/terraform-cheatsheet.md`](../docs/terraform-cheatsheet.md) | Quick reference |
-| Setup script | [`scripts/setup.sh`](../scripts/setup.sh) | Creates bucket, secrets, SAs |
+| Setup script | [`scripts/setup.sh`](../scripts/setup.sh) | Creates bucket, secrets, SAs, VPC |
