@@ -1,485 +1,131 @@
-name: "📋 Workshop Feedback Survey"
-description: "Your feedback shapes future workshops — thank you for taking 2 minutes to share your experience."
-title: "Feedback — [Your Name or Team]"
-labels: ["feedback", "workshop-feb-2026"]
+name: "📋 Workshop Feedback"
+description: "2 minutes — help us improve future workshops!"
+title: "Feedback"
+labels: ["feedback"]
 body:
 
-  # ── Header ───────────────────────────────────────────
   - type: markdown
     attributes:
       value: |
-        # 🕌 Madina Lab — GCP Cloud Workshop Feedback
-
-        **Thank you for attending!** Your honest feedback — both positive and constructive — helps us build better workshops for the community.
-
-        ⏱ **Takes ~2 minutes** · All responses are appreciated · Fields marked with * are required
+        # 🕌 Workshop Feedback
+        **10 quick questions** — your honest feedback shapes future workshops. JazakAllah Khair! 🤲
 
         ---
 
-  # ═══════════════════════════════════════════════════════
-  # SECTION 1: About You
-  # ═══════════════════════════════════════════════════════
-  - type: markdown
-    attributes:
-      value: "## 👤 About You"
-
-  - type: input
-    id: name
-    attributes:
-      label: "Name (optional)"
-      description: "Feel free to leave blank if you prefer anonymous feedback."
-      placeholder: "Your name"
-
-  - type: input
-    id: team
-    attributes:
-      label: "Team *"
-      description: "Which team were you on?"
-      placeholder: "e.g., team3"
-    validations:
-      required: true
-
+  # Q1
   - type: dropdown
-    id: role
+    id: overall
     attributes:
-      label: "What was your primary role during the labs?"
-      options:
-        - "Role A — Builder (keyboard driver)"
-        - "Role B — Observer (Console checker)"
-        - "I switched between both equally"
-    validations:
-      required: true
-
-  - type: dropdown
-    id: cloud-experience
-    attributes:
-      label: "What was your cloud experience before this workshop?"
-      options:
-        - "None — this was my first time"
-        - "Beginner — I've heard of cloud but never used it"
-        - "Some experience — I've used a cloud console before"
-        - "Intermediate — I work with cloud regularly"
-        - "Advanced — I manage cloud infrastructure professionally"
-    validations:
-      required: true
-
-  # ═══════════════════════════════════════════════════════
-  # SECTION 2: Overall Workshop
-  # ═══════════════════════════════════════════════════════
-  - type: markdown
-    attributes:
-      value: |
-        ---
-        ## ⭐ Overall Workshop Experience
-
-  - type: dropdown
-    id: overall-rating
-    attributes:
-      label: "How would you rate the workshop overall? *"
-      options:
-        - "⭐⭐⭐⭐⭐ Excellent — exceeded expectations"
-        - "⭐⭐⭐⭐ Very good — learned a lot"
-        - "⭐⭐⭐ Good — met expectations"
-        - "⭐⭐ Fair — some value but needs improvement"
-        - "⭐ Poor — did not meet expectations"
-    validations:
-      required: true
-
-  - type: dropdown
-    id: pace
-    attributes:
-      label: "How was the overall pace? *"
-      options:
-        - "Much too fast — couldn't keep up"
-        - "Slightly too fast"
-        - "Just right"
-        - "Slightly too slow"
-        - "Too slow — wanted more content"
-    validations:
-      required: true
-
-  - type: dropdown
-    id: difficulty
-    attributes:
-      label: "How was the difficulty level? *"
-      options:
-        - "Too advanced — I was lost most of the time"
-        - "Slightly challenging — but I could follow along"
-        - "Just right — challenging but achievable"
-        - "Slightly easy — could have gone deeper"
-        - "Too easy — I already knew most of this"
-    validations:
-      required: true
-
-  - type: dropdown
-    id: duration
-    attributes:
-      label: "How was the workshop duration (2h 45min)?"
-      options:
-        - "Too short — needed more time"
-        - "About right"
-        - "Too long"
-    validations:
-      required: true
-
-  # ═══════════════════════════════════════════════════════
-  # SECTION 3: Instructor
-  # ═══════════════════════════════════════════════════════
-  - type: markdown
-    attributes:
-      value: |
-        ---
-        ## 🎤 Instructor
-
-  - type: dropdown
-    id: instructor-clarity
-    attributes:
-      label: "How clear were the instructor's explanations? *"
-      options:
-        - "⭐⭐⭐⭐⭐ Very clear — easy to follow"
-        - "⭐⭐⭐⭐ Clear — minor gaps"
-        - "⭐⭐⭐ Okay — sometimes hard to follow"
-        - "⭐⭐ Unclear — frequently lost"
-        - "⭐ Very unclear"
-    validations:
-      required: true
-
-  - type: dropdown
-    id: instructor-pace
-    attributes:
-      label: "Did the instructor check in with teams during labs?"
-      options:
-        - "Yes — frequently and helpfully"
-        - "Yes — but could have checked in more"
-        - "Somewhat"
-        - "Not enough"
-    validations:
-      required: true
-
-  - type: dropdown
-    id: instructor-knowledge
-    attributes:
-      label: "How would you rate the instructor's technical knowledge?"
-      options:
-        - "⭐⭐⭐⭐⭐ Expert — answered everything confidently"
-        - "⭐⭐⭐⭐ Very knowledgeable"
-        - "⭐⭐⭐ Adequate"
-        - "⭐⭐ Some gaps"
-        - "⭐ Not sufficient"
-    validations:
-      required: true
-
-  - type: textarea
-    id: instructor-feedback
-    attributes:
-      label: "Any specific feedback for the instructor?"
-      placeholder: "What did the instructor do well? What could improve?"
-
-  # ═══════════════════════════════════════════════════════
-  # SECTION 4: Labs
-  # ═══════════════════════════════════════════════════════
-  - type: markdown
-    attributes:
-      value: |
-        ---
-        ## 🧪 Labs
-
-  - type: dropdown
-    id: lab1-rating
-    attributes:
-      label: "Lab 1 — Explore GCP Console & Meet the App"
+      label: "1. How would you rate the workshop overall?"
       options:
         - "⭐⭐⭐⭐⭐ Excellent"
         - "⭐⭐⭐⭐ Good"
         - "⭐⭐⭐ Average"
         - "⭐⭐ Below average"
         - "⭐ Poor"
-        - "Did not complete"
     validations:
       required: true
 
-  - type: dropdown
-    id: lab2-rating
-    attributes:
-      label: "Lab 2 — Ship Your App (deploy, scan, monitor)"
-      options:
-        - "⭐⭐⭐⭐⭐ Excellent"
-        - "⭐⭐⭐⭐ Good"
-        - "⭐⭐⭐ Average"
-        - "⭐⭐ Below average"
-        - "⭐ Poor"
-        - "Did not complete"
-    validations:
-      required: true
-
-  - type: dropdown
-    id: lab3-rating
-    attributes:
-      label: "Lab 3 — Infrastructure as Code (Terraform)"
-      options:
-        - "⭐⭐⭐⭐⭐ Excellent"
-        - "⭐⭐⭐⭐ Good"
-        - "⭐⭐⭐ Average"
-        - "⭐⭐ Below average"
-        - "⭐ Poor"
-        - "Did not complete"
-    validations:
-      required: true
-
+  # Q2
   - type: dropdown
     id: favorite-lab
     attributes:
-      label: "Which lab was your favorite?"
+      label: "2. Which lab was your favorite?"
       options:
-        - "Lab 1 — Explore GCP Console"
-        - "Lab 2 — Ship Your App"
-        - "Lab 3 — Terraform"
+        - "Lab 1 — Explore GCP Console & meet the app"
+        - "Lab 2 — Ship your app (deploy, scan, monitor)"
+        - "Lab 3 — Infrastructure as Code (Terraform)"
         - "Enjoyed all equally"
     validations:
       required: true
 
+  # Q3
   - type: dropdown
-    id: lab-guides
+    id: difficulty
     attributes:
-      label: "Were the lab guides (markdown files) easy to follow?"
+      label: "3. How was the difficulty?"
       options:
-        - "Yes — clear instructions, easy to follow"
-        - "Mostly — a few unclear steps"
-        - "Somewhat — needed instructor help frequently"
-        - "No — confusing or incomplete"
+        - "Too easy"
+        - "Just right"
+        - "Slightly hard but I could follow"
+        - "Too hard"
     validations:
       required: true
 
+  # Q4
+  - type: dropdown
+    id: pace
+    attributes:
+      label: "4. How was the pace?"
+      options:
+        - "Too fast"
+        - "Just right"
+        - "Too slow"
+    validations:
+      required: true
+
+  # Q5
   - type: textarea
-    id: lab-issues
+    id: liked
     attributes:
-      label: "Did you encounter any issues during the labs?"
-      placeholder: "e.g., permission errors, confusing instructions, steps that didn't work..."
-
-  # ═══════════════════════════════════════════════════════
-  # SECTION 5: The Application (Madina Lab)
-  # ═══════════════════════════════════════════════════════
-  - type: markdown
-    attributes:
-      value: |
-        ---
-        ## 🕌 The Application — Madina Lab
-
-  - type: dropdown
-    id: app-impression
-    attributes:
-      label: "What was your impression of the Madina Lab application?"
-      options:
-        - "⭐⭐⭐⭐⭐ Impressive — professional quality"
-        - "⭐⭐⭐⭐ Good — well-built"
-        - "⭐⭐⭐ Average"
-        - "⭐⭐ Needs work"
-        - "⭐ Poor"
+      label: "5. What did you like most?"
+      placeholder: "Best moment, concept, or part of the workshop..."
     validations:
       required: true
 
-  - type: dropdown
-    id: app-usecase
+  # Q6
+  - type: textarea
+    id: disliked
     attributes:
-      label: "Was the community platform a good use case for learning cloud?"
-      options:
-        - "Yes — relatable and practical"
-        - "Yes — but a simpler app might be better for learning"
-        - "Neutral"
-        - "No — too complex for a workshop"
+      label: "6. What didn't work well or could be better?"
+      placeholder: "Be honest — this helps us the most!"
     validations:
       required: true
 
+  # Q7
   - type: checkboxes
-    id: app-features
+    id: confident
     attributes:
-      label: "Which features of Madina Lab impressed you most?"
+      label: "7. What are you most confident about now? (select all)"
       options:
-        - label: "Prayer times & weather"
-        - label: "Community chat"
-        - label: "Events & RSVP"
-        - label: "Business directory"
-        - label: "Admin panel"
-        - label: "Trilingual support (EN/AR/UR)"
-        - label: "Dark mode"
-        - label: "The overall design & UI"
-
-  - type: dropdown
-    id: app-community
-    attributes:
-      label: "Would you use Madina Lab for the MCWS community?"
-      options:
-        - "Definitely — I'd use it regularly"
-        - "Probably — if it's available"
-        - "Maybe"
-        - "Probably not"
-        - "No"
-
-  # ═══════════════════════════════════════════════════════
-  # SECTION 6: Learning Outcomes
-  # ═══════════════════════════════════════════════════════
-  - type: markdown
-    attributes:
-      value: |
-        ---
-        ## 📚 Learning Outcomes
-
-  - type: checkboxes
-    id: confident-topics
-    attributes:
-      label: "Which topics are you most confident about now? (select all that apply)"
-      options:
-        - label: "Navigating the GCP Console"
-        - label: "Understanding cloud services (VPC, IAM, etc.)"
-        - label: "Docker & container concepts"
-        - label: "Reading a Dockerfile"
-        - label: "CI/CD pipelines & Cloud Build"
+        - label: "GCP Console & cloud services"
+        - label: "Docker & containers"
+        - label: "CI/CD pipelines"
         - label: "Security scanning (Hadolint, Trivy, Checkov)"
-        - label: "Secret management"
         - label: "Cloud Run deployment"
-        - label: "Terraform / Infrastructure as Code"
-        - label: "Comparing imperative vs declarative approaches"
+        - label: "Terraform / IaC"
 
-  - type: dropdown
-    id: could-explain
+  # Q8
+  - type: checkboxes
+    id: next-topics
     attributes:
-      label: "Could you explain what a CI/CD pipeline does to someone who wasn't at the workshop?"
+      label: "8. What would you like to learn next? (select all)"
       options:
-        - "Yes — confidently"
-        - "Yes — with some notes"
-        - "Maybe — I'd need to review"
-        - "No — I'm still unsure"
-    validations:
-      required: true
+        - label: "Kubernetes"
+        - label: "Azure cloud"
+        - label: "Advanced CI/CD (GitHub Actions, GitLab)"
+        - label: "Monitoring & observability"
+        - label: "AI/ML on the cloud"
+        - label: "Web development (React, Node.js)"
+        - label: "Python & automation"
+        - label: "Linux & command line"
 
-  # ═══════════════════════════════════════════════════════
-  # SECTION 7: Materials & Resources
-  # ═══════════════════════════════════════════════════════
-  - type: markdown
-    attributes:
-      value: |
-        ---
-        ## 📖 Materials & Resources
-
-  - type: dropdown
-    id: cheatsheets
-    attributes:
-      label: "Did you use the cheatsheets (docs/ folder)?"
-      options:
-        - "Yes — very helpful"
-        - "Yes — but didn't need them much"
-        - "No — didn't know about them"
-        - "No — didn't need them"
-
-  - type: dropdown
-    id: team-format
-    attributes:
-      label: "How did you feel about the team format (2 students, Role A/B)?"
-      options:
-        - "Loved it — great for learning"
-        - "Good — worked well"
-        - "Neutral"
-        - "Prefer working solo"
-
-  - type: dropdown
-    id: show-and-tell
-    attributes:
-      label: "How did you feel about the show-and-tell format (live demos, minimal slides)?"
-      options:
-        - "Preferred it — more engaging than slides"
-        - "Good — nice balance"
-        - "Would prefer more slides/visuals"
-        - "Would prefer all slides, no live demo"
-
-  # ═══════════════════════════════════════════════════════
-  # SECTION 8: Future & Recommendations
-  # ═══════════════════════════════════════════════════════
-  - type: markdown
-    attributes:
-      value: |
-        ---
-        ## 🚀 Future & Recommendations
-
+  # Q9
   - type: dropdown
     id: recommend
     attributes:
-      label: "Would you recommend this workshop to a friend or colleague? *"
+      label: "9. Would you recommend this workshop to others?"
       options:
-        - "Definitely — already planning to"
+        - "Definitely yes"
         - "Yes"
         - "Maybe"
-        - "Probably not"
         - "No"
     validations:
       required: true
 
-  - type: dropdown
-    id: attend-again
-    attributes:
-      label: "Would you attend a follow-up workshop?"
-      options:
-        - "Yes — more GCP (Kubernetes, monitoring, networking)"
-        - "Yes — Azure cloud"
-        - "Yes — any cloud/DevOps topic"
-        - "Yes — app development (React, Firebase)"
-        - "Maybe — depends on topic"
-        - "No"
-
-  - type: checkboxes
-    id: future-topics
-    attributes:
-      label: "What topics interest you for future workshops? (select all)"
-      options:
-        - label: "Kubernetes & container orchestration"
-        - label: "Azure cloud fundamentals"
-        - label: "Advanced CI/CD (GitHub Actions, GitLab CI)"
-        - label: "Monitoring & observability (Prometheus, Grafana)"
-        - label: "Networking & security deep dive"
-        - label: "Serverless functions (Cloud Functions / Lambda)"
-        - label: "Database design & management"
-        - label: "AI/ML on the cloud"
-        - label: "Web development (React, Node.js)"
-        - label: "Mobile app development"
-        - label: "Linux & command line"
-        - label: "Python scripting & automation"
-
-  # ═══════════════════════════════════════════════════════
-  # SECTION 9: Open Feedback
-  # ═══════════════════════════════════════════════════════
-  - type: markdown
-    attributes:
-      value: |
-        ---
-        ## 💬 Final Thoughts
-
-  - type: textarea
-    id: best-part
-    attributes:
-      label: "What was the best part of the workshop?"
-      placeholder: "What moment or concept stood out to you?"
-
-  - type: textarea
-    id: worst-part
-    attributes:
-      label: "What was the weakest part?"
-      placeholder: "What didn't work well or felt unnecessary?"
-
-  - type: textarea
-    id: suggestions
-    attributes:
-      label: "Any suggestions for improvement?"
-      placeholder: "Format, timing, content, logistics — anything goes..."
-
+  # Q10
   - type: textarea
     id: anything-else
     attributes:
-      label: "Anything else you'd like to share?"
-      placeholder: "Open floor — say whatever's on your mind."
-
-  - type: markdown
-    attributes:
-      value: |
-        ---
-        **JazakAllah Khair** for your time and feedback! 🤲
-
-        Your responses help us create better learning experiences for the community.
+      label: "10. Anything else?"
+      placeholder: "Optional — say whatever's on your mind."
