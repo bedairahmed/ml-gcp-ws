@@ -23,6 +23,77 @@ Using a sample community platform (chat, events, business directory) as our use 
 
 ---
 
+## 🕌 The Application — Madina Lab
+
+Madina Lab is a **production-ready trilingual community platform** built for the MCWS Canton community. It serves as both a real community tool and the sample application for this workshop.
+
+### Features
+
+| Feature | Description |
+|---------|-------------|
+| 🕐 **Prayer Times** | Real-time prayer schedule via Aladhan API (ISNA method) |
+| 🌤️ **Weather Widget** | Live weather for Canton, MI via Open-Meteo API |
+| 📿 **Athkar Tracker** | Morning & evening adhkar with tap counters and streak tracking |
+| 📅 **Community Events** | RSVP system, category filters, admin event creation |
+| 💬 **Community Chat** | Group channels with @mentions, reactions, reply threads |
+| 🏢 **Business Directory** | Listings with reviews, ratings, claim/verify workflow |
+| 🏪 **My Business** | Business owners manage listings, respond to reviews |
+| 🛡️ **Admin Panel** | User management, event moderation, claim approvals |
+| 🔔 **Notifications** | In-app notifications for reviews, claims, announcements |
+| ❓ **Help & FAQ** | Searchable help center with categorized FAQ |
+| 🌐 **Trilingual** | English, Arabic, Urdu with full RTL support |
+| 🌙 **Dark Mode** | Full dark/light theme toggle |
+
+### Tech Stack
+
+| Layer | Technology | Purpose |
+|-------|-----------|---------|
+| **Frontend** | React 18, TypeScript, Vite | UI framework & build tooling |
+| **UI** | Tailwind CSS, shadcn/ui, Lucide Icons | Styling & components |
+| **Backend** | Firebase Auth + Firestore | Authentication & real-time database |
+| **APIs** | Aladhan, Open-Meteo | Prayer times & weather data |
+| **Container** | Docker (multi-stage) | Node.js build → nginx serve |
+| **CI/CD** | Google Cloud Build | Automated build, scan & deploy |
+| **Hosting** | Google Cloud Run | Serverless container hosting |
+| **Secrets** | GCP Secret Manager | Secure credential storage |
+| **IaC** | Terraform | Infrastructure automation |
+
+### User Roles
+
+| Role | Access |
+|------|--------|
+| `admin` | Full platform control, user management, claim approvals |
+| `moderator` | Event moderation, content management |
+| `business` | Business listing management, review responses |
+| `member` | Standard community access |
+
+### Firestore Collections
+
+| Collection | Purpose |
+|-----------|---------|
+| `users` | User profiles with roles, language, groups |
+| `groups` / `chat_messages` | Chat channels and messages |
+| `events` | Community events with RSVPs |
+| `businesses` / `businesses/{id}/reviews` | Directory listings and reviews |
+| `business_claims` | Business claim requests |
+| `notifications` | In-app user notifications |
+| `announcements` | Admin announcements |
+| `direct_messages` | Private messaging |
+
+### Namespace Isolation (Workshop Mode)
+
+Each team sets `VITE_NAMESPACE` to isolate their data in the shared Firestore:
+
+| Without namespace | With `VITE_NAMESPACE=team1` |
+|---|---|
+| `users` | `team1_users` |
+| `events` | `team1_events` |
+| `businesses` | `team1_businesses` |
+| `notifications` | `team1_notifications` |
+| `chat_messages` | `team1_chat_messages` |
+
+---
+
 ## 📅 Schedule
 
 | Time | Type | Topic |
@@ -95,6 +166,7 @@ Using a sample community platform (chat, events, business directory) as our use 
 | **VPC Network** | Private network with subnet & firewall rules |
 | **Firestore** | NoSQL real-time database |
 | **Firebase Auth** | User authentication (email + Google sign-in) |
+| **Cloud Storage** | Terraform state backend (per-team isolation) |
 
 ---
 
@@ -117,7 +189,7 @@ Using a sample community platform (chat, events, business directory) as our use 
 |------|------|------|
 | 1 | `build-app` | Build & push container image |
 | 2 | `checkov-scan` | Checkov — Terraform security scan |
-| 3 | `tf-init` | Download providers |
+| 3 | `tf-init` | Download providers + per-team state backend |
 | 4 | `tf-plan` | Preview changes |
 | 5 | `tf-apply` | Create/update resources |
 
@@ -158,12 +230,13 @@ ml-gcp-ws/
 │   └── validate.sh
 │
 ├── terraform/                  # IaC files (Lab 3)
-│   ├── main.tf
-│   ├── cloud_run.tf
-│   ├── iam.tf
-│   ├── secrets.tf
-│   ├── variables.tf
-│   ├── outputs.tf
+│   ├── providers.tf            # Provider & GCS backend
+│   ├── main.tf                 # Data sources & locals
+│   ├── cloud_run.tf            # Cloud Run service
+│   ├── iam.tf                  # IAM bindings
+│   ├── secrets.tf              # Secret Manager
+│   ├── variables.tf            # Input variables
+│   ├── outputs.tf              # Output values
 │   └── terraform.tfvars.example
 │
 ├── src/                        # React application source
