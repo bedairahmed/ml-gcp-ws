@@ -69,23 +69,37 @@ variable "cpu" {
 # These default to "" so the workshop pipeline works without them.
 # secrets.tf will skip creation when values are empty.
 variable "firebase_api_key" {
-  type = string; sensitive = true; default = ""
+  type      = string
+  sensitive = true
+  default   = ""
 }
 variable "firebase_auth_domain" {
-  type = string; sensitive = true; default = ""
+  type      = string
+  sensitive = true
+  default   = ""
 }
 variable "firebase_project_id" {
-  type = string; sensitive = true; default = ""
+  type      = string
+  sensitive = true
+  default   = ""
 }
 variable "firebase_storage_bucket" {
-  type = string; sensitive = true; default = ""
+  type      = string
+  sensitive = true
+  default   = ""
 }
 variable "firebase_messaging_sender_id" {
-  type = string; sensitive = true; default = ""
+  type      = string
+  sensitive = true
+  default   = ""
 }
 variable "firebase_app_id" {
-  type = string; sensitive = true; default = ""
+  type      = string
+  sensitive = true
+  default   = ""
 }
 variable "google_maps_api_key" {
-  type = string; sensitive = true; default = ""
+  type      = string
+  sensitive = true
+  default   = ""
 }
