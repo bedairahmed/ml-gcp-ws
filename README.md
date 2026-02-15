@@ -147,13 +147,13 @@ Each team sets `VITE_NAMESPACE` to isolate their data in the shared Firestore:
 
 ## 🧪 Labs
 
-| Lab | Title | Duration | Guide |
-|-----|-------|----------|-------|
-| — | The Business Case | 5 min read | [labs/business-case.md](labs/business-case.md) |
-| 0 | Credentials & Setup | 10 min | [labs/credentials.md](labs/credentials.md) |
-| 1 | Explore Your Cloud & Meet the App | 30 min | [labs/lab1.md](labs/lab1.md) |
-| 2 | Ship Your App | 35 min | [labs/lab2.md](labs/lab2.md) |
-| 3 | Infrastructure as Code | 30 min | [labs/lab3.md](labs/lab3.md) |
+| Lab | Title | Duration | Guide | Quiz |
+|-----|-------|----------|-------|------|
+| — | The Business Case | 5 min read | [labs/business-case.md](labs/business-case.md) | |
+| 0 | Credentials & Setup | 10 min | [labs/credentials.md](labs/credentials.md) | |
+| 1 | Explore Your Cloud & Meet the App | 30 min | [labs/lab1.md](labs/lab1.md) | [Quiz 1](labs/quizzes/quiz1.md) |
+| 2 | Ship Your App | 35 min | [labs/lab2.md](labs/lab2.md) | [Quiz 2](labs/quizzes/quiz2.md) |
+| 3 | Infrastructure as Code | 30 min | [labs/lab3.md](labs/lab3.md) | [Quiz 3](labs/quizzes/quiz3.md) |
 
 ---
 
@@ -237,7 +237,11 @@ ml-gcp-ws/
 │   ├── credentials.md
 │   ├── lab1.md
 │   ├── lab2.md
-│   └── lab3.md
+│   ├── lab3.md
+│   └── quizzes/                # Quick knowledge checks
+│       ├── quiz1.md
+│       ├── quiz2.md
+│       └── quiz3.md
 │
 ├── docs/                       # Cheatsheets & reference
 │   ├── gcloud-cheatsheet.md

@@ -192,5 +192,6 @@ gcloud builds submit --config .pipelines/cloudbuild-tf.yaml \
 📖 **All cheatsheets:** [`docs/`](../docs/)
 
 ---
+[Take the Lab 3 Quiz →](quizzes/quiz3.md)
 
 ### 📋 [Submit Workshop Feedback →](https://github.com/bedairahmed/ml-gcp-ws/issues/new?template=workshop-feedback.yml)

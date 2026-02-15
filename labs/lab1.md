@@ -125,3 +125,4 @@ Copy the Cloud Run URL from Task 5. Sign up, explore chat, events, business dire
 - [ ] Read the pipeline — identify each step
 
 ---
+[Take the Lab 1 Quiz →](quizzes/quiz1.md)

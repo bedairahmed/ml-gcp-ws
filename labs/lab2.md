@@ -128,3 +128,4 @@ gcloud builds submit --config .pipelines/cloudbuild-app.yaml --substitutions=_TE
 - [ ] Found image in Artifact Registry
 
 ---
+[Take the Lab 2 Quiz →](quizzes/quiz2.md)
