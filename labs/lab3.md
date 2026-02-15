@@ -124,7 +124,13 @@ resource "google_cloud_run_v2_service" "app" {
 
 ### Task 4: Run the Pipeline
 
+📍 Open Cloud Shell (you should already be in the `ml-gcp-ws` folder from Lab 2)
+
 ```bash
+# If you're not in the repo folder:
+cd ~/ml-gcp-ws
+
+# Run the Terraform pipeline
 gcloud builds submit --config .pipelines/cloudbuild-tf.yaml \
   --substitutions=_TEAM=teamN .
 ```
@@ -144,6 +150,27 @@ gcloud builds submit --config .pipelines/cloudbuild-tf.yaml \
 📍 [**Open Cloud Run →**](https://console.cloud.google.com/run?project=ml-gcp-workshop-487117) → look for your service
 
 > ❓ Same app, deployed by Terraform. Can you tell the difference?
+
+### Task 7: Check Terraform State
+
+Your team's state is stored separately in a GCS bucket.
+
+📍 [**Open Cloud Storage →**](https://console.cloud.google.com/storage/browser/ml-gcp-workshop-487117-tfstate/terraform/state?project=ml-gcp-workshop-487117) → click your team folder (e.g. `team1/`) → you should see `default.tfstate`
+
+> ❓ Each team has its own state folder. Team1 can't break team2's infrastructure. This is **state isolation**.
+
+### ✅ Step-by-Step Validation
+
+Open each link and confirm:
+
+| # | Check | Where | Expected |
+|---|-------|-------|----------|
+| 1 | Build passed | [Cloud Build History](https://console.cloud.google.com/cloud-build/builds?project=ml-gcp-workshop-487117) | All 5 steps green, tag `team-teamN` |
+| 2 | Checkov scanned | Build → Step 2 logs | Passed/failed checks listed |
+| 3 | Plan shows `+` | Build → Step 4 logs | `Plan: 2 to add` (Cloud Run + IAM) |
+| 4 | Service running | [Cloud Run](https://console.cloud.google.com/run?project=ml-gcp-workshop-487117) | `madina-lab-teamN` with green ✅ |
+| 5 | App loads | Click the Cloud Run URL | App opens, same as Lab 2 |
+| 6 | State file exists | [Cloud Storage](https://console.cloud.google.com/storage/browser/ml-gcp-workshop-487117-tfstate/terraform/state?project=ml-gcp-workshop-487117) → teamN/ | `default.tfstate` file listed |
 
 ---
 

@@ -35,6 +35,9 @@ resource "google_cloud_run_v2_service" "app" {
       max_instance_count = var.max_instances   # default: 3
     }
 
+    # Service account for this team
+    service_account = "${var.student_namespace}-sa@${data.google_project.project.project_id}.iam.gserviceaccount.com"
+
     containers {
       # Container image from Artifact Registry (built in pipeline Step 1)
       image = local.effective_image
@@ -50,6 +53,10 @@ resource "google_cloud_run_v2_service" "app" {
           cpu    = var.cpu       # default: "1"
           memory = var.memory    # default: "256Mi"
         }
+        # CPU throttling — CPU only allocated during request processing
+        # Matches --cpu-throttling from the app pipeline (Lab 2)
+        # Required: unthrottled CPU needs minimum 512Mi memory
+        cpu_idle = true
       }
 
       # Health check — Cloud Run pings /health to know if the container is ready

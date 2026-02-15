@@ -6,23 +6,7 @@
 ![Firebase](https://img.shields.io/badge/Firebase-FFCA28?style=for-the-badge&logo=firebase&logoColor=black)
 
 > **Hands-on Workshop** — Deploy a community platform on Google Cloud
-## 🤖 AI Workshop Assistant
 
-Stuck on a command? Getting an error? Ask the AI assistant — it knows all the labs, cheatsheets, and pipeline configs.
-
-**[→ Open ML GCP Workshop Assistant](https://chatgpt.com/g/g-6991d00ab97c8191a1c1cbc4e1f23da1-ml-gcp-workshop-assistant)**
-
-Try asking:
-- "I'm getting a permission denied error in Lab 2"
-- "What does Trivy do and why do we use it?"
-- "How do I check if my Cloud Run service is running?"
-- "Explain the difference between Lab 2 and Lab 3"
-- "What is a multi-stage Docker build?"
-- "How do I see my Terraform state?"
-- "What GCP services are we using in this workshop?"
-- "Help me understand the CI/CD pipeline steps"
-
----
 ---
 
 ## 📋 Workshop Overview
@@ -150,18 +134,28 @@ Each team sets `VITE_NAMESPACE` to isolate their data in the shared Firestore:
 
 📋 [**Workshop Registration Sheet**](https://docs.google.com/spreadsheets/d/e/2PACX-1vSxQhQ5DcSui7mcSfXHVfUcVQpQWMklq4jzJzI1P9YLRgww02kMuk7HV3tdNUjxyJsYysvFosiCPy9J/pubhtml?gid=959209679&single=true) — Find your team, email, and password here.
 
-
-
 | Setting | Value |
 |---------|-------|
-| **GCP Console** | [console.cloud.google.com](https://console.cloud.google.com) |
+| **GCP Console** | [console.cloud.google.com](https://console.cloud.google.com/?project=ml-gcp-workshop-487117) |
 | **Project** | `ml-gcp-workshop-487117` |
 | **Region** | `us-central1` |
-| **Login** | `studentN@ml-gcp.cloud-people.net` |
+| **Login** | `studentN@ml-gcp.cloud-people.net` (password from registration sheet) |
+| **Cloud Shell** | [Open Cloud Shell →](https://console.cloud.google.com/cloudshell?project=ml-gcp-workshop-487117) |
+
+### Quick Start
+
+```bash
+# 1. Open Chrome Incognito → console.cloud.google.com
+# 2. Log in with your workshop account
+# 3. Open Cloud Shell (>_ icon top right)
+git clone https://github.com/bedairahmed/ml-gcp-ws.git
+cd ml-gcp-ws
+# 4. Follow Lab 1 → labs/lab1.md
+```
+
+> 📖 Full setup guide: [labs/credentials.md](labs/credentials.md)
 
 ---
-
-
 
 ## 🧪 Labs
 
@@ -349,7 +343,7 @@ npm install && npm run dev
 
 **Ahmed Bedair** — Senior Cloud Architect
 
-📧 abedair@gmail.com · 💼 [LinkedIn](https://linkedin.com/in/abedair) · 🐙 [GitHub](https://github.com/bedairahmed)
+📧 abedair@gmail.com · 💼 [LinkedIn](https://www.linkedin.com/in/abedair/) · 🐙 [GitHub](https://github.com/bedairahmed)
 
 🙋 Raise your hand · 💬 Workshop chat · 📧 Email for follow-up
 

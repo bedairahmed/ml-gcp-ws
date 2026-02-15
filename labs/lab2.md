@@ -112,6 +112,19 @@ Click your build and expand the steps:
 
 > ❓ Find your image. What tag?
 
+### ✅ Step-by-Step Validation
+
+Open each link and confirm:
+
+| # | Check | Where | Expected |
+|---|-------|-------|----------|
+| 1 | Build passed | [Cloud Build History](https://console.cloud.google.com/cloud-build/builds?project=ml-gcp-workshop-487117) | All 7 steps green, tag `team-teamN` |
+| 2 | Image pushed | [Artifact Registry](https://console.cloud.google.com/artifacts/docker/ml-gcp-workshop-487117/us-central1/madina-lab?project=ml-gcp-workshop-487117) | `madina-lab-teamN` image exists |
+| 3 | Service running | [Cloud Run](https://console.cloud.google.com/run?project=ml-gcp-workshop-487117) | `madina-lab-teamN` with green ✅ |
+| 4 | Secrets mounted | Cloud Run → your service → Variables & Secrets | 7 Firebase secret references |
+| 5 | Public access | Cloud Run → your service → Security | `allUsers` as invoker |
+| 6 | App loads | Click the Cloud Run URL | App opens, you can sign up |
+
 ---
 
 ## 💬 Discussion
