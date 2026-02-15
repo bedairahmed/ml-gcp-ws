@@ -145,6 +145,24 @@ Each team sets `VITE_NAMESPACE` to isolate their data in the shared Firestore:
 
 ---
 
+## 🤖 AI Workshop Assistant
+
+Stuck on a command? Getting an error? Ask the AI assistant — it knows all the labs, cheatsheets, and pipeline configs.
+
+**[→ Open ML GCP Workshop Assistant](https://chatgpt.com/g/g-6991d00ab97c8191a1c1cbc4e1f23da1-ml-gcp-workshop-assistant)**
+
+Try asking:
+- "I'm getting a permission denied error in Lab 2"
+- "What does Trivy do and why do we use it?"
+- "How do I check if my Cloud Run service is running?"
+- "Explain the difference between Lab 2 and Lab 3"
+- "What is a multi-stage Docker build?"
+- "How do I see my Terraform state?"
+- "What GCP services are we using in this workshop?"
+- "Help me understand the CI/CD pipeline steps"
+
+---
+
 ## 🧪 Labs
 
 | Lab | Title | Duration | Guide | Quiz |
@@ -249,7 +267,8 @@ ml-gcp-ws/
 │   ├── terraform-cheatsheet.md
 │   ├── cloudbuild-cheatsheet.md
 │   ├── yaml-cheatsheet.md
-│   └── git-cheatsheet.md
+│   ├── git-cheatsheet.md
+│   └── cloudshell-cheatsheet.md
 │
 ├── scripts/                    # Instructor scripts
 │   ├── setup.sh
@@ -315,6 +334,8 @@ npm install && npm run dev
 | [Cloud Build & CI/CD](docs/cloudbuild-cheatsheet.md) | Pipeline YAML, security scanning |
 | [YAML](docs/yaml-cheatsheet.md) | Syntax, substitutions, Cloud Build YAML |
 | [Git](docs/git-cheatsheet.md) | Clone, commit, push, branches |
+| [Cloud Shell](docs/cloudshell-cheatsheet.md) | Terminal, editor, shortcuts, troubleshooting |
+| [🤖 AI Workshop Assistant](https://chatgpt.com/g/g-6991d00ab97c8191a1c1cbc4e1f23da1-ml-gcp-workshop-assistant) | Ask questions, get help with errors, learn concepts |
 
 ---
 
