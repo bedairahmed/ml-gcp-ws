@@ -193,3 +193,6 @@ options:
   logging: CLOUD_LOGGING_ONLY
 
 timeout: "900s"
+tags:
+  - "team-${_TEAM}"
+  - "terraform-pipeline"

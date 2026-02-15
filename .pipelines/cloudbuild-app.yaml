@@ -305,3 +305,6 @@ options:
   logging: CLOUD_LOGGING_ONLY    # Build logs → Cloud Logging (Console → Cloud Build → History)
 
 timeout: "900s"                  # 15 minute timeout (extra time for security scans)
+tags:
+  - "team-${_TEAM}"
+  - "app-pipeline"
