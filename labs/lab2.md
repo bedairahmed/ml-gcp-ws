@@ -82,7 +82,11 @@ gcloud builds submit --config .pipelines/cloudbuild-app.yaml --substitutions=_TE
 
 ### Task 6: Check Build Steps
 
-📍 [**Open Cloud Build History →**](https://console.cloud.google.com/cloud-build/builds?project=ml-gcp-workshop-487117) → click your build
+📍 [**Open Cloud Build History →**](https://console.cloud.google.com/cloud-build/builds?project=ml-gcp-workshop-487117)
+
+> 💡 **Find your build:** Click **Displayed columns** (top right of the table) → enable **Tags**. Look for `team-teamN` to find your build. You can also filter: type `tags="team-teamN"` in the filter bar.
+
+Click your build and expand the steps:
 
 **Step 1 — Hadolint:** ❓ Any issues? What rules?
 **Step 3 — Trivy:** ❓ How many vulns? Any HIGH/CRITICAL?
@@ -128,4 +132,5 @@ gcloud builds submit --config .pipelines/cloudbuild-app.yaml --substitutions=_TE
 - [ ] Found image in Artifact Registry
 
 ---
-[Take the Lab 2 Quiz →](quizzes/quiz2.md)
+
+### 🧠 [Take the Lab 2 Quiz →](quizzes/quiz2.md)

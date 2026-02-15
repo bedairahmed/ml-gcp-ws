@@ -129,7 +129,7 @@ gcloud builds submit --config .pipelines/cloudbuild-tf.yaml \
   --substitutions=_TEAM=teamN .
 ```
 
-📍 **Role B:** Watch [**Cloud Build History →**](https://console.cloud.google.com/cloud-build/builds?project=ml-gcp-workshop-487117)
+📍 **Role B:** Watch [**Cloud Build History →**](https://console.cloud.google.com/cloud-build/builds?project=ml-gcp-workshop-487117) — filter by tag `team-teamN` to find your build.
 
 ### Task 5: Read the Results
 
@@ -192,6 +192,7 @@ gcloud builds submit --config .pipelines/cloudbuild-tf.yaml \
 📖 **All cheatsheets:** [`docs/`](../docs/)
 
 ---
-[Take the Lab 3 Quiz →](quizzes/quiz3.md)
+
+### 🧠 [Take the Lab 3 Quiz →](quizzes/quiz3.md)
 
 ### 📋 [Submit Workshop Feedback →](https://github.com/bedairahmed/ml-gcp-ws/issues/new?template=workshop-feedback.yml)
