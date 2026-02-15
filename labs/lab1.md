@@ -27,27 +27,39 @@
 Log into GCP Console → project: **ml-gcp-workshop-487117** *(see [credentials.md](credentials.md))*
 
 ### Task 1: VPC Network
-📍 **Console → VPC Network → VPC Networks → `madina-lab-vpc`**
+
+📍 [**Open VPC Networks →**](https://console.cloud.google.com/networking/networks/list?project=ml-gcp-workshop-487117) → click `madina-lab-vpc`
+
 > ❓ What subnet? What IP range? How many firewall rules?
 
 ### Task 2: Artifact Registry
-📍 **Console → Artifact Registry → `madina-lab`**
+
+📍 [**Open Artifact Registry →**](https://console.cloud.google.com/artifacts?project=ml-gcp-workshop-487117) → click `madina-lab`
+
 > ❓ What type of repo? Can you find the instructor's image?
 
 ### Task 3: Secret Manager
-📍 **Console → Security → Secret Manager**
+
+📍 [**Open Secret Manager →**](https://console.cloud.google.com/security/secret-manager?project=ml-gcp-workshop-487117)
+
 > ❓ How many secrets? Can you see the values?
 
 ### Task 4: Cloud Build
-📍 **Console → Cloud Build → History** — find the instructor's build, expand each step
+
+📍 [**Open Cloud Build History →**](https://console.cloud.google.com/cloud-build/builds?project=ml-gcp-workshop-487117) — find the instructor's build, expand each step
+
 > ❓ How many steps? How long? What does each step do?
 
 ### Task 5: Cloud Run
-📍 **Console → Cloud Run → `madina-lab-instructor`** — explore: Metrics, Logs, Revisions, Security, Variables & Secrets
+
+📍 [**Open Cloud Run →**](https://console.cloud.google.com/run?project=ml-gcp-workshop-487117) → click `madina-lab-instructor` → explore: Metrics, Logs, Revisions, Security, Variables & Secrets
+
 > ❓ What URL? How many instances? What service account?
 
 ### Task 6: Firestore
-📍 **Console → Firestore** — check Data tab and Rules tab
+
+📍 [**Open Firestore →**](https://console.cloud.google.com/firestore?project=ml-gcp-workshop-487117) — check Data tab and Rules tab
+
 > ❓ What collections? Where are security rules defined?
 
 ---
@@ -55,7 +67,9 @@ Log into GCP Console → project: **ml-gcp-workshop-487117** *(see [credentials.
 ## Part B: Meet the App & Pipeline (15 min)
 
 ### Task 7: Visit the Live App
+
 Copy the Cloud Run URL from Task 5. Sign up, explore chat, events, business directory.
+
 > ❓ How would each feature use Firestore?
 
 ### Task 8: Read the Dockerfile
@@ -104,8 +118,10 @@ Copy the Cloud Run URL from Task 5. Sign up, explore chat, events, business dire
 
 ## ✅ Checklist
 
-- [ ] Logged into GCP Console
+- [ ] Logged into [GCP Console](https://console.cloud.google.com/?project=ml-gcp-workshop-487117)
 - [ ] Explored: VPC, Artifact Registry, Secret Manager, Cloud Build, Cloud Run, Firestore
 - [ ] Visited the live app
 - [ ] Read the Dockerfile — understand two stages
 - [ ] Read the pipeline — identify each step
+
+---

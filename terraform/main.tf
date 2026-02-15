@@ -2,7 +2,7 @@
 #  🕌  Madina Lab — Main Configuration
 # =============================================================================
 #
-#  Provider & backend → providers.tf
+#  Provider & backend → provider.tf
 #  Cloud Run          → cloud_run.tf
 #  IAM                → iam.tf
 #  Secrets            → secrets.tf

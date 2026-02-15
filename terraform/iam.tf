@@ -31,7 +31,4 @@ resource "google_project_iam_member" "cloudbuild_secret_access" {
   member  = "serviceAccount:${data.google_project.project.number}@cloudbuild.gserviceaccount.com"
 }
 
-# Look up the project number (needed for Cloud Build SA email)
-data "google_project" "project" {
-  project_id = var.project_id
-}
+# data.google_project.project is defined in main.tf

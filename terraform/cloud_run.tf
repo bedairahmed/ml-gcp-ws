@@ -15,16 +15,9 @@
 # =============================================================================
 
 # ── Computed Values ──────────────────────────────────────
-# These derive the service name and image URL from variables.
-# If not explicitly set, they're auto-generated from the namespace.
-locals {
-  # Service name: "madina-lab-team1" (or override with var.service_name)
-  effective_service_name = var.service_name != "" ? var.service_name : "madina-lab-${var.student_namespace}"
-
-  # Image URL: auto-derived from Artifact Registry path
-  # The pipeline passes this via -var="image=..." so it matches what was just built
-  effective_image = var.image != "" ? var.image : "${var.region}-docker.pkg.dev/${var.project_id}/madina-lab/madina-lab-${var.student_namespace}:latest"
-}
+# Defined in main.tf:
+#   local.effective_service_name  → "madina-lab-team1"
+#   local.effective_image         → Artifact Registry image URL
 
 # ── Cloud Run Service ────────────────────────────────────
 # This creates a serverless container service.
