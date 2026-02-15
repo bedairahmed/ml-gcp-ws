@@ -349,7 +349,7 @@ npm install && npm run dev
 
 **Ahmed Bedair** — Senior Cloud Architect
 
-📧 abedair@gmail.com · 💼 [LinkedIn](https://linkedin.com/in/ahmedbedair) · 🐙 [GitHub](https://github.com/bedairahmed)
+📧 abedair@gmail.com · 💼 [LinkedIn](https://linkedin.com/in/abedair) · 🐙 [GitHub](https://github.com/bedairahmed)
 
 🙋 Raise your hand · 💬 Workshop chat · 📧 Email for follow-up
 
