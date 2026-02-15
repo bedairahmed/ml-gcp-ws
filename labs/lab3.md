@@ -44,7 +44,8 @@
 
 ```
 terraform/
-├── main.tf                  ← Provider config
+├── provider.tf              ← Provider + GCS state backend
+├── main.tf                  ← Data sources + locals
 ├── cloud_run.tf             ← Cloud Run service ⭐
 ├── iam.tf                   ← Public access + Cloud Build permissions
 ├── secrets.tf               ← Secret Manager (instructor setup)
@@ -57,7 +58,8 @@ Read each file:
 
 | File | What to look for |
 |------|-----------------|
-| [`main.tf`](../terraform/main.tf) | `provider "google"` — which project and region? |
+| [`provider.tf`](../terraform/provider.tf) | `backend "gcs"` — where is state stored? |
+| [`main.tf`](../terraform/main.tf) | `data "google_project"` + `locals` — computed values |
 | [`cloud_run.tf`](../terraform/cloud_run.tf) | `google_cloud_run_v2_service` — port, memory, scaling, health check |
 | [`iam.tf`](../terraform/iam.tf) | `allUsers` — same as Step 6 in app pipeline |
 | [`variables.tf`](../terraform/variables.tf) | What inputs does Terraform need? |
@@ -127,7 +129,7 @@ gcloud builds submit --config .pipelines/cloudbuild-tf.yaml \
   --substitutions=_TEAM=teamN .
 ```
 
-📍 **Role B:** Watch Console → Cloud Build → History.
+📍 **Role B:** Watch [**Cloud Build History →**](https://console.cloud.google.com/cloud-build/builds?project=ml-gcp-workshop-487117)
 
 ### Task 5: Read the Results
 
@@ -139,7 +141,7 @@ gcloud builds submit --config .pipelines/cloudbuild-tf.yaml \
 
 ### Task 6: Visit Your App
 
-📍 Console → Cloud Run → look for your service
+📍 [**Open Cloud Run →**](https://console.cloud.google.com/run?project=ml-gcp-workshop-487117) → look for your service
 
 > ❓ Same app, deployed by Terraform. Can you tell the difference?
 
@@ -188,3 +190,7 @@ gcloud builds submit --config .pipelines/cloudbuild-tf.yaml \
 - 🏗️ IaC — Terraform, plan before apply
 
 📖 **All cheatsheets:** [`docs/`](../docs/)
+
+---
+
+### 📋 [Submit Workshop Feedback →](https://github.com/bedairahmed/ml-gcp-ws/issues/new?template=workshop-feedback.yml)

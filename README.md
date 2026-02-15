@@ -5,13 +5,13 @@
 ![Terraform](https://img.shields.io/badge/Terraform-7B42BC?style=for-the-badge&logo=terraform&logoColor=white)
 ![Firebase](https://img.shields.io/badge/Firebase-FFCA28?style=for-the-badge&logo=firebase&logoColor=black)
 
-> **Hands-on Workshop** — Build a solution architecture on Google Cloud using a sample community application
+> **Hands-on Workshop** — Deploy a community platform on Google Cloud
 
 ---
 
 ## 📋 Workshop Overview
 
-Using a sample community platform (chat, events, business directory) as our use case, we'll build a solution architecture on Google Cloud and deploy it using GCP services.
+Using a sample community platform (chat, events, business directory) as our use case, we'll deploy on Google Cloud and learn GCP services hands-on.
 
 **3 labs. All hands-on.**
 
@@ -20,6 +20,24 @@ Using a sample community platform (chat, events, business directory) as our use 
 | 🔍 | **Lab 1** | Explore GCP services & understand the architecture |
 | 🚀 | **Lab 2** | Build & deploy using containers and CI/CD pipelines |
 | 🏗️ | **Lab 3** | Introduction to Infrastructure as Code |
+
+---
+
+## 🎯 The Business Case
+
+📄 [**Read the full business case →**](labs/business-case.md)
+
+The **Muslim Community of the West Side (MCWS)** needs a unified platform to replace scattered WhatsApp groups and Google Forms. The dev team built the app. **You are the cloud team — deploy it securely on GCP.**
+
+| # | Requirement | How You'll Deliver |
+|---|------------|-------------------|
+| 1 | Each team deploys independently | `_TEAM` variable → isolated services, data, and state |
+| 2 | No hardcoded secrets | Secret Manager → injected at build time |
+| 3 | Security scanning before deploy | Hadolint + Trivy (containers) + Checkov (infra) |
+| 4 | One-command deployment | CI/CD pipeline — `gcloud builds submit` |
+| 5 | Scales to zero when idle | Cloud Run — `min-instances=0` |
+| 6 | Infrastructure as Code | Terraform — deploy 1 team or 50 with the same code |
+| 7 | Monitoring built-in | Cloud Run logs, metrics, and health checks |
 
 ---
 
@@ -116,6 +134,8 @@ Each team sets `VITE_NAMESPACE` to isolate their data in the shared Firestore:
 
 📋 [**Workshop Registration Sheet**](https://docs.google.com/spreadsheets/d/e/2PACX-1vSxQhQ5DcSui7mcSfXHVfUcVQpQWMklq4jzJzI1P9YLRgww02kMuk7HV3tdNUjxyJsYysvFosiCPy9J/pubhtml?gid=959209679&single=true) — Find your team, email, and password here.
 
+<iframe src="https://docs.google.com/spreadsheets/d/e/2PACX-1vSxQhQ5DcSui7mcSfXHVfUcVQpQWMklq4jzJzI1P9YLRgww02kMuk7HV3tdNUjxyJsYysvFosiCPy9J/pubhtml?gid=959209679&amp;single=true&amp;widget=true&amp;headers=false" width="100%" height="400" frameborder="0"></iframe>
+
 | Setting | Value |
 |---------|-------|
 | **GCP Console** | [console.cloud.google.com](https://console.cloud.google.com) |
@@ -129,6 +149,7 @@ Each team sets `VITE_NAMESPACE` to isolate their data in the shared Firestore:
 
 | Lab | Title | Duration | Guide |
 |-----|-------|----------|-------|
+| — | The Business Case | 5 min read | [labs/business-case.md](labs/business-case.md) |
 | 0 | Credentials & Setup | 10 min | [labs/credentials.md](labs/credentials.md) |
 | 1 | Explore Your Cloud & Meet the App | 30 min | [labs/lab1.md](labs/lab1.md) |
 | 2 | Ship Your App | 35 min | [labs/lab2.md](labs/lab2.md) |
@@ -172,7 +193,7 @@ Each team sets `VITE_NAMESPACE` to isolate their data in the shared Firestore:
 
 ## 🔄 CI/CD Pipelines
 
-### App Pipeline ([`.pipelines/cloudbuild-app.yaml`](.pipelines/cloudbuild-app.yaml)) — 6 steps
+### App Pipeline ([`.pipelines/cloudbuild-app.yaml`](.pipelines/cloudbuild-app.yaml)) — 7 steps
 
 | Step | Name | What |
 |------|------|------|
@@ -182,6 +203,7 @@ Each team sets `VITE_NAMESPACE` to isolate their data in the shared Firestore:
 | 4 | `push` | Push image to Artifact Registry |
 | 5 | `deploy-app` | Deploy to Cloud Run |
 | 6 | `allow-public-access` | Grant public access |
+| 7 | `map-domain` | Map custom domain |
 
 ### Terraform Pipeline ([`.pipelines/cloudbuild-tf.yaml`](.pipelines/cloudbuild-tf.yaml)) — 5 steps
 
@@ -211,6 +233,7 @@ ml-gcp-ws/
 │   └── cloudbuild-tf.yaml      # Terraform pipeline (Lab 3)
 │
 ├── labs/                       # Workshop lab guides
+│   ├── business-case.md        # The scenario & requirements
 │   ├── credentials.md
 │   ├── lab1.md
 │   ├── lab2.md
@@ -227,6 +250,7 @@ ml-gcp-ws/
 ├── scripts/                    # Instructor scripts
 │   ├── setup.sh
 │   ├── cleanup.sh
+│   ├── cleanup-lab3-prep.sh    # Delete team services before Lab 3
 │   └── validate.sh
 │
 ├── terraform/                  # IaC files (Lab 3)
