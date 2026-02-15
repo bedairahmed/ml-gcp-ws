@@ -1,0 +1,275 @@
+<mxfile host="Electron" modified="2026-02-15T18:47:20.249Z" agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) draw.io/24.2.5 Chrome/120.0.6099.109 Electron/28.1.0 Safari/537.36" version="24.2.5" etag="AWaCt2YoGNGFKV2-K2As" type="device" pages="3">
+  <diagram id="7-547_oG5UozZ8sr_tOq" name="Architecure">
+    <mxGraphModel dx="958" dy="492" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="ZyqxdFTejdt30JSR0eMQ-1" value="" style="rounded=1;whiteSpace=wrap;html=1;dashed=1;dashPattern=8 4;strokeColor=#4285F4;strokeWidth=2;fillColor=none;arcSize=3;" vertex="1" parent="1">
+          <mxGeometry x="220" y="30" width="1150" height="520" as="geometry" />
+        </mxCell>
+        <mxCell id="ZyqxdFTejdt30JSR0eMQ-2" value="GCP Project: ml-gcp-workshop-487117 &amp;nbsp;|&amp;nbsp; Region: us-central1" style="text;html=1;fontSize=13;fontStyle=1;fontColor=#4285F4;align=left;verticalAlign=top;" vertex="1" parent="1">
+          <mxGeometry x="240" y="38" width="450" height="25" as="geometry" />
+        </mxCell>
+        <mxCell id="ZyqxdFTejdt30JSR0eMQ-3" value="" style="shape=image;verticalLabelPosition=bottom;labelBackgroundColor=default;verticalAlign=top;aspect=fixed;imageAspect=0;image=https://raw.githubusercontent.com/mingrammer/diagrams/master/resources/onprem/vcs/github.png;" vertex="1" parent="1">
+          <mxGeometry x="40" y="160" width="65" height="65" as="geometry" />
+        </mxCell>
+        <mxCell id="ZyqxdFTejdt30JSR0eMQ-4" value="&lt;b&gt;GitHub&lt;/b&gt;&lt;br&gt;&lt;font color=&#39;#78909C&#39; style=&#39;font-size:11px&#39;&gt;Source Code&lt;br&gt;bedairahmed/ml-gcp-ws&lt;/font&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#F5F5F5;strokeColor=#BDBDBD;strokeWidth=1;arcSize=12;verticalAlign=top;spacingTop=68;fontSize=12;" vertex="1" parent="1">
+          <mxGeometry x="10" y="130" width="130" height="140" as="geometry" />
+        </mxCell>
+        <mxCell id="ZyqxdFTejdt30JSR0eMQ-5" value="git push" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;strokeColor=#78909C;strokeWidth=2;fontSize=10;fontColor=#78909C;" edge="1" parent="1" source="ZyqxdFTejdt30JSR0eMQ-4" target="ZyqxdFTejdt30JSR0eMQ-7">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="ZyqxdFTejdt30JSR0eMQ-6" value="" style="shape=image;verticalLabelPosition=bottom;labelBackgroundColor=default;verticalAlign=top;aspect=fixed;imageAspect=0;image=https://www.gstatic.com/pantheon/images/welcome/supercloud.svg;" vertex="1" parent="1">
+          <mxGeometry x="310" y="90" width="50" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="ZyqxdFTejdt30JSR0eMQ-7" value="&lt;b style=&#39;color:#1565C0;font-size:14px&#39;&gt;Cloud Build&lt;/b&gt;&lt;br&gt;&lt;br&gt;&lt;font style=&#39;font-size:11px&#39;&gt;1. Lint (Hadolint)&lt;br&gt;2. Build Docker Image&lt;br&gt;3. Scan (Trivy / Checkov)&lt;br&gt;4. Push to Registry&lt;br&gt;5. Deploy to Cloud Run&lt;/font&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#E3F2FD;strokeColor=#90CAF9;strokeWidth=2;arcSize=8;verticalAlign=top;spacingTop=8;fontSize=12;" vertex="1" parent="1">
+          <mxGeometry x="240" y="80" width="210" height="190" as="geometry" />
+        </mxCell>
+        <mxCell id="ZyqxdFTejdt30JSR0eMQ-8" value="deploy" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;strokeColor=#F57F17;strokeWidth=2;fontSize=10;fontColor=#F57F17;fontStyle=1;" edge="1" parent="1" source="ZyqxdFTejdt30JSR0eMQ-7" target="ZyqxdFTejdt30JSR0eMQ-9">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="ZyqxdFTejdt30JSR0eMQ-9" value="&lt;b style=&#39;color:#2E7D32;font-size:14px&#39;&gt;Cloud Run&lt;/b&gt;&lt;br&gt;&lt;font color=&#39;#2E7D32&#39; style=&#39;font-size:10px&#39;&gt;Serverless • Scales to zero&lt;/font&gt;&lt;br&gt;&lt;br&gt;&lt;font style=&#39;font-size:11px&#39;&gt;madina-lab-team1&lt;br&gt;madina-lab-team2&lt;br&gt;. . .&lt;br&gt;madina-lab-team8&lt;br&gt;&lt;b&gt;madina-lab-instructor&lt;/b&gt;&lt;/font&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#E8F5E9;strokeColor=#A5D6A7;strokeWidth=2;arcSize=8;verticalAlign=top;spacingTop=8;fontSize=12;" vertex="1" parent="1">
+          <mxGeometry x="560" y="70" width="210" height="210" as="geometry" />
+        </mxCell>
+        <mxCell id="ZyqxdFTejdt30JSR0eMQ-10" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;strokeColor=#FB8C00;strokeWidth=2;dashed=0;" edge="1" parent="1" source="ZyqxdFTejdt30JSR0eMQ-9" target="ZyqxdFTejdt30JSR0eMQ-16">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="ZyqxdFTejdt30JSR0eMQ-11" value="&lt;b style=&#39;color:#C62828;font-size:13px&#39;&gt;Secret Manager&lt;/b&gt;&lt;br&gt;&lt;br&gt;&lt;font style=&#39;font-size:11px&#39;&gt;FIREBASE_API_KEY&lt;br&gt;FIREBASE_AUTH_DOMAIN&lt;br&gt;FIREBASE_PROJECT_ID&lt;br&gt;+ 4 more secrets&lt;/font&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFEBEE;strokeColor=#EF9A9A;strokeWidth=2;arcSize=8;verticalAlign=top;spacingTop=8;fontSize=12;" vertex="1" parent="1">
+          <mxGeometry x="880" y="80" width="200" height="160" as="geometry" />
+        </mxCell>
+        <mxCell id="ZyqxdFTejdt30JSR0eMQ-12" value="inject at build" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;exitX=0;exitY=0.5;exitDx=0;exitDy=0;entryX=1;entryY=0.4;entryDx=0;entryDy=0;strokeColor=#C62828;strokeWidth=1.5;dashed=1;dashPattern=8 4;fontSize=10;fontColor=#C62828;" edge="1" parent="1" source="ZyqxdFTejdt30JSR0eMQ-11" target="ZyqxdFTejdt30JSR0eMQ-9">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="ZyqxdFTejdt30JSR0eMQ-13" value="&lt;b style=&#39;color:#1565C0;font-size:12px&#39;&gt;VPC Network&lt;/b&gt;&lt;br&gt;&lt;font style=&#39;font-size:10px;color:#78909C&#39;&gt;madina-lab-vpc&lt;br&gt;10.10.0.0/24&lt;/font&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#E3F2FD;strokeColor=#90CAF9;strokeWidth=1.5;arcSize=10;verticalAlign=middle;fontSize=12;" vertex="1" parent="1">
+          <mxGeometry x="240" y="350" width="170" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="ZyqxdFTejdt30JSR0eMQ-14" value="&lt;b style=&#39;color:#1565C0;font-size:12px&#39;&gt;Artifact Registry&lt;/b&gt;&lt;br&gt;&lt;font style=&#39;font-size:10px;color:#78909C&#39;&gt;madina-lab-repo&lt;br&gt;Docker Images&lt;/font&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#E3F2FD;strokeColor=#90CAF9;strokeWidth=1.5;arcSize=10;verticalAlign=middle;fontSize=12;" vertex="1" parent="1">
+          <mxGeometry x="460" y="350" width="170" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="ZyqxdFTejdt30JSR0eMQ-15" value="push image" style="edgeStyle=orthogonalEdgeStyle;rounded=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;strokeColor=#7B1FA2;strokeWidth=1.5;fontSize=9;fontColor=#7B1FA2;" edge="1" parent="1" source="ZyqxdFTejdt30JSR0eMQ-7" target="ZyqxdFTejdt30JSR0eMQ-14">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="ZyqxdFTejdt30JSR0eMQ-16" value="&lt;b style=&#39;color:#E65100;font-size:12px&#39;&gt;Firebase / Firestore&lt;/b&gt;&lt;br&gt;&lt;font style=&#39;font-size:10px;color:#78909C&#39;&gt;Authentication&lt;br&gt;Real-time Database&lt;/font&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFF8E1;strokeColor=#FFE082;strokeWidth=1.5;arcSize=10;verticalAlign=middle;fontSize=12;" vertex="1" parent="1">
+          <mxGeometry x="680" y="350" width="170" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="ZyqxdFTejdt30JSR0eMQ-17" value="&lt;b style=&#39;color:#6A1B9A;font-size:12px&#39;&gt;Cloud Storage&lt;/b&gt;&lt;br&gt;&lt;font style=&#39;font-size:10px;color:#78909C&#39;&gt;Terraform State&lt;br&gt;Per-team isolation&lt;/font&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#F3E5F5;strokeColor=#CE93D8;strokeWidth=1.5;arcSize=10;verticalAlign=middle;fontSize=12;" vertex="1" parent="1">
+          <mxGeometry x="900" y="350" width="170" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="ZyqxdFTejdt30JSR0eMQ-18" value="" style="shape=line;strokeColor=#E0E0E0;strokeWidth=1;fillColor=none;" vertex="1" parent="1">
+          <mxGeometry x="30" y="480" width="1340" height="1" as="geometry" />
+        </mxCell>
+        <mxCell id="ZyqxdFTejdt30JSR0eMQ-19" value="&lt;b style=&#39;color:#1565C0&#39;&gt;Lab 1: Explore&lt;/b&gt;&lt;br&gt;&lt;font style=&#39;font-size:10px;color:#78909C&#39;&gt;Console tour — understand the architecture&lt;/font&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#E3F2FD;strokeColor=#90CAF9;strokeWidth=1;arcSize=12;fontSize=12;" vertex="1" parent="1">
+          <mxGeometry x="40" y="500" width="400" height="45" as="geometry" />
+        </mxCell>
+        <mxCell id="ZyqxdFTejdt30JSR0eMQ-20" value="&lt;b style=&#39;color:#E65100&#39;&gt;Lab 2: Ship (gcloud)&lt;/b&gt;&lt;br&gt;&lt;font style=&#39;font-size:10px;color:#78909C&#39;&gt;Build → Scan → Deploy → Monitor&lt;/font&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFF8E1;strokeColor=#FFE082;strokeWidth=1;arcSize=12;fontSize=12;" vertex="1" parent="1">
+          <mxGeometry x="480" y="500" width="400" height="45" as="geometry" />
+        </mxCell>
+        <mxCell id="ZyqxdFTejdt30JSR0eMQ-21" value="&lt;b style=&#39;color:#2E7D32&#39;&gt;Lab 3: IaC (Terraform)&lt;/b&gt;&lt;br&gt;&lt;font style=&#39;font-size:10px;color:#78909C&#39;&gt;Same result — declarative + state + security&lt;/font&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#E8F5E9;strokeColor=#A5D6A7;strokeWidth=1;arcSize=12;fontSize=12;" vertex="1" parent="1">
+          <mxGeometry x="920" y="500" width="400" height="45" as="geometry" />
+        </mxCell>
+        <mxCell id="ZyqxdFTejdt30JSR0eMQ-22" value="&lt;b&gt;Users&lt;/b&gt;&lt;br&gt;&lt;font style=&#39;font-size:10px;color:#78909C&#39;&gt;teamN.lab.ml-gcp.cloud-people.net&lt;/font&gt;" style="shape=mxgraph.gcp2.user;fillColor=#4285F4;fontColor=#FFFFFF;strokeColor=none;fontSize=11;rounded=1;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="1160" y="130" width="140" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="ZyqxdFTejdt30JSR0eMQ-23" value="HTTPS" style="edgeStyle=orthogonalEdgeStyle;rounded=1;exitX=0;exitY=0.5;exitDx=0;exitDy=0;entryX=1;entryY=0.25;entryDx=0;entryDy=0;strokeColor=#2E7D32;strokeWidth=1.5;fontSize=10;fontColor=#2E7D32;" edge="1" parent="1" source="ZyqxdFTejdt30JSR0eMQ-22" target="ZyqxdFTejdt30JSR0eMQ-9">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+  <diagram id="terraform" name="Terraform">
+    <mxGraphModel dx="1369" dy="703" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1400" pageHeight="650" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="title" value="Terraform Pipeline — Lab 3: Infrastructure as Code" style="text;html=1;fontSize=20;fontStyle=1;fontColor=#263238;align=left;verticalAlign=middle;" parent="1" vertex="1">
+          <mxGeometry x="30" y="15" width="550" height="35" as="geometry" />
+        </mxCell>
+        <mxCell id="subtitle" value="Same app, different approach — declarative infrastructure" style="text;html=1;fontSize=12;fontColor=#78909C;align=left;verticalAlign=middle;" parent="1" vertex="1">
+          <mxGeometry x="30" y="48" width="400" height="20" as="geometry" />
+        </mxCell>
+        <mxCell id="imp-box" value="" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFF8E1;strokeColor=#FFE082;strokeWidth=2;arcSize=8;" parent="1" vertex="1">
+          <mxGeometry x="30" y="80" width="440" height="130" as="geometry" />
+        </mxCell>
+        <mxCell id="imp-title" value="Lab 2 — Imperative" style="text;html=1;fontSize=16;fontStyle=1;fontColor=#E65100;align=center;verticalAlign=middle;" parent="1" vertex="1">
+          <mxGeometry x="30" y="85" width="440" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="imp-text" value="&lt;font style=&#39;font-size:12px&#39;&gt;&quot;Run these 7 steps in this order&quot;&lt;br&gt;No state tracking — Cloud Build doesn&#39;t know what exists&lt;br&gt;50 teams = run 50 separate commands&lt;/font&gt;" style="text;html=1;fontColor=#37474F;align=center;verticalAlign=top;" parent="1" vertex="1">
+          <mxGeometry x="50" y="120" width="400" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="vs-arrow" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=1;exitX=1;exitY=0.5;entryX=0;entryY=0.5;strokeColor=#78909C;strokeWidth=3;" parent="1" source="imp-box" target="dec-box" edge="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="vs-label" value="evolves to" style="text;html=1;fontSize=11;fontColor=#78909C;fontStyle=2;align=center;" parent="1" vertex="1">
+          <mxGeometry x="490" y="120" width="80" height="20" as="geometry" />
+        </mxCell>
+        <mxCell id="dec-box" value="" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#E8F5E9;strokeColor=#A5D6A7;strokeWidth=2;arcSize=8;" parent="1" vertex="1">
+          <mxGeometry x="590" y="80" width="440" height="130" as="geometry" />
+        </mxCell>
+        <mxCell id="dec-title" value="Lab 3 — Declarative" style="text;html=1;fontSize=16;fontStyle=1;fontColor=#2E7D32;align=center;verticalAlign=middle;" parent="1" vertex="1">
+          <mxGeometry x="590" y="85" width="440" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="dec-text" value="&lt;font style=&#39;font-size:12px&#39;&gt;&quot;Make it look like this&quot;&lt;br&gt;State tracking + drift detection — Terraform knows what exists&lt;br&gt;50 teams = change one variable in terraform.tfvars&lt;/font&gt;" style="text;html=1;fontColor=#37474F;align=center;verticalAlign=top;" parent="1" vertex="1">
+          <mxGeometry x="610" y="120" width="400" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="benefits" value="&lt;b&gt;Why IaC?&lt;/b&gt; Reproducible • Version controlled • Auditable • Scalable" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#F5F5F5;strokeColor=#E0E0E0;strokeWidth=1;fontSize=11;fontColor=#37474F;arcSize=20;" parent="1" vertex="1">
+          <mxGeometry x="1070" y="115" width="290" height="55" as="geometry" />
+        </mxCell>
+        <mxCell id="pipe-bg" value="" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FAFAFA;strokeColor=#E0E0E0;strokeWidth=1;arcSize=3;" parent="1" vertex="1">
+          <mxGeometry x="20" y="240" width="1360" height="250" as="geometry" />
+        </mxCell>
+        <mxCell id="pipe-label" value="Cloud Build Pipeline (cloudbuild-tf.yaml)" style="text;html=1;fontSize=11;fontStyle=1;fontColor=#7B1FA2;align=left;" parent="1" vertex="1">
+          <mxGeometry x="35" y="248" width="300" height="20" as="geometry" />
+        </mxCell>
+        <mxCell id="t1" value="&lt;b style=&#39;font-size:14px&#39;&gt;Build&lt;/b&gt;&lt;br&gt;&lt;font style=&#39;font-size:10px;color:#78909C&#39;&gt;Docker&lt;br&gt;&lt;br&gt;Same app image&lt;br&gt;as Lab 2&lt;/font&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#E3F2FD;strokeColor=#42A5F5;strokeWidth=2;arcSize=10;verticalAlign=top;spacingTop=8;" parent="1" vertex="1">
+          <mxGeometry x="40" y="280" width="200" height="140" as="geometry" />
+        </mxCell>
+        <mxCell id="t1-num" value="1" style="ellipse;whiteSpace=wrap;html=1;fillColor=#2196F3;fontColor=#FFFFFF;strokeColor=none;fontSize=16;fontStyle=1;" parent="1" vertex="1">
+          <mxGeometry x="40" y="268" width="32" height="32" as="geometry" />
+        </mxCell>
+        <mxCell id="ta12" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=1;exitX=1;exitY=0.5;entryX=0;entryY=0.5;strokeColor=#CE93D8;strokeWidth=2;" parent="1" source="t1" target="t2" edge="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="t2" value="&lt;b style=&#39;font-size:14px&#39;&gt;Checkov&lt;/b&gt;&lt;br&gt;&lt;font style=&#39;font-size:10px;color:#78909C&#39;&gt;Security Scan&lt;br&gt;&lt;br&gt;IaC security&lt;br&gt;best practices&lt;/font&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FCE4EC;strokeColor=#EF9A9A;strokeWidth=2;arcSize=10;verticalAlign=top;spacingTop=8;" parent="1" vertex="1">
+          <mxGeometry x="300" y="280" width="200" height="140" as="geometry" />
+        </mxCell>
+        <mxCell id="t2-num" value="2" style="ellipse;whiteSpace=wrap;html=1;fillColor=#F4A900;fontColor=#FFFFFF;strokeColor=none;fontSize=16;fontStyle=1;" parent="1" vertex="1">
+          <mxGeometry x="300" y="268" width="32" height="32" as="geometry" />
+        </mxCell>
+        <mxCell id="ta23" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=1;exitX=1;exitY=0.5;entryX=0;entryY=0.5;strokeColor=#CE93D8;strokeWidth=2;" parent="1" source="t2" target="t3" edge="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="t3" value="&lt;b style=&#39;font-size:14px&#39;&gt;Init&lt;/b&gt;&lt;br&gt;&lt;font style=&#39;font-size:10px;color:#78909C&#39;&gt;Terraform&lt;br&gt;&lt;br&gt;Download providers&lt;br&gt;Connect backend&lt;/font&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#F3E5F5;strokeColor=#CE93D8;strokeWidth=2;arcSize=10;verticalAlign=top;spacingTop=8;" parent="1" vertex="1">
+          <mxGeometry x="560" y="280" width="200" height="140" as="geometry" />
+        </mxCell>
+        <mxCell id="t3-num" value="3" style="ellipse;whiteSpace=wrap;html=1;fillColor=#7B1FA2;fontColor=#FFFFFF;strokeColor=none;fontSize=16;fontStyle=1;" parent="1" vertex="1">
+          <mxGeometry x="560" y="268" width="32" height="32" as="geometry" />
+        </mxCell>
+        <mxCell id="ta34" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=1;exitX=1;exitY=0.5;entryX=0;entryY=0.5;strokeColor=#CE93D8;strokeWidth=2;" parent="1" source="t3" target="t4" edge="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="t4" value="&lt;b style=&#39;font-size:14px&#39;&gt;Plan&lt;/b&gt;&lt;br&gt;&lt;font style=&#39;font-size:10px;color:#78909C&#39;&gt;Terraform&lt;br&gt;&lt;br&gt;Preview changes&lt;br&gt;What will happen&lt;/font&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#F3E5F5;strokeColor=#CE93D8;strokeWidth=2;arcSize=10;verticalAlign=top;spacingTop=8;" parent="1" vertex="1">
+          <mxGeometry x="820" y="280" width="200" height="140" as="geometry" />
+        </mxCell>
+        <mxCell id="t4-num" value="4" style="ellipse;whiteSpace=wrap;html=1;fillColor=#7B1FA2;fontColor=#FFFFFF;strokeColor=none;fontSize=16;fontStyle=1;" parent="1" vertex="1">
+          <mxGeometry x="820" y="268" width="32" height="32" as="geometry" />
+        </mxCell>
+        <mxCell id="ta45" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=1;exitX=1;exitY=0.5;entryX=0;entryY=0.5;strokeColor=#CE93D8;strokeWidth=2;" parent="1" source="t4" target="t5" edge="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="t5" value="&lt;b style=&#39;font-size:14px&#39;&gt;Apply&lt;/b&gt;&lt;br&gt;&lt;font style=&#39;font-size:10px;color:#78909C&#39;&gt;Terraform&lt;br&gt;&lt;br&gt;Create resources&lt;br&gt;Store state&lt;/font&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#E8F5E9;strokeColor=#66BB6A;strokeWidth=2;arcSize=10;verticalAlign=top;spacingTop=8;" parent="1" vertex="1">
+          <mxGeometry x="1080" y="280" width="200" height="140" as="geometry" />
+        </mxCell>
+        <mxCell id="t5-num" value="5" style="ellipse;whiteSpace=wrap;html=1;fillColor=#2E7D32;fontColor=#FFFFFF;strokeColor=none;fontSize=16;fontStyle=1;" parent="1" vertex="1">
+          <mxGeometry x="1080" y="268" width="32" height="32" as="geometry" />
+        </mxCell>
+        <mxCell id="state-box" value="&lt;b style=&#39;color:#6A1B9A&#39;&gt;State File&lt;/b&gt;&lt;br&gt;&lt;font style=&#39;font-size:10px;color:#78909C&#39;&gt;gs://ml-gcp-workshop-487117-tfstate/&lt;br&gt;terraform/state/teamN/default.tfstate&lt;/font&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#F3E5F5;strokeColor=#CE93D8;strokeWidth=1;arcSize=10;fontSize=11;" parent="1" vertex="1">
+          <mxGeometry x="1090" y="435" width="270" height="55" as="geometry" />
+        </mxCell>
+        <mxCell id="state-arrow" value="write state" style="edgeStyle=orthogonalEdgeStyle;rounded=1;exitX=0.5;exitY=1;entryX=0.3;entryY=0;strokeColor=#7B1FA2;strokeWidth=1.5;dashed=1;fontSize=9;fontColor=#7B1FA2;" parent="1" source="t5" target="state-box" edge="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="cmd-bg" value="" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#263238;strokeColor=none;arcSize=5;" parent="1" vertex="1">
+          <mxGeometry x="30" y="510" width="1020" height="45" as="geometry" />
+        </mxCell>
+        <mxCell id="cmd" value="$ gcloud builds submit --config .pipelines/cloudbuild-tf.yaml --substitutions=_TEAM=teamN ." style="text;html=1;fontSize=13;fontFamily=Courier New;fontColor=#81C784;align=left;verticalAlign=middle;" parent="1" vertex="1">
+          <mxGeometry x="50" y="510" width="1000" height="45" as="geometry" />
+        </mxCell>
+        <mxCell id="drift" value="💡 Run again → Terraform detects no changes needed (drift detection)" style="text;html=1;fontSize=11;fontColor=#2E7D32;fontStyle=2;align=left;" parent="1" vertex="1">
+          <mxGeometry x="30" y="570" width="500" height="20" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+  <diagram id="zd3USVl7Xo6LSD8U8NPD" name="Pipleline">
+    <mxGraphModel dx="958" dy="492" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="cNWGoAcSPng8hVGYhMuB-1" value="CI/CD Pipeline — Lab 2: Ship Your App" style="text;html=1;fontSize=20;fontStyle=1;fontColor=#263238;align=left;verticalAlign=middle;" vertex="1" parent="1">
+          <mxGeometry x="20" y="20" width="500" height="35" as="geometry" />
+        </mxCell>
+        <mxCell id="cNWGoAcSPng8hVGYhMuB-2" value="One command triggers 7 automated steps" style="text;html=1;fontSize=12;fontColor=#78909C;align=left;verticalAlign=middle;" vertex="1" parent="1">
+          <mxGeometry x="20" y="53" width="400" height="20" as="geometry" />
+        </mxCell>
+        <mxCell id="cNWGoAcSPng8hVGYhMuB-3" value="" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FAFAFA;strokeColor=#E0E0E0;strokeWidth=1;arcSize=3;" vertex="1" parent="1">
+          <mxGeometry x="10" y="85" width="1360" height="300" as="geometry" />
+        </mxCell>
+        <mxCell id="cNWGoAcSPng8hVGYhMuB-4" value="Cloud Build Pipeline (cloudbuild-app.yaml)" style="text;html=1;fontSize=11;fontStyle=1;fontColor=#1565C0;align=left;" vertex="1" parent="1">
+          <mxGeometry x="25" y="91" width="300" height="20" as="geometry" />
+        </mxCell>
+        <mxCell id="cNWGoAcSPng8hVGYhMuB-5" value="&lt;b style=&#39;font-size:13px&#39;&gt;Lint&lt;/b&gt;&lt;br&gt;&lt;font style=&#39;font-size:10px;color:#78909C&#39;&gt;Hadolint&lt;br&gt;&lt;br&gt;Dockerfile&lt;br&gt;best practices&lt;/font&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#E3F2FD;strokeColor=#90CAF9;strokeWidth=2;arcSize=10;verticalAlign=top;spacingTop=8;" vertex="1" parent="1">
+          <mxGeometry x="30" y="125" width="140" height="130" as="geometry" />
+        </mxCell>
+        <mxCell id="cNWGoAcSPng8hVGYhMuB-6" value="1" style="ellipse;whiteSpace=wrap;html=1;fillColor=#0097A7;fontColor=#FFFFFF;strokeColor=none;fontSize=14;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="30" y="115" width="30" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="cNWGoAcSPng8hVGYhMuB-7" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=1;exitX=1;exitY=0.5;entryX=0;entryY=0.5;strokeColor=#90CAF9;strokeWidth=2;" edge="1" parent="1" source="cNWGoAcSPng8hVGYhMuB-5" target="cNWGoAcSPng8hVGYhMuB-8">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="cNWGoAcSPng8hVGYhMuB-8" value="&lt;b style=&#39;font-size:13px&#39;&gt;Build&lt;/b&gt;&lt;br&gt;&lt;font style=&#39;font-size:10px;color:#78909C&#39;&gt;Docker&lt;br&gt;&lt;br&gt;Multi-stage build&lt;br&gt;Node.js app&lt;/font&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#E3F2FD;strokeColor=#42A5F5;strokeWidth=2;arcSize=10;verticalAlign=top;spacingTop=8;" vertex="1" parent="1">
+          <mxGeometry x="210" y="125" width="140" height="130" as="geometry" />
+        </mxCell>
+        <mxCell id="cNWGoAcSPng8hVGYhMuB-9" value="2" style="ellipse;whiteSpace=wrap;html=1;fillColor=#2196F3;fontColor=#FFFFFF;strokeColor=none;fontSize=14;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="210" y="115" width="30" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="cNWGoAcSPng8hVGYhMuB-10" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=1;exitX=1;exitY=0.5;entryX=0;entryY=0.5;strokeColor=#90CAF9;strokeWidth=2;" edge="1" parent="1" source="cNWGoAcSPng8hVGYhMuB-8" target="cNWGoAcSPng8hVGYhMuB-11">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="cNWGoAcSPng8hVGYhMuB-11" value="&lt;b style=&#39;font-size:13px&#39;&gt;Scan&lt;/b&gt;&lt;br&gt;&lt;font style=&#39;font-size:10px;color:#78909C&#39;&gt;Trivy&lt;br&gt;&lt;br&gt;CVE vulnerability&lt;br&gt;scanning&lt;/font&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FCE4EC;strokeColor=#EF9A9A;strokeWidth=2;arcSize=10;verticalAlign=top;spacingTop=8;" vertex="1" parent="1">
+          <mxGeometry x="390" y="125" width="140" height="130" as="geometry" />
+        </mxCell>
+        <mxCell id="cNWGoAcSPng8hVGYhMuB-12" value="3" style="ellipse;whiteSpace=wrap;html=1;fillColor=#E91E63;fontColor=#FFFFFF;strokeColor=none;fontSize=14;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="390" y="115" width="30" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="cNWGoAcSPng8hVGYhMuB-13" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=1;exitX=1;exitY=0.5;entryX=0;entryY=0.5;strokeColor=#EF9A9A;strokeWidth=2;" edge="1" parent="1" source="cNWGoAcSPng8hVGYhMuB-11" target="cNWGoAcSPng8hVGYhMuB-14">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="cNWGoAcSPng8hVGYhMuB-14" value="&lt;b style=&#39;font-size:13px&#39;&gt;Push&lt;/b&gt;&lt;br&gt;&lt;font style=&#39;font-size:10px;color:#78909C&#39;&gt;Artifact Registry&lt;br&gt;&lt;br&gt;Tag &amp;amp; push&lt;br&gt;Docker image&lt;/font&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#F3E5F5;strokeColor=#CE93D8;strokeWidth=2;arcSize=10;verticalAlign=top;spacingTop=8;" vertex="1" parent="1">
+          <mxGeometry x="570" y="125" width="140" height="130" as="geometry" />
+        </mxCell>
+        <mxCell id="cNWGoAcSPng8hVGYhMuB-15" value="4" style="ellipse;whiteSpace=wrap;html=1;fillColor=#7B1FA2;fontColor=#FFFFFF;strokeColor=none;fontSize=14;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="570" y="115" width="30" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="cNWGoAcSPng8hVGYhMuB-16" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=1;exitX=1;exitY=0.5;entryX=0;entryY=0.5;strokeColor=#CE93D8;strokeWidth=2;" edge="1" parent="1" source="cNWGoAcSPng8hVGYhMuB-14" target="cNWGoAcSPng8hVGYhMuB-17">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="cNWGoAcSPng8hVGYhMuB-17" value="&lt;b style=&#39;font-size:13px&#39;&gt;Deploy&lt;/b&gt;&lt;br&gt;&lt;font style=&#39;font-size:10px;color:#78909C&#39;&gt;Cloud Run&lt;br&gt;&lt;br&gt;New revision&lt;br&gt;from image&lt;/font&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#E8F5E9;strokeColor=#A5D6A7;strokeWidth=2;arcSize=10;verticalAlign=top;spacingTop=8;" vertex="1" parent="1">
+          <mxGeometry x="750" y="125" width="140" height="130" as="geometry" />
+        </mxCell>
+        <mxCell id="cNWGoAcSPng8hVGYhMuB-18" value="5" style="ellipse;whiteSpace=wrap;html=1;fillColor=#2E7D32;fontColor=#FFFFFF;strokeColor=none;fontSize=14;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="750" y="115" width="30" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="cNWGoAcSPng8hVGYhMuB-19" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=1;exitX=1;exitY=0.5;entryX=0;entryY=0.5;strokeColor=#A5D6A7;strokeWidth=2;" edge="1" parent="1" source="cNWGoAcSPng8hVGYhMuB-17" target="cNWGoAcSPng8hVGYhMuB-20">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="cNWGoAcSPng8hVGYhMuB-20" value="&lt;b style=&#39;font-size:13px&#39;&gt;Public&lt;/b&gt;&lt;br&gt;&lt;font style=&#39;font-size:10px;color:#78909C&#39;&gt;IAM Policy&lt;br&gt;&lt;br&gt;allUsers invoker&lt;br&gt;permission&lt;/font&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#E8F5E9;strokeColor=#81C784;strokeWidth=2;arcSize=10;verticalAlign=top;spacingTop=8;" vertex="1" parent="1">
+          <mxGeometry x="930" y="125" width="140" height="130" as="geometry" />
+        </mxCell>
+        <mxCell id="cNWGoAcSPng8hVGYhMuB-21" value="6" style="ellipse;whiteSpace=wrap;html=1;fillColor=#43A047;fontColor=#FFFFFF;strokeColor=none;fontSize=14;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="930" y="115" width="30" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="cNWGoAcSPng8hVGYhMuB-22" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=1;exitX=1;exitY=0.5;entryX=0;entryY=0.5;strokeColor=#81C784;strokeWidth=2;" edge="1" parent="1" source="cNWGoAcSPng8hVGYhMuB-20" target="cNWGoAcSPng8hVGYhMuB-23">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="cNWGoAcSPng8hVGYhMuB-23" value="&lt;b style=&#39;font-size:13px&#39;&gt;Domain&lt;/b&gt;&lt;br&gt;&lt;font style=&#39;font-size:10px;color:#78909C&#39;&gt;URL Mapping&lt;br&gt;&lt;br&gt;teamN.lab.&lt;br&gt;ml-gcp.cloud-people.net&lt;/font&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#E8F5E9;strokeColor=#66BB6A;strokeWidth=2;arcSize=10;verticalAlign=top;spacingTop=8;" vertex="1" parent="1">
+          <mxGeometry x="1110" y="125" width="150" height="130" as="geometry" />
+        </mxCell>
+        <mxCell id="cNWGoAcSPng8hVGYhMuB-24" value="7" style="ellipse;whiteSpace=wrap;html=1;fillColor=#388E3C;fontColor=#FFFFFF;strokeColor=none;fontSize=14;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="1110" y="115" width="30" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="cNWGoAcSPng8hVGYhMuB-25" value="🎉 App is Live!" style="text;html=1;fontSize=16;fontStyle=1;fontColor=#2E7D32;align=center;verticalAlign=middle;" vertex="1" parent="1">
+          <mxGeometry x="1110" y="265" width="150" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="cNWGoAcSPng8hVGYhMuB-26" value="" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#263238;strokeColor=none;arcSize=5;" vertex="1" parent="1">
+          <mxGeometry x="20" y="405" width="1340" height="45" as="geometry" />
+        </mxCell>
+        <mxCell id="cNWGoAcSPng8hVGYhMuB-27" value="$ gcloud builds submit --config .pipelines/cloudbuild-app.yaml --substitutions=_TEAM=teamN ." style="text;html=1;fontSize=13;fontFamily=Courier New;fontColor=#4FC3F7;align=left;verticalAlign=middle;" vertex="1" parent="1">
+          <mxGeometry x="40" y="405" width="1200" height="45" as="geometry" />
+        </mxCell>
+        <mxCell id="cNWGoAcSPng8hVGYhMuB-28" value="🔒 Security scans at steps 1 &amp; 3 — pipeline fails if critical issues found" style="text;html=1;fontSize=11;fontColor=#C62828;fontStyle=2;align=left;" vertex="1" parent="1">
+          <mxGeometry x="20" y="465" width="500" height="20" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>
