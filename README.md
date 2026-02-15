@@ -6,7 +6,23 @@
 ![Firebase](https://img.shields.io/badge/Firebase-FFCA28?style=for-the-badge&logo=firebase&logoColor=black)
 
 > **Hands-on Workshop** — Deploy a community platform on Google Cloud
+## 🤖 AI Workshop Assistant
 
+Stuck on a command? Getting an error? Ask the AI assistant — it knows all the labs, cheatsheets, and pipeline configs.
+
+**[→ Open ML GCP Workshop Assistant](https://chatgpt.com/g/g-6991d00ab97c8191a1c1cbc4e1f23da1-ml-gcp-workshop-assistant)**
+
+Try asking:
+- "I'm getting a permission denied error in Lab 2"
+- "What does Trivy do and why do we use it?"
+- "How do I check if my Cloud Run service is running?"
+- "Explain the difference between Lab 2 and Lab 3"
+- "What is a multi-stage Docker build?"
+- "How do I see my Terraform state?"
+- "What GCP services are we using in this workshop?"
+- "Help me understand the CI/CD pipeline steps"
+
+---
 ---
 
 ## 📋 Workshop Overview
@@ -134,7 +150,7 @@ Each team sets `VITE_NAMESPACE` to isolate their data in the shared Firestore:
 
 📋 [**Workshop Registration Sheet**](https://docs.google.com/spreadsheets/d/e/2PACX-1vSxQhQ5DcSui7mcSfXHVfUcVQpQWMklq4jzJzI1P9YLRgww02kMuk7HV3tdNUjxyJsYysvFosiCPy9J/pubhtml?gid=959209679&single=true) — Find your team, email, and password here.
 
-<iframe src="https://docs.google.com/spreadsheets/d/e/2PACX-1vSxQhQ5DcSui7mcSfXHVfUcVQpQWMklq4jzJzI1P9YLRgww02kMuk7HV3tdNUjxyJsYysvFosiCPy9J/pubhtml?gid=959209679&amp;single=true&amp;widget=true&amp;headers=false" width="100%" height="400" frameborder="0"></iframe>
+
 
 | Setting | Value |
 |---------|-------|
@@ -145,23 +161,7 @@ Each team sets `VITE_NAMESPACE` to isolate their data in the shared Firestore:
 
 ---
 
-## 🤖 AI Workshop Assistant
 
-Stuck on a command? Getting an error? Ask the AI assistant — it knows all the labs, cheatsheets, and pipeline configs.
-
-**[→ Open ML GCP Workshop Assistant](https://chatgpt.com/g/g-6991d00ab97c8191a1c1cbc4e1f23da1-ml-gcp-workshop-assistant)**
-
-Try asking:
-- "I'm getting a permission denied error in Lab 2"
-- "What does Trivy do and why do we use it?"
-- "How do I check if my Cloud Run service is running?"
-- "Explain the difference between Lab 2 and Lab 3"
-- "What is a multi-stage Docker build?"
-- "How do I see my Terraform state?"
-- "What GCP services are we using in this workshop?"
-- "Help me understand the CI/CD pipeline steps"
-
----
 
 ## 🧪 Labs
 
