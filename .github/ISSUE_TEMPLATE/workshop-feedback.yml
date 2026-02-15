@@ -1,6 +1,6 @@
 name: "📋 Workshop Feedback"
 description: "2 minutes — help us improve future workshops!"
-title: "Feedback"
+title: "[Feedback] "
 labels: ["feedback"]
 body:
 
@@ -71,7 +71,7 @@ body:
       label: "5. What did you like most?"
       placeholder: "Best moment, concept, or part of the workshop..."
     validations:
-      required: true
+      required: false
 
   # Q6
   - type: textarea
@@ -80,7 +80,7 @@ body:
       label: "6. What didn't work well or could be better?"
       placeholder: "Be honest — this helps us the most!"
     validations:
-      required: true
+      required: false
 
   # Q7
   - type: checkboxes
